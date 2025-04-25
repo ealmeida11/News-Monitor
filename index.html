@@ -54,24 +54,6 @@
             font-size: 12px;
             z-index: 1000;
         }
-        
-        /* Botão para pausar/retomar atualização */
-        #toggleUpdate {
-            position: fixed;
-            bottom: 10px;
-            right: 120px;
-            background-color: #2980b9;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 12px;
-            z-index: 1000;
-        }
-        #toggleUpdate:hover {
-            background-color: #3498db;
-        }
     </style>
     <script>
         // Função para ordenar a tabela
@@ -137,54 +119,25 @@
             countdownDiv.id = 'countdown';
             document.body.appendChild(countdownDiv);
             
-            // Criar botão para pausar/retomar atualização
-            const toggleButton = document.createElement('button');
-            toggleButton.id = 'toggleUpdate';
-            toggleButton.textContent = 'Pausar atualização';
-            document.body.appendChild(toggleButton);
-            
-            let autoUpdateEnabled = true;
             let secondsLeft = 60;
-            let timer;
             
             // Função para atualizar a contagem regressiva
             function updateCountdown() {
-                if (autoUpdateEnabled) {
-                    countdownDiv.textContent = `Atualização em ${secondsLeft}s`;
-                    secondsLeft--;
+                countdownDiv.textContent = `Atualização em ${secondsLeft}s`;
+                secondsLeft--;
+                
+                if (secondsLeft < 0) {
+                    // Salvar posição de rolagem atual
+                    const scrollPos = window.scrollY;
                     
-                    if (secondsLeft < 0) {
-                        // Salvar posição de rolagem atual
-                        const scrollPos = window.scrollY;
-                        
-                        // Recarregar a página
-                        location.reload();
-                        
-                        // Restaurar posição de rolagem (isso na verdade não funciona aqui, 
-                        // mas será aplicado após o carregamento com o código abaixo)
-                    }
-                } else {
-                    countdownDiv.textContent = 'Atualização pausada';
+                    // Recarregar a página
+                    location.reload();
                 }
             }
             
             // Iniciar temporizador
-            timer = setInterval(updateCountdown, 1000);
+            setInterval(updateCountdown, 1000);
             updateCountdown();
-            
-            // Manipulador de eventos para o botão de alternar
-            toggleButton.addEventListener('click', function() {
-                autoUpdateEnabled = !autoUpdateEnabled;
-                
-                if (autoUpdateEnabled) {
-                    secondsLeft = 60; // Reiniciar contagem
-                    toggleButton.textContent = 'Pausar atualização';
-                } else {
-                    toggleButton.textContent = 'Retomar atualização';
-                }
-                
-                updateCountdown();
-            });
             
             // Salvar posição de rolagem no sessionStorage antes de recarregar
             window.addEventListener('beforeunload', function() {
@@ -204,7 +157,7 @@
 <body>
     <div class="container">
         <h1>Monitor de Notícias</h1>
-        <div class="data-atualizacao">Atualizado em: 24/04/2025 às 20:46:52</div>
+        <div class="data-atualizacao">Atualizado em: 24/04/2025 às 21:11:34</div>
         <table id="tabela-noticias">
             <thead>
                 <tr>
@@ -216,7 +169,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/compradora-da-santos-brasil-cma-anuncia-compra-de-acoes-para-deslistar-empresa-da-b3.ghtml' target='_blank'>Compradora da Santos Brasil, CMA anuncia compra de ações para deslistar empresa da B3</a></td>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/compradora-da-santos-brasil-cma-anuncia-compra-de-acoes-para-deslistar-empresa-da-b3.ghtml' target='_blank'>Compradora da Santos Brasil, CMA anuncia aquisição de ações para deslistar empresa da B3</a></td>
                     <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>20:40</td>
@@ -360,6 +313,12 @@
                     <td class='hora'>17:13</td>
                 </tr>
                 <tr>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/24/governo-ja-bloqueou-r-2-bi-de-associacoes-e-pessoas-envolvidas-em-esquema-do-inss-diz-cgu.ghtml' target='_blank'>Governo já bloqueou R$ 2 bi de associações e pessoas envolvidas em esquema do INSS, diz CGU</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>17:10</td>
+                </tr>
+                <tr>
                     <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/zelensky-acusa-coreia-do-norte-de-fabricar-mssil-usado-em-ataque-contra-kiev.ghtml' target='_blank'>Zelensky acusa Coreia do Norte de fabricar míssil usado em ataque contra Kiev</a></td>
                     <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
                     <td class='fonte'>Valor Econômico</td>
@@ -402,10 +361,10 @@
                     <td class='hora'>16:28</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/24/inss-ainda-nao-sabe-informar-quantidade-exata-de-descontos-ilegais-diz-diretora.ghtml' target='_blank'>INSS ainda não sabe informar quantidade exata de descontos ilegais, diz diretora</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/confira-a-lista-completa-de-prioridades-regulatrias-do-bc-para-2025-e-2026.ghtml' target='_blank'>Confira a lista de prioridades regulatórias do BC para 2025 e 2026</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>16:20</td>
+                    <td class='hora'>16:12</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/brasil/concursos-publicos/post/2025/04/proxima-edicao-do-enem-dos-concursos-deve-ofertar-cerca-de-3-mil-vagas.ghtml' target='_blank'>Próxima edição do "Enem dos Concursos" deve ofertar cerca de 3 mil vagas</a></td>
@@ -448,12 +407,6 @@
                     <td><span class='categoria' style='background-color: #9E9E9E;'>Concursos públicos</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>15:46</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/bradesco-lidera-ranking-de-reclamacoes-de-bancos-no-1o-trimestre.ghtml' target='_blank'>Bradesco lidera ranking de reclamações de bancos no 1º trimestre</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>15:31</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/legislacao/noticia/2025/04/24/tjmg-mulher-deve-receber-indenizacao-por-tratamento-odontologico-malsucedido.ghtml' target='_blank'>TJMG: Mulher deve receber indenização por tratamento odontológico malsucedido</a></td>
@@ -504,6 +457,12 @@
                     <td class='hora'>14:19</td>
                 </tr>
                 <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/bc-vai-trabalhar-para-melhorar-a-performance-do-open-finance-neste-ano-diz-diretor-de-regulacao.ghtml' target='_blank'>BC vai trabalhar para melhorar a performance do open finance neste ano, diz diretor de regulação</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>13:54</td>
+                </tr>
+                <tr>
                     <td><a href='https://valor.globo.com/politica/noticia/2025/04/24/motta-diz-que-analise-da-urgencia-do-pl-da-anistia-ficara-para-depois.ghtml' target='_blank'>Motta adia análise do pedido de urgência para votar PL da Anistia</a></td>
                     <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
                     <td class='fonte'>Valor Econômico</td>
@@ -546,10 +505,10 @@
                     <td class='hora'>13:27</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/medicamentos-a-base-de-semaglutida-devem-continuar-caros-mesmo-apos-queda-da-patente-diz-hypera.ghtml' target='_blank'>Medicamentos à base de semaglutida devem continuar caros, mesmo após queda da patente, diz Hypera</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/bolsas-sobem-na-europa-com-politica-comercial-dos-eua-e-balancos-no-radar.ghtml' target='_blank'>Bolsas sobem na Europa com política comercial dos EUA e balanços no radar</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>13:17</td>
+                    <td class='hora'>13:15</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/bc-trabalha-em-sistema-que-deve-evitar-abertura-de-conta-em-nome-de-terceiros-sem-autorizacao.ghtml' target='_blank'>BC trabalha em sistema para evitar abertura de conta em nome de terceiros sem autorização</a></td>
@@ -594,10 +553,10 @@
                     <td class='hora'>12:58</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/financas/criptomoedas/noticia/2025/04/24/normas-para-prestadoras-de-servicos-de-ativos-virtuais-saem-no-2o-semestre-diz-diretor-do-bc.ghtml' target='_blank'>Normas para prestadoras de serviços de ativos virtuais saem no 2º semestre, diz diretor do BC</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Criptomoedas</span></td>
+                    <td><a href='https://valor.globo.com/politica/noticia/2025/04/24/stf-ja-tem-data-para-julgar-zambelli-e-delgatti-por-invasao-ao-sistema-do-cnj.ghtml' target='_blank'>STF já tem data para julgar Zambelli e Delgatti por invasão ao sistema do CNJ</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>12:47</td>
+                    <td class='hora'>12:32</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/ft-empresas-dos-eua-alertam-wall-street-sobre-danos-causados-pela-guerra-comercial-de-trump.ghtml' target='_blank'>FT: Empresas dos EUA alertam Wall Street sobre danos causados pela guerra comercial de Trump</a></td>
@@ -642,10 +601,10 @@
                     <td class='hora'>12:05</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/credores-da-azul-teriam-sido-solicitados-a-fornecer-recursos-para-financiar-aumento-de-capital.ghtml' target='_blank'>Credores da Azul teriam sido solicitados a fornecer recursos para financiar aumento de capital</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/revisao-das-regras-de-fundos-garantidores-entra-na-lista-de-prioridades-do-bc.ghtml' target='_blank'>Revisão das regras de fundos garantidores entra na lista de prioridades do BC</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>12:03</td>
+                    <td class='hora'>11:46</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/b3-vai-criar-50-novos-agentes-de-ia-em-2025-em-investimento-de-r-10-milhoes.ghtml' target='_blank'>B3 vai criar 50 novos agentes de IA em 2025, em investimento de R$ 10 milhões</a></td>
@@ -690,10 +649,10 @@
                     <td class='hora'>11:28</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/24/lewandowski-autoriza-atuacao-da-forca-nacional-em-terras-indigenas-da-ba-am-e-pa.ghtml' target='_blank'>Lewandowski autoriza atuação da Força Nacional em terras indígenas da BA, AM e PA</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/pedidos-de-seguro-desemprego-nos-eua-somam-222-mil.ghtml' target='_blank'>Pedidos de seguro-desemprego nos EUA somam 222 mil</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>11:26</td>
+                    <td class='hora'>11:21</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/paquisto-teme-aumento-de-tenses-aps-ndia-revogar-tratado-sobre-guas.ghtml' target='_blank'>Paquistão teme aumento de tensões após Índia revogar tratado sobre águas</a></td>
@@ -738,20 +697,20 @@
                     <td class='hora'>10:49</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/ibovespa-avanca-com-negociacao-entre-china-e-eua-no-radar.ghtml' target='_blank'>Ibovespa sobe com alívio nos juros longos, apesar de incertezas entre China e EUA</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>10:38</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/trump-faz-apelo-direto-para-que-putin-interrompa-ataques-contra-a-ucrnia.ghtml' target='_blank'>Trump faz apelo direto para que Putin interrompa ataques contra a Ucrânia</a></td>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/zelensky-diz-que-trump-recebeu-proposta-de-cessar-fogo-elaborada-durante-reunio-em-londres.ghtml' target='_blank'>Zelensky diz que Trump recebeu proposta de cessar-fogo elaborada durante reunião em Londres</a></td>
                     <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>10:18</td>
+                    <td class='hora'>10:28</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/brasil/noticia/2025/04/24/pib-deve-subir-23-pontos-percentuais-em-2025-menor-crescimento-em-cinco-anos-projeta-cni.ghtml' target='_blank'>PIB deve subir 2,3% em 2025, menor crescimento em cinco anos, projeta CNI</a></td>
                     <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>10:18</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/trump-faz-apelo-direto-para-que-putin-interrompa-ataques-contra-a-ucrnia.ghtml' target='_blank'>Trump faz apelo direto para que Putin interrompa ataques contra a Ucrânia</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>10:18</td>
                 </tr>
@@ -786,10 +745,10 @@
                     <td class='hora'>09:54</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/choque-de-incerteza-reprecifica-treasuries-e-momento-e-de-diversificacao-diz-economista-chefe-do-itau.ghtml' target='_blank'>Choque de incertezas reprecifica Treasuries e momento é de diversificação, diz economista-chefe do Itaú</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/usiminas-eleva-producao-e-vendas-de-aco-e-minerio-no-1o-trimestre.ghtml' target='_blank'>Usiminas eleva produção e vendas de aço e minério no 1º trimestre</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>09:49</td>
+                    <td class='hora'>09:34</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/trump-far-comcio-para-comemorar-100-dias-de-governo.ghtml' target='_blank'>Trump fará comício para comemorar 100 dias de governo</a></td>
@@ -834,10 +793,28 @@
                     <td class='hora'>09:14</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/24/consignado-privado-pode-pressionar-inflao-no-curto-prazo-avalia-economista-chefe-do-ita-unibanco.ghtml' target='_blank'>Consignado privado vai contra objetivo do BC de desacelerar economia, diz economista-chefe do Itaú</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/american-airlines-amplia-prejuizo-em-516percent-no-1o-trimestre-para-us-473-milhoes.ghtml' target='_blank'>American Airlines amplia prejuízo em 51,6% no 1º trimestre, para US$ 473 milhões</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>09:10</td>
+                    <td class='hora'>09:03</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/lucro-da-procter-and-gamble-sobe-04percent-no-3o-trimestre-fiscal-para-us-376-bilhoes.ghtml' target='_blank'>Lucro da Procter & Gamble sobe 0,4% no 3º trimestre fiscal, para US$ 3,76 bilhões</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>09:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/lucro-da-hasbro-cresce-694percent-no-1o-trimestre-enquanto-avalia-efeitos-de-tarifas.ghtml' target='_blank'>Lucro da Hasbro cresce 69,4% no 1º trimestre, enquanto avalia efeitos de tarifas</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>08:58</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/eua-podem-aceitar-programa-nuclear-civil-no-ir-diz-secretrio-de-estado.ghtml' target='_blank'>EUA podem aceitar programa nuclear civil no Irã, diz secretário de Estado</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>08:56</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/eni-tem-lucro-de-172-bilhao-de-euros-no-1o-trimestre-queda-anual-de-3percent.ghtml' target='_blank'>Eni tem lucro de 1,72 bilhão de euros no 1º trimestre, queda anual de 3%</a></td>
@@ -864,18 +841,6 @@
                     <td class='hora'>08:49</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/lucro-da-usiminas-salta-845-pontos-percentuais-no-1-trimestre-para-r-337-milhes.ghtml' target='_blank'>Lucro da Usiminas salta 845% no 1º trimestre, para R$ 337 milhões</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/24/lula-indica-mulheres-para-embaixadas-na-malasia-estado-do-brunei-darussalam-granada-e-camboja.ghtml' target='_blank'>Lula indica mulheres para embaixadas na Malásia, Estado do Brunei Darussalam, Granada e Camboja</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:41</td>
-                </tr>
-                <tr>
                     <td><a href='https://valor.globo.com/empresas/noticia/2025/04/24/pepsico-tem-lucro-de-us-183-bilhao-no-1o-trimestre-queda-de-102percent.ghtml' target='_blank'>PepsiCo tem lucro de US$ 1,83 bilhão no 1º trimestre, queda de 10,2%</a></td>
                     <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
@@ -888,8 +853,7 @@
                     <td class='hora'>08:37</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/china-diz-que-eua-devem-revogar-tarifas-unilaterais-e-nega-negociacoes.ghtml' target='_blank'>China diz aos EUA que ‘cancelem
- as tarifas’ se quiserem negociações</a></td>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/24/china-diz-que-eua-devem-revogar-tarifas-unilaterais-e-nega-negociacoes.ghtml' target='_blank'>China diz que EUA devem revogar tarifas unilaterais e nega negociações</a></td>
                     <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>08:34</td>
@@ -926,7 +890,7 @@
                 </tr>
             </tbody>
         </table>
-        <div class="stats">Total de notícias: 118</div>
+        <div class="stats">Total de notícias: 120</div>
     </div>
 </body>
 </html>
