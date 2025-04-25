@@ -11,13 +11,20 @@
     
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
     
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; background: #f5f5f5; color: #333; }
         .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         h1 { color: #1a5276; text-align: center; margin-bottom: 30px; }
         .data-atualizacao { text-align: center; color: #666; margin-bottom: 20px; font-style: italic; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #2c3e50; color: white; padding: 12px; text-align: left; cursor: pointer; }
+        th:hover { background: #1a252f; }
+        th::after { content: ""; float: right; margin-top: 7px; border-width: 5px; border-style: solid; border-color: transparent; }
+        th.asc::after { border-bottom-color: white; margin-top: 2px; }
+        th.desc::after { border-top-color: white; margin-top: 12px; }
+        td { padding: 12px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f9f9f9; }
         a { color: #2980b9; text-decoration: none; }
         a:hover { text-decoration: underline; }
         .categoria { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; color: white; }
@@ -25,59 +32,141 @@
         .fonte { white-space: nowrap; color: #666; font-weight: bold; }
         .stats { margin-top: 30px; text-align: center; color: #666; }
         
-        /* Estilos responsivos melhorados para celulares */
+        /* Estilos responsivos para celulares */
         @media (max-width: 768px) {
-            body { padding: 5px; }
+            body { padding: 10px; }
             .container { padding: 10px; }
-            h1 { font-size: 1.5rem; margin-bottom: 15px; }
-            .data-atualizacao { font-size: 0.9rem; margin-bottom: 15px; }
-            
-            /* Ajustes para DataTables em dispositivos móveis */
-            table.dataTable { 
-                width: 100% !important;
-                margin: 0 !important;
-            }
-            
-            .dataTables_wrapper .dataTables_length, 
-            .dataTables_wrapper .dataTables_filter {
-                float: none;
-                text-align: left;
-                margin-bottom: 10px;
-            }
-            
-            /* Garantindo que as células da tabela se adaptem */
-            td, th {
-                word-break: break-word;
-                min-width: 40px;
-                font-size: 0.9rem;
-                padding: 8px 5px;
-            }
-            
-            /* Estilos para controles DataTables em telas pequenas */
-            div.dataTables_wrapper div.dataTables_paginate {
-                text-align: center;
-                margin-top: 10px;
-            }
-            
-            div.dataTables_wrapper div.dataTables_paginate ul.pagination {
-                justify-content: center !important;
-            }
+            th, td { padding: 8px; }
+            th { font-size: 0.9em; }
+            td { font-size: 0.9em; }
+            .categoria { font-size: 0.8em; }
+        }
+        
+        @media (max-width: 480px) {
+            th, td { padding: 6px; }
+            th { font-size: 0.8em; }
+            td { font-size: 0.8em; }
+            .categoria { font-size: 0.7em; padding: 3px 6px; }
         }
     </style>
+    <script>
+        // Função para ordenar a tabela
+        function ordenarTabela(n) {
+            const tabela = document.getElementById('tabela-noticias');
+            let linhas, i, x, y, trocando = true;
+            let direcao = "asc";
+            let contador = 0;
+            
+            // Definir direção da ordenação
+            const cabecalho = tabela.getElementsByTagName("TH")[n];
+            
+            // Limpar todas as classes dos cabeçalhos
+            const cabecalhos = tabela.getElementsByTagName("TH");
+            for (i = 0; i < cabecalhos.length; i++) {
+                cabecalhos[i].classList.remove("asc", "desc");
+            }
+            
+            // Alternar direção se o mesmo cabeçalho for clicado novamente
+            if (cabecalho.getAttribute("data-ordem") === "asc") {
+                direcao = "desc";
+                cabecalho.setAttribute("data-ordem", "desc");
+                cabecalho.classList.add("desc");
+            } else {
+                direcao = "asc";
+                cabecalho.setAttribute("data-ordem", "asc");
+                cabecalho.classList.add("asc");
+            }
+            
+            // Resetar outros cabeçalhos
+            for (i = 0; i < cabecalhos.length; i++) {
+                if (i !== n) cabecalhos[i].removeAttribute("data-ordem");
+            }
+            
+            // Loop para ordenar
+            while (trocando) {
+                trocando = false;
+                linhas = tabela.rows;
+                
+                for (i = 1; i < (linhas.length - 1); i++) {
+                    x = linhas[i].getElementsByTagName("TD")[n];
+                    y = linhas[i + 1].getElementsByTagName("TD")[n];
+                    
+                    // Comparar valores
+                    if (direcao === "asc" && x.textContent.toLowerCase() > y.textContent.toLowerCase() ||
+                        direcao === "desc" && x.textContent.toLowerCase() < y.textContent.toLowerCase()) {
+                        // Trocar linhas
+                        linhas[i].parentNode.insertBefore(linhas[i + 1], linhas[i]);
+                        trocando = true;
+                        contador++;
+                    }
+                }
+                
+                // Limitar número de trocas para evitar loops infinitos
+                if (contador > 1000) break;
+            }
+        }
+
+        // Script para atualização automática da página sem mostrar contagem
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calcular o tempo até o próximo minuto exato e configurar recarregamento
+            function configurarRecarregamento() {
+                const agora = new Date();
+                const segundosRestantes = 60 - agora.getSeconds();
+                const milissegundosRestantes = segundosRestantes * 1000;
+                
+                setTimeout(function() {
+                    // Salvar posição de rolagem
+                    const scrollPos = window.scrollY;
+                    sessionStorage.setItem('scrollPos', scrollPos);
+                    
+                    // Recarregar a página
+                    location.reload();
+                }, milissegundosRestantes);
+            }
+            
+            // Configurar o recarregamento automático
+            configurarRecarregamento();
+            
+            // Salvar posição de rolagem no sessionStorage antes de recarregar
+            window.addEventListener('beforeunload', function() {
+                sessionStorage.setItem('scrollPos', window.scrollY);
+            });
+        });
+        
+        // Restaurar posição de rolagem após o carregamento da página
+        window.addEventListener('load', function() {
+            const scrollPos = sessionStorage.getItem('scrollPos');
+            if (scrollPos) {
+                window.scrollTo(0, parseInt(scrollPos));
+            }
+        });
+    </script>
 </head>
 <body>
     <div class="container">
-        <h1>Monitor de Notícias - Brasil</h1>        <div class="data-atualizacao">Atualizado em: 25/04/2025 às 16:36:07</div>
-        <table id="tabela-noticias" class="table table-striped table-hover dt-responsive nowrap" style="width:100%">
+        <h1>Monitor de Notícias - Brasil</h1>        <div class="data-atualizacao">Atualizado em: 25/04/2025 às 16:38:17</div>
+        <table id="tabela-noticias">
             <thead>
                 <tr>
-                    <th>Título</th>
-                    <th>Categoria</th>
-                    <th>Fonte</th>
-                    <th>Hora</th>
+                    <th onclick="ordenarTabela(0)">Título</th>
+                    <th onclick="ordenarTabela(1)">Categoria</th>
+                    <th onclick="ordenarTabela(2)">Fonte</th>
+                    <th onclick="ordenarTabela(3)">Hora</th>
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/25/bandeira-tarifaria-na-conta-de-luz-sai-de-verde-em-abril-para-amarela-em-maio.ghtml' target='_blank'>Bandeira tarifária na conta de luz sai de verde em abril para amarela em maio</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>16:29</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/politica/noticia/2025/04/25/novas-regras-preveem-atuacao-conjunta-entre-gcu-agu-e-mpf-para-fechar-acordos-de-leniencia.ghtml' target='_blank'>Novas regras preveem atuação conjunta entre GCU, AGU e MPF para fechar acordos de leniência</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>16:22</td>
+                </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/petroleo-sobe-em-meio-a-volatilidade-gerada-por-embate-entre-eua-e-china.ghtml' target='_blank'>Petróleo sobe em meio à volatilidade gerada por embate entre EUA e China</a></td>
                     <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
@@ -115,16 +204,16 @@
                     <td class='hora'>15:36</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/eu-e/noticia/2025/04/25/quando-e-o-show-da-lady-gaga-no-rio-de-janeiro.ghtml' target='_blank'>Quando é o show da Lady Gaga no Rio de Janeiro?</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Eu &</span></td>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/ministrio-pblico-quer-que-inss-amplie-segurana-em-descontos-de-emprstimos-consignados.ghtml' target='_blank'>Ministério Público quer que INSS amplie segurança em descontos de empréstimos consignados</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>15:31</td>
+                    <td class='hora'>15:06</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/legislacao/noticia/2025/04/25/dia-do-trabalho-e-feriado-nacional-ou-ponto-facultativo.ghtml' target='_blank'>Dia do Trabalho é feriado nacional ou ponto facultativo?</a></td>
-                    <td><span class='categoria' style='background-color: #795548;'>Legislação</span></td>
+                    <td><a href='https://valor.globo.com/politica/noticia/2025/04/25/mrcio-frana-e-psb-se-movimentam-por-pr-candidatura-da-esquerda-ao-governo-de-sp.ghtml' target='_blank'>Márcio França e PSB se movimentam por pré-candidatura da esquerda ao Governo de SP</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>15:27</td>
+                    <td class='hora'>15:03</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/opiniao/coluna/nos-somos-o-oceano.ghtml' target='_blank'>Nós somos o Oceano</a></td>
@@ -163,16 +252,22 @@
                     <td class='hora'>14:37</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/25/cmbio-pode-comprometer-ajuda-esperada-de-combustveis-para-reduo-da-inflao-avalia-ibre.ghtml' target='_blank'>Câmbio pode comprometer ajuda esperada de combustíveis para redução da inflação, avalia Ibre</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/crescimento-anual-do-estoque-de-crdito-deve-desacelerar-para-111-pontos-percentuais-em-maro-diz-febraban.ghtml' target='_blank'>Crescimento anual do estoque de crédito deve desacelerar para 11,1% em março, diz Febraban</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>14:34</td>
+                    <td class='hora'>14:23</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/aclara-inaugura-planta-piloto-em-goias-para-testar-producao-de-terras-raras.ghtml' target='_blank'>Aclara inaugura planta-piloto em Goiás para testar produção de terras raras</a></td>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/assembleia-da-tokandstok-e-cancelada-e-cvm-pede-explicacoes-sobre-denuncia.ghtml' target='_blank'>Assembleia da Tok&Stok é cancelada, e CVM pede explicações sobre denúncia</a></td>
                     <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>14:32</td>
+                    <td class='hora'>14:20</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/analistas-enxergam-possvel-alvio-em-relao-ameaa-da-ia-ao-negcio-de-buscas-do-google.ghtml' target='_blank'>Analistas enxergam possível alívio em relação à ameaça da IA ao negócio de buscas do Google</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>14:15</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/mundo/noticia/2025/04/25/ex-congressista-george-santos-condenado-a-sete-anos-de-priso-nos-eua.ghtml' target='_blank'>Ex-congressista George Santos é condenado a sete anos de prisão nos EUA</a></td>
@@ -201,12 +296,6 @@
                 <tr>
                     <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/ft-presidente-da-toyota-prope-aquisio-da-maior-subsidiria-da-montadora-por-us-42-bilhes.ghtml' target='_blank'>FT: Presidente da Toyota propõe aquisição da maior subsidiária da montadora por US$ 42 bilhões</a></td>
                     <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>13:42</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/25/fbi-prende-juiza-nos-eua-por-facilitar-fuga-de-imigrante.ghtml' target='_blank'>FBI prende juíza nos EUA por supostamente facilitar fuga de imigrante</a></td>
-                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>13:42</td>
                 </tr>
@@ -253,22 +342,10 @@
                     <td class='hora'>13:11</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/periodo-ainda-e-incerto-para-discutir-pagamento-de-dividendos-extraordinarios-diz-comando-da-vale.ghtml' target='_blank'>Período ainda é incerto para discutir pagamento de dividendos extraordinários, diz comando da Vale</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td><a href='https://valor.globo.com/politica/noticia/2025/04/25/fux-volta-a-mudar-de-posicao-sobre-81-ao-propor-pena-de-um-ano-e-seis-meses-contra-pichadora.ghtml' target='_blank'>Fux volta a mudar de posição sobre 8/1 ao propor pena de um ano e seis meses contra pichadora</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>12:43</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/carrefour-brasil-vira-votos-e-aprova-saida-da-bolsa-com-59percent-de-apoio-a-proposta-dizem-fontes.ghtml' target='_blank'>Exclusivo: Carrefour Brasil ‘vira’ votos e aprova saída da bolsa com 59% de apoio à proposta, dizem fontes</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>12:40</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/lagarde-processo-de-desinflacao-esta-bem-encaminhado.ghtml' target='_blank'>Lagarde: Processo de desinflação está bem encaminhado</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>12:40</td>
+                    <td class='hora'>13:06</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/politica/noticia/2025/04/25/em-audincia-de-custdia-collor-pede-para-ficar-preso-em-macei.ghtml' target='_blank'>Em audiência de custódia, Collor pede para ficar preso em Maceió</a></td>
@@ -301,6 +378,18 @@
                     <td class='hora'>12:17</td>
                 </tr>
                 <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/leilo-da-rodovia-juiz-de-fora-rio-de-janeiro-atrai-ao-menos-3-grupos.ghtml' target='_blank'>Leilão da rodovia Juiz de Fora-Rio de Janeiro atrai ao menos 3 grupos</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>12:14</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/acoes-da-vale-recuam-quase-2percent-apos-balanco.ghtml' target='_blank'>Ações da Vale recuam quase 2% após balanço</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>12:06</td>
+                </tr>
+                <tr>
                     <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/em-crise-gold-energia-prope-pagar-25-pontos-percentuais-da-dvida-em-recuperao-extrajudicial.ghtml' target='_blank'>Em crise, Gold Energia propõe pagar 2,5% da dívida em recuperação extrajudicial</a></td>
                     <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
@@ -319,14 +408,14 @@
                     <td class='hora'>11:49</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/empresas/coluna/tv-e-streaming-precisam-se-libertar-do-google-ou-afundarao-juntos.ghtml' target='_blank'>TV e streaming precisam se libertar do Google ou afundarão juntos</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/25/passagem-aerea-arroz-e-gasolina-ajudam-a-segurar-previa-da-inflacao-em-abril.ghtml' target='_blank'>Passagem aérea, arroz e gasolina ajudam a segurar prévia da inflação em abril</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>11:48</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/25/passagem-aerea-arroz-e-gasolina-ajudam-a-segurar-previa-da-inflacao-em-abril.ghtml' target='_blank'>Passagem aérea, arroz e gasolina ajudam a segurar prévia da inflação em abril</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td><a href='https://valor.globo.com/empresas/coluna/tv-e-streaming-precisam-se-libertar-do-google-ou-afundarao-juntos.ghtml' target='_blank'>TV e streaming precisam se libertar do Google ou afundarão juntos</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>11:48</td>
                 </tr>
@@ -347,6 +436,24 @@
                     <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>11:36</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/politica/noticia/2025/04/25/stf-forma-maioria-para-condenar-mulher-que-pichou-esttua-da-justia.ghtml' target='_blank'>STF forma maioria para condenar mulher que pichou estátua da Justiça</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>11:31</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/criptomoedas/noticia/2025/04/25/bitcoin-volta-a-subir-e-acumula-ganhos-de-12-pontos-percentuais-em-7-dias-com-alvio-regulatrio-e-macroeconmico.ghtml' target='_blank'>Bitcoin volta a subir e acumula ganhos de 12% em 7 dias com alívio regulatório e macroeconômico</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Criptomoedas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>11:21</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/politica/noticia/2025/04/25/gilmar-suspende-julgamento-sobre-prisao-de-collor-e-caso-vai-para-o-plenario-fisico.ghtml' target='_blank'>Gilmar suspende julgamento sobre Collor; quatro ministros votam por manter prisão do ex-presidente</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>11:21</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/estrangeiros-acumulam-entradas-pela-3-sesso-consecutiva-e-aportes-chegam-a-r-17-bilho-em-23-de-abril.ghtml' target='_blank'>Estrangeiros acumulam entradas pela 3ª sessão consecutiva e aportes chegam a R$ 1,7 bilhão em 23 de abril</a></td>
@@ -377,18 +484,6 @@
                     <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>10:58</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/25/ataques-recentes-e-suspenso-de-ajuda-dos-eua-reduzem-apoio-a-deslocados-na-ucrnia.ghtml' target='_blank'>Ataques recentes e suspensão de ajuda dos EUA reduzem apoio a deslocados na Ucrânia</a></td>
-                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>10:51</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/bolsas-de-ny-operam-mistas-com-incertezas-sobre-guerra-comercial-entre-china-e-eua.ghtml' target='_blank'>Bolsas de NY caem com incertezas sobre guerra comercial entre China e EUA</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>10:50</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/ibovespa-inicia-sessao-perto-da-estabilidade-acoes-da-vale-recuam-mais-de-2percent-apos-balanco.ghtml' target='_blank'>Ibovespa opera estável com ajuda de Petrobras e bancos; ações da Vale recuam após balanço</a></td>
@@ -439,18 +534,6 @@
                     <td class='hora'>10:27</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/25/planejamento-abre-crdito-suplementar-de-r-16-bi-informa-dou.ghtml' target='_blank'>Planejamento abre crédito suplementar de R$ 16 bi, informa Diário Oficial da União</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>10:24</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/bc-inclui-perguntas-sobre-impacto-da-guerra-comercial-em-questionrio-pr-copom.ghtml' target='_blank'>BC inclui perguntas sobre impacto da guerra comercial em Questionário Pré-Copom</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>10:20</td>
-                </tr>
-                <tr>
                     <td><a href='https://valor.globo.com/mundo/noticia/2025/04/25/ft-reino-unido-deve-pagar-para-aderir-ao-fundo-de-defesa-da-ue-diz-bruxelas.ghtml' target='_blank'>FT: Reino Unido deve pagar para aderir ao fundo de Defesa da UE, diz Bruxelas</a></td>
                     <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
                     <td class='fonte'>Valor Econômico</td>
@@ -493,6 +576,30 @@
                     <td class='hora'>09:52</td>
                 </tr>
                 <tr>
+                    <td><a href='https://valor.globo.com/brasil/esg/noticia/2025/04/25/a-cop30-sera-vitoriosa-se-ajudar-a-fortalecer-o-multilateralismo-climatico-diz-marina-silva.ghtml' target='_blank'>‘A COP30 será vitoriosa se ajudar a fortalecer o multilateralismo climático’, diz Marina Silva</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>ESG</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>09:51</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/04/25/trump-brasil-sobrevive-e-ficou-rico-cobrando-tarifas-sobre-os-eua.ghtml' target='_blank'>Trump: Brasil 'sobrevive' e 'ficou rico' cobrando tarifas sobre os EUA</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>09:43</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/dolar-tem-leve-alta-em-possivel-ajuste-e-com-investidor-de-olho-em-guerra-tarifaria.ghtml' target='_blank'>Dólar tem leve queda contra o real e caminha para 6ª sessão de desvalorização</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>09:39</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/juros-futuros-tem-leve-alta-puxada-por-movimento-de-correcao-e-ipca-15.ghtml' target='_blank'>Juros futuros sobem após IPCA-15 e em movimento de correção</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>09:34</td>
+                </tr>
+                <tr>
                     <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/minrio-de-ferro-cai-187-pontos-percentuais-na-bolsa-de-dalian.ghtml' target='_blank'>Minério de ferro cai 1,87% na Bolsa de Dalian</a></td>
                     <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
@@ -521,18 +628,6 @@
                     <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>09:08</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/25/ipca-15-desacelera-alta-para-043percent-em-abril.ghtml' target='_blank'>IPCA-15 desacelera alta para 0,43% em abril</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>09:07</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/04/25/mais-de-60percent-dos-brasileiros-nao-buscam-atendimento-medico-quando-precisa-mostra-pesquisa.ghtml' target='_blank'>Mais de 60% dos brasileiros não buscam atendimento médico quando precisa, mostra pesquisa</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>09:00</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/brava-energia-anuncia-novo-diretor-de-operaes-offshore.ghtml' target='_blank'>Brava Energia anuncia novo diretor de Operações Offshore</a></td>
@@ -577,34 +672,10 @@
                     <td class='hora'>08:42</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/agenda-do-dia-ipca-15-no-brasil-e-confianca-do-consumidor-nos-eua-sao-destaques.ghtml' target='_blank'>Agenda do dia: IPCA-15 no Brasil e confiança do consumidor nos EUA são destaques</a></td>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/manha-no-mercado-guerra-tarifaria-e-ipca-15-guiam-os-negocios-nesta-sexta-feira.ghtml' target='_blank'>Manhã no mercado: Guerra tarifária e IPCA-15 guiam os negócios nesta sexta-feira</a></td>
                     <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:14</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/bolsas-da-asia-fecham-em-alta-com-foco-em-reducao-de-tensoes-comerciais.ghtml' target='_blank'>Bolsas da Ásia fecham em alta com foco em redução de tensões comerciais</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:13</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/summit-valor-brazil-china-2025/noticia/2025/04/25/globalizacao-e-negocios-dao-o-tom-ao-summit-valor-brazil-china-2025-assista.ghtml' target='_blank'>Globalização e negócios dão o tom ao Summit Valor Brazil-China 2025; assista</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Summit Valor Brazil China 2025</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:10</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/brasil-fecha-2024-com-29-mil-restaurantes-a-menos.ghtml' target='_blank'>Brasil fecha 2024 com 29 mil restaurantes a menos</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/politica/noticia/2025/04/25/ex-presidente-fernando-collor-preso-em-macei.ghtml' target='_blank'>Ex-presidente Fernando Collor é preso em Maceió</a></td>
-                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:00</td>
+                    <td class='hora'>08:41</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/legislacao/fio-da-meada/post/2025/04/proposta-de-contabilizacao-de-cbsibs.ghtml' target='_blank'>Proposta de contabilização de CBS/IBS</a></td>
@@ -623,6 +694,12 @@
                     <td><span class='categoria' style='background-color: #9E9E9E;'>Eu &</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>05:10</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/eu-e/coluna/tatiana-salem-levy-lembrancas-de-dois-poetas-portugueses-que-tinham-horror-ao-fascismo.ghtml' target='_blank'>Tatiana Salem Levy: Lembranças de dois poetas portugueses que tinham horror ao fascismo</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Eu &</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:03</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/eu-e/coluna/fernando-luiz-abrucio-tarefas-para-nos-salvar-do-extremismo.ghtml' target='_blank'>Fernando Luiz Abrucio: Tarefas para nos salvar do extremismo</a></td>
@@ -649,30 +726,6 @@
                     <td class='hora'>05:03</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/opiniao/coluna/o-novo-acordo-pandemico-da-oms.ghtml' target='_blank'>O novo Acordo Pandêmico da OMS</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:02</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/opiniao/coluna/tarifas-de-importacao.ghtml' target='_blank'>Tarifas de importação</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:02</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/opiniao/noticia/2025/04/25/518f50ee-frase-do-dia.ghtml' target='_blank'>Frase do dia</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:02</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/opiniao/coluna/as-criancas-esquecidas-no-seculo-19.ghtml' target='_blank'>As crianças esquecidas no século 19</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:02</td>
-                </tr>
-                <tr>
                     <td><a href='https://valor.globo.com/opiniao/noticia/2025/04/25/disputa-geopolitica-exige-plano-para-minerais-criticos.ghtml' target='_blank'>Disputa geopolítica exige plano para minerais críticos</a></td>
                     <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
                     <td class='fonte'>Valor Econômico</td>
@@ -692,6 +745,30 @@
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/leilao-tem-demanda-forte-com-aposta-na-selic.ghtml' target='_blank'>Leilão do Tesouro tem demanda forte com aposta no fim do ciclo de aperto da Selic</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:02</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/dolar-fecha-abaixo-de-r-570-e-tem-novo-alivio.ghtml' target='_blank'>Dólar fecha abaixo de R$ 5,70 e tem novo alívio</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:02</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/ex-donos-do-voiter-processam-banco-master.ghtml' target='_blank'>Ex-donos do Voiter processam Banco Master por dívida</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:02</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/coluna/ia-na-gestao-de-recursos-o-que-diz-a-regulacao-e-o-que-falta.ghtml' target='_blank'>IA na gestão de recursos: o que diz a regulação (e o que falta)</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:02</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/04/25/sao-pedro-traz-time-para-fundo-global-de-tech.ghtml' target='_blank'>São Pedro traz time para fundo global de ‘tech’</a></td>
                     <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>05:02</td>
@@ -719,6 +796,18 @@
                     <td><span class='categoria' style='background-color: #795548;'>Legislação</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>05:02</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/opiniao/noticia/2025/04/25/df6711bc-cartas-de-leitores.ghtml' target='_blank'>Cartas de Leitores</a></td>
+                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/votos-para-carrefour-deixar-b3-surpreendem-mas-placar-pode-mudar.ghtml' target='_blank'>Votos para Carrefour deixar B3 surpreendem, mas placar pode mudar</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/empresas/coluna/para-rir-como-francisco.ghtml' target='_blank'>Para rir como Francisco</a></td>
@@ -756,87 +845,9 @@
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>05:01</td>
                 </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/d26e793d-curtas.ghtml' target='_blank'>Curtas</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:01</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/04/25/mec-acirra-rigor-sobre-cursos-ead-de-saude.ghtml' target='_blank'>MEC acirra rigor sobre cursos EAD de saúde</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:01</td>
-                </tr>
             </tbody>
         </table>
         <div class="stats">Total de notícias: 115</div>
     </div>
-    
-    <!-- jQuery e Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
-    
-    <script>
-        // Inicializar DataTables com configurações aprimoradas para responsividade
-        $(document).ready(function() {
-            $('#tabela-noticias').DataTable({
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
-                },
-                pageLength: 50,
-                order: [], // Sem ordenação inicial
-                responsive: true,
-                lengthMenu: [10, 25, 50, 100],
-                columnDefs: [
-                    { responsivePriority: 1, targets: 0 }, // Título tem prioridade máxima
-                    { responsivePriority: 2, targets: 2 }, // Fonte tem segunda prioridade
-                    { responsivePriority: 3, targets: 1 }, // Categoria tem terceira prioridade
-                    { responsivePriority: 4, targets: 3 }  // Hora tem menor prioridade
-                ]
-            });
-        });
-
-        // Script para atualização automática da página sem mostrar contagem
-        document.addEventListener('DOMContentLoaded', function() {
-            // Calcular o tempo até o próximo minuto exato e configurar recarregamento
-            function configurarRecarregamento() {
-                const agora = new Date();
-                const segundosRestantes = 60 - agora.getSeconds();
-                const milissegundosRestantes = segundosRestantes * 1000;
-                
-                setTimeout(function() {
-                    // Salvar posição de rolagem
-                    const scrollPos = window.scrollY;
-                    sessionStorage.setItem('scrollPos', scrollPos);
-                    
-                    // Recarregar a página
-                    location.reload();
-                }, milissegundosRestantes);
-            }
-            
-            // Configurar o recarregamento automático
-            configurarRecarregamento();
-            
-            // Salvar posição de rolagem no sessionStorage antes de recarregar
-            window.addEventListener('beforeunload', function() {
-                sessionStorage.setItem('scrollPos', window.scrollY);
-            });
-        });
-        
-        // Restaurar posição de rolagem após o carregamento da página
-        window.addEventListener('load', function() {
-            const scrollPos = sessionStorage.getItem('scrollPos');
-            if (scrollPos) {
-                window.scrollTo(0, parseInt(scrollPos));
-            }
-        });
-    </script>
 </body>
 </html>
