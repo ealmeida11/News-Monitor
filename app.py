@@ -14,7 +14,7 @@ import webbrowser
 import argparse
 import socket
 from datetime import datetime
-from scraper import extrair_noticias_valor
+from scraper import extrair_todas_noticias
 
 # Variável global para armazenar o app Flask
 flask_app = None
@@ -74,7 +74,7 @@ def executar_servidor_web(porta=5000, auto_update=False, intervalo=60):
     # Verificar se já existe um arquivo HTML para servir
     if not os.path.exists('monitor_noticias.html'):
         print("[*] Arquivo HTML não encontrado. Extraindo notícias primeiro...")
-        extrair_noticias_valor()
+        extrair_todas_noticias()
     
     ip_local = get_local_ip()
     
@@ -107,7 +107,7 @@ def executar_automaticamente(intervalo=60, abrir_navegador=True):
             print(f"\n[*] Execução automática em {hora_atual}")
             
             # Executar extração
-            extrair_noticias_valor()
+            extrair_todas_noticias()
             
             # Atualizar a página no navegador (apenas na primeira execução)
             if abrir_navegador and not navegador_aberto[0]:
@@ -156,7 +156,7 @@ def executar_uma_vez():
     print("\nIniciando extração de notícias...\n")
     
     # Executar o scraper
-    extrair_noticias_valor()
+    extrair_todas_noticias()
     
     # Verificar se o arquivo HTML foi gerado
     arquivo_html = "monitor_noticias.html"

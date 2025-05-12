@@ -12,7 +12,7 @@ import webbrowser
 import time
 import threading
 from datetime import datetime
-from scraper import extrair_noticias_valor
+from scraper import extrair_todas_noticias
 
 def imprimir_cabecalho():
     """
@@ -39,7 +39,7 @@ def extrair():
     Executa a extração de notícias
     """
     print("\n[*] Iniciando extração de notícias...\n")
-    df = extrair_noticias_valor()
+    df = extrair_todas_noticias()
     
     if df is not None and not df.empty:
         print(f"\n[+] Extração concluída com sucesso! Foram encontradas {len(df)} notícias.")
