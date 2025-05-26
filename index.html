@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Notícias - Brasil</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; background: #f5f5f5; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #1a5276; text-align: center; margin-bottom: 30px; }
+        .data-atualizacao { text-align: center; color: #666; margin-bottom: 20px; font-style: italic; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #2c3e50; color: white; padding: 12px; text-align: left; cursor: pointer; }
+        th:hover { background: #1a252f; }
+        th::after { content: ""; float: right; margin-top: 7px; border-width: 5px; border-style: solid; border-color: transparent; }
+        th.asc::after { border-bottom-color: white; margin-top: 2px; }
+        th.desc::after { border-top-color: white; margin-top: 12px; }
+        td { padding: 12px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f9f9f9; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .categoria { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; color: white; }
+        .hora { white-space: nowrap; color: #666; }
+        .fonte { white-space: nowrap; color: #666; font-weight: bold; }
+        .stats { margin-top: 30px; text-align: center; color: #666; }
+        
+        /* Estilos responsivos para celulares */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 10px; }
+            th, td { padding: 8px; }
+            th { font-size: 0.9em; }
+            td { font-size: 0.9em; }
+            .categoria { font-size: 0.8em; }
+        }
+        
+        @media (max-width: 480px) {
+            th, td { padding: 6px; }
+            th { font-size: 0.8em; }
+            td { font-size: 0.8em; }
+            .categoria { font-size: 0.7em; padding: 3px 6px; }
+        }
+    </style>
+    <script>
+        // Função para ordenar a tabela
+        function ordenarTabela(n) {
+            const tabela = document.getElementById('tabela-noticias');
+            let linhas, i, x, y, trocando = true;
+            let direcao = "asc";
+            let contador = 0;
+            
+            // Definir direção da ordenação
+            const cabecalho = tabela.getElementsByTagName("TH")[n];
+            
+            // Limpar todas as classes dos cabeçalhos
+            const cabecalhos = tabela.getElementsByTagName("TH");
+            for (i = 0; i < cabecalhos.length; i++) {
+                cabecalhos[i].classList.remove("asc", "desc");
+            }
+            
+            // Alternar direção se o mesmo cabeçalho for clicado novamente
+            if (cabecalho.getAttribute("data-ordem") === "asc") {
+                direcao = "desc";
+                cabecalho.setAttribute("data-ordem", "desc");
+                cabecalho.classList.add("desc");
+            } else {
+                direcao = "asc";
+                cabecalho.setAttribute("data-ordem", "asc");
+                cabecalho.classList.add("asc");
+            }
+            
+            // Resetar outros cabeçalhos
+            for (i = 0; i < cabecalhos.length; i++) {
+                if (i !== n) cabecalhos[i].removeAttribute("data-ordem");
+            }
+            
+            // Loop para ordenar
+            while (trocando) {
+                trocando = false;
+                linhas = tabela.rows;
+                
+                for (i = 1; i < (linhas.length - 1); i++) {
+                    x = linhas[i].getElementsByTagName("TD")[n];
+                    y = linhas[i + 1].getElementsByTagName("TD")[n];
+                    
+                    // Comparar valores
+                    if (direcao === "asc" && x.textContent.toLowerCase() > y.textContent.toLowerCase() ||
+                        direcao === "desc" && x.textContent.toLowerCase() < y.textContent.toLowerCase()) {
+                        // Trocar linhas
+                        linhas[i].parentNode.insertBefore(linhas[i + 1], linhas[i]);
+                        trocando = true;
+                        contador++;
+                    }
+                }
+                
+                // Limitar número de trocas para evitar loops infinitos
+                if (contador > 1000) break;
+            }
+        }
+
+        // Script para atualização automática da página sem mostrar contagem
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calcular o tempo até o próximo minuto exato e configurar recarregamento
+            function configurarRecarregamento() {
+                const agora = new Date();
+                const segundosRestantes = 60 - agora.getSeconds();
+                const milissegundosRestantes = segundosRestantes * 1000;
+                
+                setTimeout(function() {
+                    // Salvar posição de rolagem
+                    const scrollPos = window.scrollY;
+                    sessionStorage.setItem('scrollPos', scrollPos);
+                    
+                    // Recarregar a página
+                    location.reload();
+                }, milissegundosRestantes);
+            }
+            
+            // Configurar o recarregamento automático
+            configurarRecarregamento();
+            
+            // Salvar posição de rolagem no sessionStorage antes de recarregar
+            window.addEventListener('beforeunload', function() {
+                sessionStorage.setItem('scrollPos', window.scrollY);
+            });
+        });
+        
+        // Restaurar posição de rolagem após o carregamento da página
+        window.addEventListener('load', function() {
+            const scrollPos = sessionStorage.getItem('scrollPos');
+            if (scrollPos) {
+                window.scrollTo(0, parseInt(scrollPos));
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Monitor de Notícias - Brasil</h1>        <div class="data-atualizacao">Atualizado em: 11/05/2025 às 19:05:58</div>
+        <table id="tabela-noticias">
+            <thead>
+                <tr>
+                    <th onclick="ordenarTabela(0)">Título</th>
+                    <th onclick="ordenarTabela(1)">Categoria</th>
+                    <th onclick="ordenarTabela(2)">Fonte</th>
+                    <th onclick="ordenarTabela(3)">Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/05/11/agenda-de-mercados-ata-do-copom-inflacao-dos-eua-e-discurso-de-powell-sao-destaques-da-semana.ghtml' target='_blank'>Agenda de Mercados: Ata do Copom, inflação dos EUA e discurso de Powell são destaques da semana</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>17:59</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/politica/noticia/2025/05/11/roberto-jefferson-j-cumpre-priso-domiciliar-autorizada-por-moraes-diz-jornal.ghtml' target='_blank'>Roberto Jefferson já cumpre prisão domiciliar autorizada por Moraes, diz jornal</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>17:26</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/05/11/mercados-avaliarao-se-palavras-bastam-apos-conversas-entre-eua-e-china.ghtml' target='_blank'>Mercados avaliarão se palavras bastam após conversas entre EUA e China</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>17:10</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/11/embaixador-dos-eua-diz-que-tarifas-ao-canada-podem-nao-ser-totalmente-retiradas.ghtml' target='_blank'>Embaixador dos EUA diz que tarifas ao Canadá podem não ser totalmente retiradas</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>16:39</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/11/hamas-diz-que-liberara-ultimo-refem-americano-vivo.ghtml' target='_blank'>Hamas diz que libertará último refém americano vivo</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>16:27</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/11/trump-pode-aceitar-aviao-luxuoso-de-familia-real-do-catar.ghtml' target='_blank'>Trump poderá receber como presente avião luxuoso da família real do Catar</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>15:26</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/11/zelensky-estou-pronto-para-me-encontrar-com-putin-na-turquia.ghtml' target='_blank'>Zelensky: Estou pronto para me encontrar com Putin</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>14:57</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/11/bessent-eua-e-china-fizeram-avanos-substanciais-em-negociaes-comerciais.ghtml' target='_blank'>Bessent: EUA e China fizeram 'avanços substanciais' em negociações comerciais</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>14:20</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/11/trump-fala-em-grande-progresso-mesmo-sem-avanco-em-negociacoes-com-a-china.ghtml' target='_blank'>Trump fala em ‘grande progresso’, mesmo sem avanço em negociações com a China</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>13:39</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/11/um-ano-apos-enchentes-buscas-por-25-desaparecidos-segue-ativa-no-rio-grande-do-sul.ghtml' target='_blank'>Um ano após enchentes, buscas por 25 desaparecidos seguem ativas no Rio Grande do Sul</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>13:25</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/11/apos-pressao-da-europa-putin-chama-a-ucrania-para-encontro-na-turquia.ghtml' target='_blank'>Após pressão da Europa, Putin chama a Ucrânia para encontro na Turquia</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>13:08</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/11/turbulencia-global-muda-rota-de-feiras-e-eventos-e-brasil-esta-no-radar.ghtml' target='_blank'>Turbulência global muda rota de feiras e eventos, e Brasil está no radar</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>12:59</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/11/cop-na-amaznia-no-faz-sentido-sem-amaznidas-diz-reitor-da-ufpa.ghtml' target='_blank'>COP na Amazônia não faz sentido sem amazônidas, diz reitor da UFPA</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>12:49</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/11/anm-autorizou-reduo-de-lance-dado-por-mineradora-aps-empresa-vencer-leilo.ghtml' target='_blank'>ANM autorizou redução de lance dado por mineradora após empresa vencer leilão</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>12:10</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/agronegocios/noticia/2025/05/11/alckmin-regulamentacao-da-politica-para-data-centers-esta-praticamente-formulada.ghtml' target='_blank'>Alckmin: Regulamentação da política para data centers "está praticamente formulada"</a></td>
+                    <td><span class='categoria' style='background-color: #8BC34A;'>Agronegócios</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>11:16</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/agronegocios/noticia/2025/05/11/alckmin-governo-esta-agindo-para-reparar-danos-da-fraude-do-inss.ghtml' target='_blank'>Alckmin: Governo está agindo para reparar danos da fraude do INSS</a></td>
+                    <td><span class='categoria' style='background-color: #8BC34A;'>Agronegócios</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>11:14</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/brasil/artigo/confira-5-calculos-diferentes-que-medem-a-desigualdade-de-renda-no-brasil.ghtml' target='_blank'>Confira 5 cálculos diferentes que medem a desigualdade de renda no Brasil</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>10:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/11/papa-leao-xiv-faz-apelo-por-paz-mundial-em-sua-1a-oracao-dominical.ghtml' target='_blank'>Papa Leão XIV faz apelo por paz mundial em sua 1ª oração dominical</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>09:48</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/politica/noticia/2025/05/11/agenda-de-politica-senado-tenta-ouvir-novo-ministro-da-previdencia-e-lula-participa-de-reunioes-na-china.ghtml' target='_blank'>Agenda de política: Senado tenta ouvir novo ministro da Previdência e Lula participa de reuniões na China</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>09:39</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/11/analise-trump-vai-ao-oriente-medio-de-olho-em-acordo-com-o-ira.ghtml' target='_blank'>Análise: Trump vai ao Oriente Médio de olho em acordo com o Irã</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>09:08</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/legislacao/noticia/2025/05/11/agenda-do-stf-ministros-devem-julgar-contribuicao-sindical-e-periodo-de-descanso-para-trabalhador.ghtml' target='_blank'>Agenda do STF: Ministros devem julgar contribuição sindical e período de descanso para trabalhador</a></td>
+                    <td><span class='categoria' style='background-color: #795548;'>Legislação</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>08:30</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/eu-e/noticia/2025/05/11/centenario-de-rubem-fonseca-traz-a-tona-textos-ineditos-de-juventude-e-outonais-eventos-e-relancamentos.ghtml' target='_blank'>Centenário de Rubem Fonseca traz à tona textos inéditos de juventude e ‘outonais’, eventos e relançamentos</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Eu &</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>08:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/eu-e/noticia/2025/05/11/como-os-produtores-de-azeite-no-brasil-estao-enfrentando-a-quebra-de-safra-de-azeitonas.ghtml' target='_blank'>Como os produtores de azeite no Brasil estão enfrentando a quebra de safra de azeitonas</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Eu &</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>08:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/11/sam-altman-chefe-da-openai-isso-e-inteligencia-em-nivel-de-genio.ghtml' target='_blank'>Sam Altman, chefe da OpenAI: “Isso é inteligência em nível de gênio”</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>08:00</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="stats">Total de notícias: 24</div>
+    </div>
+</body>
+</html>
