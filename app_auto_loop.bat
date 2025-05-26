@@ -3,9 +3,10 @@ echo Monitor de Noticias - Valor Economico, Estadao, Folha e O Globo
 echo Atualizando Github a cada minuto enquanto o servidor web roda
 echo.
 
-REM Definir pasta temporária local
+REM Definir pasta temporária local e caminho do Git
 set TEMP_DIR=%TEMP%\MonitorNoticias
 set SOURCE_DIR=%~dp0
+set GIT_CMD="%TEMP%\PortableGit\bin\git.exe"
 
 echo Criando pasta temporaria: %TEMP_DIR%
 if exist "%TEMP_DIR%" rmdir /s /q "%TEMP_DIR%"
@@ -15,7 +16,7 @@ echo Copiando arquivos para pasta temporaria...
 copy "%SOURCE_DIR%*.py" "%TEMP_DIR%\" > nul
 copy "%SOURCE_DIR%requirements.txt" "%TEMP_DIR%\" > nul
 
-REM Mudar para a pasta temporária
+REM Mudar para a pasta temporária para executar o scraper
 cd /d "%TEMP_DIR%"
 
 REM Executando o scraper para gerar arquivos atualizados inicialmente
@@ -31,7 +32,7 @@ if exist "noticias_folha.json" copy "noticias_folha.json" "%SOURCE_DIR%" > nul
 if exist "noticias_oglobo.json" copy "noticias_oglobo.json" "%SOURCE_DIR%" > nul
 if exist "noticias_combinadas.json" copy "noticias_combinadas.json" "%SOURCE_DIR%" > nul
 
-REM Voltar para a pasta original
+REM Voltar para a pasta original ANTES dos comandos Git
 cd /d "%SOURCE_DIR%"
 
 REM Renomeando o arquivo para index.html
@@ -40,9 +41,9 @@ copy /Y monitor_noticias.html index.html
 
 REM Primeiro push para o GitHub
 echo Enviando versao inicial para o GitHub...
-git add index.html noticias_valor.json noticias_estadao.json noticias_folha.json noticias_oglobo.json noticias_combinadas.json
-git commit -m "Atualizacao automatica inicial %DATE%_%TIME%"
-git push origin main
+%GIT_CMD% add index.html noticias_valor.json noticias_estadao.json noticias_folha.json noticias_oglobo.json noticias_combinadas.json
+%GIT_CMD% commit -m "Atualizacao automatica inicial %DATE%_%TIME%"
+%GIT_CMD% push origin main
 
 REM Iniciando o servidor web em segundo plano
 echo Iniciando servidor web em segundo plano...
@@ -56,7 +57,7 @@ echo.
 REM Esperando 60 segundos
 timeout /t 60 /nobreak > nul
 
-REM Mudar para a pasta temporária
+REM Mudar para a pasta temporária para executar o scraper
 cd /d "%TEMP_DIR%"
 
 REM Executando o scraper para atualizar os arquivos
@@ -71,7 +72,7 @@ if exist "noticias_folha.json" copy "noticias_folha.json" "%SOURCE_DIR%" > nul
 if exist "noticias_oglobo.json" copy "noticias_oglobo.json" "%SOURCE_DIR%" > nul
 if exist "noticias_combinadas.json" copy "noticias_combinadas.json" "%SOURCE_DIR%" > nul
 
-REM Voltar para a pasta original
+REM Voltar para a pasta original ANTES dos comandos Git
 cd /d "%SOURCE_DIR%"
 
 REM Renomeando o arquivo para index.html
@@ -79,13 +80,13 @@ copy /Y monitor_noticias.html index.html > nul
 
 REM Adiciona os arquivos específicos para o commit
 echo [%TIME%] Enviando para o GitHub...
-git add index.html noticias_valor.json noticias_estadao.json noticias_folha.json noticias_oglobo.json noticias_combinadas.json > nul
+%GIT_CMD% add index.html noticias_valor.json noticias_estadao.json noticias_folha.json noticias_oglobo.json noticias_combinadas.json > nul
 
 REM Se houver mudanças, cria um commit
-git diff --quiet HEAD
+%GIT_CMD% diff --quiet HEAD
 if %ERRORLEVEL% neq 0 (
-    git commit -m "Atualizacao automatica %DATE%_%TIME%" > nul
-    git push origin main > nul
+    %GIT_CMD% commit -m "Atualizacao automatica %DATE%_%TIME%" > nul
+    %GIT_CMD% push origin main > nul
     echo [%TIME%] GitHub atualizado com sucesso!
 ) else (
     echo [%TIME%] Nenhuma mudanca desde a ultima atualizacao.
