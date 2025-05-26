@@ -17,6 +17,78 @@ from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from bs4 import BeautifulSoup
 from io import StringIO
+import concurrent.futures
+import threading
+import random
+
+# Pool global de drivers para reutilização
+driver_pool = []
+driver_lock = threading.Lock()
+
+def criar_driver_otimizado():
+    """
+    Cria um driver Edge otimizado para performance
+    """
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-logging")
+    options.add_argument("--log-level=3")
+    options.add_argument("--disable-web-security")
+    options.add_argument("--disable-features=IsolateOrigins,site-per-process")
+    options.add_argument("--disable-images")  # Não carregar imagens para ser mais rápido
+    options.add_argument("--disable-plugins")
+    options.add_argument("--disable-background-timer-throttling")
+    options.add_argument("--disable-backgrounding-occluded-windows")
+    options.add_argument("--disable-renderer-backgrounding")
+    options.add_argument("--disable-features=VizDisplayCompositor")
+    options.add_argument("--disable-ipc-flooding-protection")
+    options.add_argument("--disable-background-networking")
+    options.add_argument("--disable-sync")
+    options.add_argument("--disable-translate")
+    options.add_argument("--disable-default-apps")
+    options.add_argument("--disable-component-extensions-with-background-pages")
+    options.add_argument("--disable-client-side-phishing-detection")
+    options.add_argument("--disable-hang-monitor")
+    options.add_argument("--disable-prompt-on-repost")
+    options.add_argument("--disable-domain-reliability")
+    options.add_argument("--disable-features=TranslateUI")
+    options.add_argument("--disable-features=BlinkGenPropertyTrees")
+    # Configurações adicionais para melhor conectividade
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--disable-features=VizDisplayCompositor")
+    options.add_argument("--max_old_space_size=4096")
+    options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+    
+    service = Service(EdgeChromiumDriverManager().install())
+    driver = webdriver.Edge(service=service, options=options)
+    driver.set_page_load_timeout(25)  # Aumentado para 25 segundos para O Globo
+    driver.implicitly_wait(5)  # Aumentado para 5 segundos
+    return driver
+
+def obter_driver():
+    """
+    Obtém um driver do pool ou cria um novo
+    """
+    with driver_lock:
+        if driver_pool:
+            return driver_pool.pop()
+        else:
+            return criar_driver_otimizado()
+
+def retornar_driver(driver):
+    """
+    Retorna um driver para o pool
+    """
+    with driver_lock:
+        if len(driver_pool) < 4:  # Máximo 4 drivers no pool
+            driver_pool.append(driver)
+        else:
+            driver.quit()
 
 class ValorEconomicoScraper:
     def __init__(self):
@@ -24,101 +96,73 @@ class ValorEconomicoScraper:
         self.noticias = []
         self.hoje = datetime.now().strftime("%d/%m/%Y")
         self.titulos_atuais = set()
+        self.driver = None
         
-        # Configurar o driver do Edge
-        self.driver = self.configurar_driver()
-    
     def configurar_driver(self):
         """
-        Configura o driver do Microsoft Edge para a automação
+        Obtém um driver do pool
         """
         print("Configurando o driver do Microsoft Edge...")
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--window-size=1920,1080")
-        options.add_argument("--disable-extensions")
-        options.add_argument("--disable-logging")
-        options.add_argument("--log-level=3")
-        options.add_argument("--disable-web-security")
-        options.add_argument("--disable-features=IsolateOrigins,site-per-process")
-        
-        # Instalar/atualizar o driver do Edge automaticamente
-        service = Service(EdgeChromiumDriverManager().install())
-        driver = webdriver.Edge(service=service, options=options)
-        
-        return driver
+        self.driver = obter_driver()
+        return self.driver
     
     def fechar_driver(self):
         """
-        Fecha o driver do Edge quando não for mais necessário
+        Retorna o driver para o pool
         """
         if self.driver:
-            self.driver.quit()
-            print("Driver do Edge fechado.")
+            retornar_driver(self.driver)
+            self.driver = None
+            print("Driver do Edge retornado ao pool.")
     
     def obter_pagina(self, url):
         """
-        Carrega a página usando o Selenium e retorna o conteúdo HTML
+        Carrega a página usando o Selenium com timeout otimizado e retry
         """
         try:
-            print(f"Carregando a página: {url}")
-            self.driver.get(url)
+            if not carregar_pagina_com_retry(self.driver, url):
+                return None
             
-            # Aguardar o carregamento dos elementos principais
-            WebDriverWait(self.driver, 10).until(
+            # Aguardar o carregamento dos elementos principais com timeout menor
+            WebDriverWait(self.driver, 8).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "feed-post-body"))
             )
             
-            # Retornar o HTML da página
             return self.driver.page_source
         except Exception as e:
-            print(f"Erro ao carregar página: {e}")
+            print(f"Erro ao aguardar elementos da página: {e}")
             return None
     
     def extrair_noticias(self, html):
         """
-        Extrai as notícias do HTML usando BeautifulSoup
+        Extrai as notícias do HTML usando BeautifulSoup com parada inteligente
         """
         if not html:
-            return 0
+            return 0, False
             
         soup = BeautifulSoup(html, 'html.parser')
-        
-        # Encontrar todos os artigos de notícias
         artigos = soup.find_all('div', class_='feed-post-body')
         print(f"Encontrados {len(artigos)} artigos na página")
         
-        # Data atual para filtrar notícias
         data_atual = self.hoje
-        
         novas_noticias = 0
         noticias_batch = []
+        encontrou_noticia_antiga = False
         
         for artigo in artigos:
             try:
-                # Extrair título e link
                 link_element = artigo.find('a', class_='feed-post-link')
                 if not link_element:
                     continue
                     
                 titulo = link_element.text.strip()
                 
-                # Verificar se o título já existe na lista de notícias
                 if titulo in self.titulos_atuais:
                     continue
                     
                 link = link_element['href']
+                fonte = 'Valor Econômico' if 'valor.globo.com' in link else 'Desconhecida'
                 
-                # Determinar a fonte com base no link
-                if 'valor.globo.com' in link:
-                    fonte = 'Valor Econômico'
-                else:
-                    fonte = 'Desconhecida'
-                
-                # Extrair categoria
                 categoria_element = artigo.find('span', class_='feed-post-metadata-section')
                 if not categoria_element:
                     categoria_element = artigo.find('a', class_='feed-post-header-chapeu')
@@ -127,26 +171,22 @@ class ValorEconomicoScraper:
                     
                 categoria = categoria_element.text.strip() if categoria_element else "Não especificada"
                 
-                # Extrair data e hora
                 data_element = artigo.find('span', class_='feed-post-datetime')
                 if not data_element:
                     continue
                     
                 data_hora_texto = data_element.text.strip()
-                
-                # Verificar se contém o formato de data DD/MM/AAAA, HH:MM
                 data_match = re.search(r'(\d{2}/\d{2}/\d{4}),\s*(\d{2}:\d{2})', data_hora_texto)
+                
                 if data_match:
                     data = data_match.group(1)
                     hora = data_match.group(2)
                     
-                    # Verificar se a notícia é do dia atual
                     if data != data_atual:
-                        # Se encontrarmos uma notícia de data anterior, podemos parar a extração
-                        self.noticias_antigas_encontradas = True
-                        continue
+                        # Encontrou notícia antiga - sinalizar para parar
+                        encontrou_noticia_antiga = True
+                        break
                     
-                    # Adicionar à lista temporária
                     noticias_batch.append({
                         'titulo': titulo,
                         'categoria': categoria,
@@ -157,31 +197,29 @@ class ValorEconomicoScraper:
                     })
                     self.titulos_atuais.add(titulo)
                     novas_noticias += 1
+                    
             except Exception as e:
                 print(f"Erro ao processar artigo: {e}")
                 continue
         
-        # Adicionar o lote de notícias à lista principal
         if noticias_batch:
             self.noticias.extend(noticias_batch)
             print(f"Adicionadas {novas_noticias} novas notícias")
                 
-        return novas_noticias
+        return novas_noticias, encontrou_noticia_antiga
     
     def navegar_para_proxima_pagina(self, pagina_atual):
         """
-        Navega diretamente para a próxima página usando URL em vez de clicar no botão
+        Navega diretamente para a próxima página
         """
         try:
-            # Construir a URL para a próxima página
             proxima_pagina = pagina_atual + 1
             url_proxima = f"https://valor.globo.com/ultimas-noticias/index/feed/pagina-{proxima_pagina}"
             
             print(f"Navegando para página {proxima_pagina}: {url_proxima}")
             self.driver.get(url_proxima)
             
-            # Verificar se a página carregou corretamente
-            WebDriverWait(self.driver, 5).until(
+            WebDriverWait(self.driver, 3).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "feed-post-body"))
             )
             return True
@@ -189,50 +227,54 @@ class ValorEconomicoScraper:
             print(f"Erro ao navegar para a próxima página: {e}")
             return False
     
-    def extrair_todas_noticias(self, max_paginas=15):
+    def extrair_todas_noticias(self, max_paginas=10):  # Reduzido de 15 para 10
         """
-        Extrai notícias de várias páginas usando navegação direta
+        Extrai notícias com parada inteligente quando encontra notícias antigas
         """
-        # Inicializar variáveis de controle
-        self.noticias_antigas_encontradas = False
-        
-        # Carregar a primeira página
+        if not self.driver:
+            self.configurar_driver()
+            
         html = self.obter_pagina(self.url)
         if not html:
-            print("Não foi possível carregar a página inicial.")
+            print("Erro: Não foi possível carregar a primeira página.")
             return
         
-        # Extrair notícias da primeira página
-        novas_noticias = self.extrair_noticias(html)
+        novas_noticias, encontrou_antiga = self.extrair_noticias(html)
         print(f"Notícias encontradas até agora: {len(self.noticias)}")
         
-        # Carregar mais páginas navegando diretamente para as URLs
-        pagina_atual = 1
-        tentativas_sem_novas = 0
+        # Se já encontrou notícia antiga na primeira página, não precisa continuar
+        if encontrou_antiga:
+            print("Encontradas notícias antigas na primeira página. Parando extração.")
+            return
         
-        while pagina_atual < max_paginas and not self.noticias_antigas_encontradas:
-            if self.navegar_para_proxima_pagina(pagina_atual):
-                novas_noticias = self.extrair_noticias(self.driver.page_source)
+        pagina_atual = 1
+        paginas_sem_noticias = 0
+        
+        while pagina_atual < max_paginas and paginas_sem_noticias < 2:  # Para após 2 páginas sem notícias
+            if not self.navegar_para_proxima_pagina(pagina_atual):
+                break
+            
+            html = self.obter_pagina(self.driver.current_url)
+            if not html:
+                paginas_sem_noticias += 1
                 pagina_atual += 1
-                
-                if novas_noticias > 0:
-                    print(f"Notícias encontradas até agora: {len(self.noticias)}")
-                    tentativas_sem_novas = 0
-                else:
-                    tentativas_sem_novas += 1
-                    print(f"Nenhuma nova notícia na página {pagina_atual}. Tentativa {tentativas_sem_novas}/2")
-                    if tentativas_sem_novas >= 2:
-                        print("Duas tentativas sem novas notícias. Finalizando.")
-                        break
-                
-                if self.noticias_antigas_encontradas:
-                    print("Encontradas notícias de dias anteriores. Finalizando.")
-                    break
-            else:
-                print("Não foi possível carregar mais páginas. Finalizando.")
+                continue
+            
+            novas_noticias, encontrou_antiga = self.extrair_noticias(html)
+            
+            if encontrou_antiga:
+                print(f"Encontradas notícias antigas na página {pagina_atual + 1}. Parando extração.")
                 break
                 
-        print(f"Extração finalizada após verificar {pagina_atual} páginas. Total: {len(self.noticias)} notícias")
+            if novas_noticias == 0:
+                paginas_sem_noticias += 1
+            else:
+                paginas_sem_noticias = 0
+                
+            print(f"Notícias encontradas até agora: {len(self.noticias)}")
+            pagina_atual += 1
+        
+        print(f"Extração do Valor Econômico finalizada após verificar {pagina_atual} páginas. Total: {len(self.noticias)} notícias")
     
     def salvar_noticias(self, formato='json'):
         """
@@ -521,135 +563,88 @@ class EstadaoScraper:
         self.noticias = []
         self.hoje = datetime.now().strftime("%d/%m/%Y")
         self.titulos_atuais = set()
-        
-        # Configurar o driver do Edge
-        self.driver = self.configurar_driver()
+        self.driver = None
     
     def configurar_driver(self):
         """
-        Configura o driver do Microsoft Edge para a automação
+        Obtém um driver do pool
         """
         print("Configurando o driver do Microsoft Edge...")
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--window-size=1920,1080")
-        options.add_argument("--disable-extensions")
-        options.add_argument("--disable-logging")
-        options.add_argument("--log-level=3")
-        options.add_argument("--disable-web-security")
-        options.add_argument("--disable-features=IsolateOrigins,site-per-process")
-        
-        # Instalar/atualizar o driver do Edge automaticamente
-        service = Service(EdgeChromiumDriverManager().install())
-        driver = webdriver.Edge(service=service, options=options)
-        
-        return driver
+        self.driver = obter_driver()
+        return self.driver
     
     def fechar_driver(self):
         """
-        Fecha o driver do Edge quando não for mais necessário
+        Retorna o driver para o pool
         """
         if self.driver:
-            self.driver.quit()
-            print("Driver do Edge fechado.")
+            retornar_driver(self.driver)
+            self.driver = None
+            print("Driver do Edge retornado ao pool.")
     
     def obter_pagina(self, url):
         """
-        Carrega a página usando o Selenium e retorna o conteúdo HTML
+        Carrega a página usando o Selenium com timeout otimizado e retry
         """
         try:
-            print(f"Carregando a página: {url}")
-            self.driver.get(url)
+            if not carregar_pagina_com_retry(self.driver, url):
+                return None
             
-            # Aguardar o carregamento dos elementos principais
-            WebDriverWait(self.driver, 10).until(
+            # Aguardar o carregamento dos elementos principais com timeout menor
+            WebDriverWait(self.driver, 8).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "a[data-component-name='lista-ultimas']"))
             )
             
-            # Retornar o HTML da página
             return self.driver.page_source
         except Exception as e:
-            print(f"Erro ao carregar página: {e}")
+            print(f"Erro ao aguardar elementos da página: {e}")
             return None
     
     def extrair_noticias(self, html):
         """
-        Extrai as notícias do HTML usando BeautifulSoup
+        Extrai as notícias do HTML usando BeautifulSoup com parada inteligente
         """
         if not html:
-            return 0
+            return 0, False
             
         soup = BeautifulSoup(html, 'html.parser')
-        
-        # Encontrar todos os artigos de notícias
-        # No Estadão, as notícias estão em links específicos
         artigos = soup.find_all('a', attrs={'data-component-name': 'lista-ultimas'})
         print(f"Encontrados {len(artigos)} artigos na página")
         
-        # Data atual para filtrar notícias
         data_atual = self.hoje
-        
         novas_noticias = 0
         noticias_batch = []
+        encontrou_noticia_antiga = False
         
         for artigo in artigos:
             try:
-                # Extrair título e link
                 titulo = artigo.get('title', '').strip()
                 if not titulo:
                     continue
                 
-                # Verificar se o título já existe na lista de notícias
                 if titulo in self.titulos_atuais:
                     continue
                     
                 link = artigo.get('href', '#')
-                
-                # Extrair categoria - no Estadão está no texto do link
                 categoria = artigo.text.strip()
                 
-                # Remover duplicatas de categorias (se aparecer mais de uma vez no HTML)
+                # Remover duplicatas de categorias
                 if categoria and artigo.find_previous('a', attrs={'data-component-name': 'lista-ultimas'}) and artigo.find_previous('a', attrs={'data-component-name': 'lista-ultimas'}).text.strip() == categoria:
-                    # Se o mesmo texto da categoria aparece em um link anterior, pode ser um item duplicado
                     continue
                 
-                # Se a categoria estiver vazia ou for muito longa, não é uma categoria válida
+                # Mapear categoria baseado na URL se necessário
                 if not categoria or categoria == "" or len(categoria) > 30:
-                    # Mapeamento expandido de categorias baseado nos padrões de URL do Estadão
                     url_categories = {
                         '/politica/': 'Política',
                         '/economia/': 'Economia',
                         '/esportes/': 'Esportes',
                         '/cultura/': 'Cultura',
                         '/internacional/': 'Internacional',
-                        '/sustentabilidade/': 'Sustentabilidade',
-                        '/educacao/': 'Educação',
-                        '/saude/': 'Saúde',
                         '/brasil/': 'Brasil',
                         '/tecnologia/': 'Tecnologia',
                         '/futebol/': 'Futebol',
-                        '/link/': 'Tecnologia',
-                        '/emais/': 'Entretenimento',
-                        '/emais/celebridades/': 'Celebridades',
-                        '/emais/gente/': 'Celebridades',
-                        '/emais/tv/': 'Televisão',
-                        '/esportes/futebol/': 'Futebol',
-                        '/esportes/ufc/': 'UFC',
-                        '/esportes/basquete/': 'Basquete',
-                        '/esportes/tenis/': 'Tênis',
-                        '/economia/sua-carreira/': 'Carreira',
-                        '/economia/negocios/': 'Negócios',
-                        '/economia/pme/': 'PME',
-                        '/jornal-do-carro/': 'Automóveis',
                         '/sao-paulo/': 'São Paulo',
-                        '/estadao-verifica/': 'Fato ou Fake',
-                        '/eldorado/': 'Rádio',
-                        '/opiniao/': 'Opinião',
-                        '/acervo/': 'História',
-                        '/midia-mkt/': 'Mídia e Marketing'
+                        '/opiniao/': 'Opinião'
                     }
                     
                     categoria_encontrada = False
@@ -662,16 +657,13 @@ class EstadaoScraper:
                     if not categoria_encontrada:
                         categoria = "Não especificada"
                 
-                print(f"Categoria extraída: '{categoria}' para o título: '{titulo[:50]}'")
-                
-                # Encontrar a data e hora - no Estadão está em um span com class="date" próximo ao link
+                # Encontrar a data e hora
                 data_element = None
                 parent_div = artigo.find_parent('div')
                 if parent_div:
                     data_element = parent_div.find('span', class_='date')
                 
                 if not data_element:
-                    # Tenta buscar em elementos vizinhos
                     next_element = artigo.find_next_sibling()
                     if next_element and next_element.name == 'span' and 'date' in next_element.get('class', []):
                         data_element = next_element
@@ -680,18 +672,17 @@ class EstadaoScraper:
                     continue
                 
                 data_hora_texto = data_element.text.strip()
-                
-                # Extrair data e hora do formato "25/04/2025, 10h17"
                 data_match = re.search(r'(\d{2}/\d{2}/\d{4}),\s*(\d{1,2})h(\d{2})', data_hora_texto)
+                
                 if data_match:
                     data = data_match.group(1)
                     hora = f"{data_match.group(2)}:{data_match.group(3)}"
                     
-                    # Verificar se a notícia é do dia atual
                     if data != data_atual:
-                        continue
+                        # Encontrou notícia antiga - sinalizar para parar
+                        encontrou_noticia_antiga = True
+                        break
                     
-                    # Adicionar à lista temporária
                     noticias_batch.append({
                         'titulo': titulo,
                         'categoria': categoria,
@@ -702,16 +693,16 @@ class EstadaoScraper:
                     })
                     self.titulos_atuais.add(titulo)
                     novas_noticias += 1
+                    
             except Exception as e:
                 print(f"Erro ao processar artigo: {e}")
                 continue
         
-        # Adicionar o lote de notícias à lista principal
         if noticias_batch:
             self.noticias.extend(noticias_batch)
-            print(f"Adicionadas {novas_noticias} novas notícias")
+            print(f"Adicionadas {novas_noticias} novas notícias do Estadão")
                 
-        return novas_noticias
+        return novas_noticias, encontrou_noticia_antiga
     
     def obter_categoria_da_pagina(self, url):
         """
@@ -838,65 +829,54 @@ class EstadaoScraper:
             print(f"Erro ao clicar no botão 'Carregar mais notícias': {e}")
             return False
     
-    def extrair_todas_noticias(self, max_cliques=10):
+    def extrair_todas_noticias(self, max_cliques=8):  # Reduzido de 10 para 8
         """
-        Extrai notícias clicando no botão 'Carregar mais notícias' várias vezes
-        
-        Args:
-            max_cliques: Número máximo de vezes para clicar no botão
+        Extrai notícias com parada inteligente quando encontra notícias antigas
         """
-        # Carregar a primeira página
+        if not self.driver:
+            self.configurar_driver()
+            
         html = self.obter_pagina(self.url)
         if not html:
-            print("Não foi possível carregar a página inicial.")
+            print("Erro: Não foi possível carregar a primeira página do Estadão.")
             return
         
-        # Extrair notícias da primeira página
-        novas_noticias = self.extrair_noticias(html)
-        print(f"Notícias encontradas na página inicial: {novas_noticias}")
+        novas_noticias, encontrou_antiga = self.extrair_noticias(html)
+        print(f"Notícias do Estadão encontradas até agora: {len(self.noticias)}")
         
-        # Clique no botão "Carregar mais notícias" várias vezes
+        # Se já encontrou notícia antiga na primeira página, não precisa continuar
+        if encontrou_antiga:
+            print("Encontradas notícias antigas na primeira página do Estadão. Parando extração.")
+            return
+        
         cliques_realizados = 0
-        tentativas_sem_novas = 0
+        cliques_sem_noticias = 0
         
-        while cliques_realizados < max_cliques:
-            # Clicar no botão para carregar mais notícias
-            if self.clicar_carregar_mais():
-                # Extrair as novas notícias carregadas
-                novas_noticias = self.extrair_noticias(self.driver.page_source)
-                cliques_realizados += 1
-                
-                print(f"Clique {cliques_realizados}/{max_cliques} realizado.")
-                
-                if novas_noticias > 0:
-                    print(f"Notícias encontradas até agora: {len(self.noticias)}")
-                    tentativas_sem_novas = 0
-                else:
-                    tentativas_sem_novas += 1
-                    print(f"Nenhuma nova notícia após o clique {cliques_realizados}. Tentativa {tentativas_sem_novas}/3")
-                    
-                    # Se não encontrarmos novas notícias em 3 tentativas consecutivas, paramos
-                    if tentativas_sem_novas >= 3:
-                        print("Três tentativas sem novas notícias. Finalizando.")
-                        break
-            else:
-                print("Não foi possível carregar mais notícias. Finalizando.")
+        while cliques_realizados < max_cliques and cliques_sem_noticias < 2:  # Para após 2 cliques sem notícias
+            if not self.clicar_carregar_mais():
+                print("Não foi possível clicar em 'Carregar mais' ou botão não encontrado.")
                 break
             
-            # Pequena pausa para não sobrecarregar o site
-            time.sleep(1)
+            # Aguardar carregamento das novas notícias
+            time.sleep(2)  # Reduzido de 3 para 2 segundos
+            
+            html = self.driver.page_source
+            novas_noticias, encontrou_antiga = self.extrair_noticias(html)
+            
+            if encontrou_antiga:
+                print(f"Encontradas notícias antigas após {cliques_realizados + 1} cliques no Estadão. Parando extração.")
+                break
                 
-        print(f"Extração finalizada após {cliques_realizados} cliques. Total: {len(self.noticias)} notícias")
+            if novas_noticias == 0:
+                cliques_sem_noticias += 1
+                print(f"Nenhuma nova notícia após clique {cliques_realizados + 1}. Tentativa {cliques_sem_noticias}/2")
+            else:
+                cliques_sem_noticias = 0
+                print(f"Notícias do Estadão encontradas até agora: {len(self.noticias)}")
+            
+            cliques_realizados += 1
         
-        # Refinar categorias para notícias sem categoria específica
-        print("Refinando categorias para notícias do Estadão...")
-        for i, noticia in enumerate(self.noticias):
-            if noticia['categoria'] == "Não especificada" and noticia['fonte'] == 'Estadão':
-                print(f"Buscando categoria para '{noticia['titulo'][:30]}...'")
-                categoria = self.obter_categoria_da_pagina(noticia['link'])
-                if categoria != "Não especificada":
-                    self.noticias[i]['categoria'] = categoria
-                    print(f"Categoria encontrada: {categoria}")
+        print(f"Extração do Estadão finalizada após {cliques_realizados} cliques. Total: {len(self.noticias)} notícias")
     
     def salvar_noticias(self):
         """
@@ -938,40 +918,24 @@ class FolhaScraper:
         self.noticias = []
         self.hoje = datetime.now().strftime("%d/%m/%Y")
         self.titulos_atuais = set()
-        
-        # Configurar o driver do Edge
-        self.driver = self.configurar_driver()
+        self.driver = None
     
     def configurar_driver(self):
         """
-        Configura o driver do Microsoft Edge para a automação
+        Obtém um driver do pool
         """
-        print("Configurando o driver do Microsoft Edge para Folha...")
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--window-size=1920,1080")
-        options.add_argument("--disable-extensions")
-        options.add_argument("--disable-logging")
-        options.add_argument("--log-level=3")
-        options.add_argument("--disable-web-security")
-        options.add_argument("--disable-features=IsolateOrigins,site-per-process")
-        
-        # Instalar/atualizar o driver do Edge automaticamente
-        service = Service(EdgeChromiumDriverManager().install())
-        driver = webdriver.Edge(service=service, options=options)
-        
-        return driver
+        print("Configurando o driver do Microsoft Edge...")
+        self.driver = obter_driver()
+        return self.driver
     
     def fechar_driver(self):
         """
-        Fecha o driver do Edge quando não for mais necessário
+        Retorna o driver para o pool
         """
         if self.driver:
-            self.driver.quit()
-            print("Driver do Edge para Folha fechado.")
+            retornar_driver(self.driver)
+            self.driver = None
+            print("Driver do Edge retornado ao pool.")
     
     def obter_pagina(self, url):
         """
@@ -1332,7 +1296,7 @@ class FolhaScraper:
             print(f"Erro ao clicar no botão 'Ver mais' da Folha: {e}")
             return False
     
-    def extrair_todas_noticias(self, max_cliques=10):
+    def extrair_todas_noticias(self, max_cliques=8):
         """
         Extrai notícias clicando no botão 'Ver mais' várias vezes
         
@@ -1422,53 +1386,43 @@ class OGloboScraper:
         self.noticias = []
         self.hoje = datetime.now().strftime("%d/%m/%Y")
         self.titulos_atuais = set()
-        
-        # Configurar o driver do Edge
-        self.driver = self.configurar_driver()
+        self.driver = None
     
     def configurar_driver(self):
         """
-        Configura o driver do Microsoft Edge para a automação
+        Obtém um driver do pool
         """
-        print("Configurando o driver do Microsoft Edge para O Globo...")
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--window-size=1920,1080")
-        options.add_argument("--disable-extensions")
-        options.add_argument("--disable-logging")
-        options.add_argument("--log-level=3")
-        options.add_argument("--disable-web-security")
-        options.add_argument("--disable-features=IsolateOrigins,site-per-process")
-        
-        # Instalar/atualizar o driver do Edge automaticamente
-        service = Service(EdgeChromiumDriverManager().install())
-        driver = webdriver.Edge(service=service, options=options)
-        
-        return driver
+        print("Configurando o driver do Microsoft Edge...")
+        self.driver = obter_driver()
+        return self.driver
     
     def fechar_driver(self):
         """
-        Fecha o driver do Edge quando não for mais necessário
+        Retorna o driver para o pool
         """
         if self.driver:
-            self.driver.quit()
-            print("Driver do Edge para O Globo fechado.")
+            retornar_driver(self.driver)
+            self.driver = None
+            print("Driver do Edge retornado ao pool.")
     
     def obter_pagina(self, url):
         """
-        Carrega a página usando o Selenium e retorna o conteúdo HTML
+        Carrega a página usando o Selenium com retry e retorna o conteúdo HTML
         """
         try:
             print(f"Carregando a página de O Globo: {url}")
-            self.driver.get(url)
             
-            # Aguardar o carregamento dos elementos principais
-            WebDriverWait(self.driver, 10).until(
+            # Usar a função de retry com timeout maior específico para O Globo
+            if not carregar_pagina_com_retry(self.driver, url, max_tentativas=4, timeout=30):
+                return None
+            
+            # Aguardar o carregamento dos elementos principais com timeout maior
+            WebDriverWait(self.driver, 25).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "feed-post-body"))
             )
+            
+            # Aguardar um pouco mais para garantir carregamento completo
+            time.sleep(3)
             
             # Retornar o HTML da página
             return self.driver.page_source
@@ -1586,7 +1540,7 @@ class OGloboScraper:
     
     def navegar_para_proxima_pagina(self, pagina_atual):
         """
-        Navega diretamente para a próxima página usando URL
+        Navega diretamente para a próxima página usando URL com retry
         """
         try:
             # Construir a URL para a próxima página
@@ -1595,10 +1549,13 @@ class OGloboScraper:
             # Note a extensão .ghtml, diferente do Valor
             
             print(f"Navegando para página {proxima_pagina} de O Globo: {url_proxima}")
-            self.driver.get(url_proxima)
             
-            # Verificar se a página carregou corretamente
-            WebDriverWait(self.driver, 5).until(
+            # Usar a função de retry com timeout maior
+            if not carregar_pagina_com_retry(self.driver, url_proxima, max_tentativas=4, timeout=30):
+                return False
+            
+            # Verificar se a página carregou corretamente com timeout maior
+            WebDriverWait(self.driver, 20).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "feed-post-body"))
             )
             return True
@@ -1682,86 +1639,179 @@ class OGloboScraper:
             
         return df
 
-# Função principal para executar o scraper de O Globo
-def extrair_noticias_oglobo():
-    print("Iniciando extração de notícias de O Globo...")
-    scraper = OGloboScraper()
-    
-    try:
-        scraper.extrair_todas_noticias()
-        df = scraper.salvar_noticias()
-        print(f"Extração de O Globo concluída. Foram encontradas {len(df)} notícias.")
-        return df
-    finally:
-        scraper.fechar_driver()
-
-# Função principal para executar o scraper
 def extrair_noticias_valor():
+    """
+    Função otimizada para extrair notícias do Valor Econômico
+    """
     print("Iniciando extração de notícias do Valor Econômico...")
     scraper = ValorEconomicoScraper()
-    
     try:
+        scraper.configurar_driver()
         scraper.extrair_todas_noticias()
         df = scraper.salvar_noticias()
-        print(f"Extração concluída. Foram encontradas {len(df)} notícias.")
-        print(f"Os resultados foram salvos em monitor_noticias.html")
+        print(f"Extração de Valor Econômico concluída. Foram encontradas {len(scraper.noticias)} notícias.")
         return df
+    except Exception as e:
+        print(f"Erro na extração do Valor Econômico: {e}")
+        return None
     finally:
         scraper.fechar_driver()
 
-# Função principal para executar o scraper do Estadão
 def extrair_noticias_estadao():
+    """
+    Função otimizada para extrair notícias do Estadão
+    """
     print("Iniciando extração de notícias do Estadão...")
     scraper = EstadaoScraper()
-    
     try:
-        scraper.extrair_todas_noticias()
+        scraper.configurar_driver()
+        scraper.extrair_todas_noticias(max_cliques=8)  # Reduzido de 10 para 8
         df = scraper.salvar_noticias()
-        print(f"Extração do Estadão concluída. Foram encontradas {len(df)} notícias.")
+        print(f"Extração de Estadão concluída. Foram encontradas {len(scraper.noticias)} notícias.")
         return df
+    except Exception as e:
+        print(f"Erro na extração do Estadão: {e}")
+        return None
     finally:
         scraper.fechar_driver()
 
-# Função principal para executar o scraper da Folha
 def extrair_noticias_folha():
-    print("Iniciando extração de notícias da Folha de S.Paulo...")
+    """
+    Função otimizada para extrair notícias da Folha
+    """
+    print("Iniciando extração de notícias da Folha...")
     scraper = FolhaScraper()
-    
     try:
-        scraper.extrair_todas_noticias()
+        scraper.configurar_driver()
+        scraper.extrair_todas_noticias(max_cliques=8)  # Reduzido de 10 para 8
         df = scraper.salvar_noticias()
-        print(f"Extração da Folha concluída. Foram encontradas {len(df)} notícias.")
+        print(f"Extração de Folha concluída. Foram encontradas {len(scraper.noticias)} notícias.")
         return df
+    except Exception as e:
+        print(f"Erro na extração da Folha: {e}")
+        return None
     finally:
         scraper.fechar_driver()
 
-# Função para executar todos os scrapers e combinar os resultados
-def extrair_todas_noticias():
-    # Extrair notícias do Valor Econômico
-    df_valor = extrair_noticias_valor()
+def extrair_noticias_oglobo():
+    """
+    Função otimizada para extrair notícias de O Globo
+    """
+    print("Iniciando extração de notícias de O Globo...")
+    scraper = OGloboScraper()
+    try:
+        scraper.configurar_driver()
+        scraper.extrair_todas_noticias(max_paginas=10)  # Reduzido de 15 para 10
+        df = scraper.salvar_noticias()
+        print(f"Extração de O Globo concluída. Foram encontradas {len(scraper.noticias)} notícias.")
+        return df
+    except Exception as e:
+        print(f"Erro na extração de O Globo: {e}")
+        return None
+    finally:
+        scraper.fechar_driver()
+
+def extrair_todas_noticias(modo_rapido=False):
+    """
+    Extrai notícias de todas as fontes em paralelo para maior eficiência
     
-    # Extrair notícias do Estadão
-    df_estadao = extrair_noticias_estadao()
+    Args:
+        modo_rapido: Se True, reduz o número de páginas/cliques para atualizações mais frequentes
+    """
+    print("=== INICIANDO EXTRAÇÃO PARALELA DE NOTÍCIAS ===")
+    if modo_rapido:
+        print("Modo rápido ativado - menos páginas por fonte")
     
-    # Extrair notícias da Folha
-    df_folha = extrair_noticias_folha()
+    start_time = time.time()
     
-    # Extrair notícias de O Globo
-    df_oglobo = extrair_noticias_oglobo()
+    # Ajustar parâmetros baseado no modo
+    max_paginas = 5 if modo_rapido else 10
+    max_cliques = 4 if modo_rapido else 8
+    
+    # Lista de funções de extração com parâmetros otimizados
+    def extrair_valor_otimizado():
+        scraper = ValorEconomicoScraper()
+        try:
+            scraper.configurar_driver()
+            scraper.extrair_todas_noticias(max_paginas=max_paginas)
+            df = scraper.salvar_noticias()
+            print(f"Extração de Valor Econômico concluída. Foram encontradas {len(scraper.noticias)} notícias.")
+            return df
+        except Exception as e:
+            print(f"Erro na extração do Valor Econômico: {e}")
+            return None
+        finally:
+            scraper.fechar_driver()
+    
+    def extrair_estadao_otimizado():
+        scraper = EstadaoScraper()
+        try:
+            scraper.configurar_driver()
+            scraper.extrair_todas_noticias(max_cliques=max_cliques)
+            df = scraper.salvar_noticias()
+            print(f"Extração de Estadão concluída. Foram encontradas {len(scraper.noticias)} notícias.")
+            return df
+        except Exception as e:
+            print(f"Erro na extração do Estadão: {e}")
+            return None
+        finally:
+            scraper.fechar_driver()
+    
+    def extrair_folha_otimizado():
+        scraper = FolhaScraper()
+        try:
+            scraper.configurar_driver()
+            scraper.extrair_todas_noticias(max_cliques=max_cliques)
+            df = scraper.salvar_noticias()
+            print(f"Extração de Folha concluída. Foram encontradas {len(scraper.noticias)} notícias.")
+            return df
+        except Exception as e:
+            print(f"Erro na extração da Folha: {e}")
+            return None
+        finally:
+            scraper.fechar_driver()
+    
+    def extrair_oglobo_otimizado():
+        scraper = OGloboScraper()
+        try:
+            scraper.configurar_driver()
+            scraper.extrair_todas_noticias(max_paginas=max_paginas)
+            df = scraper.salvar_noticias()
+            print(f"Extração de O Globo concluída. Foram encontradas {len(scraper.noticias)} notícias.")
+            return df
+        except Exception as e:
+            print(f"Erro na extração de O Globo: {e}")
+            return None
+        finally:
+            scraper.fechar_driver()
+    
+    funcoes_extracao = [
+        extrair_valor_otimizado,
+        extrair_estadao_otimizado,
+        extrair_folha_otimizado,
+        extrair_oglobo_otimizado
+    ]
+    
+    # Executar extrações em paralelo
+    resultados = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        # Submeter todas as tarefas
+        futures = [executor.submit(func) for func in funcoes_extracao]
+        
+        # Coletar resultados conforme completam
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                resultado = future.result(timeout=180 if modo_rapido else 300)  # Timeout menor no modo rápido
+                if resultado is not None and not resultado.empty:
+                    resultados.append(resultado)
+            except concurrent.futures.TimeoutError:
+                print("Timeout em um dos scrapers - continuando com os outros")
+            except Exception as e:
+                print(f"Erro em um dos scrapers: {e}")
     
     # Combinar os dataframes
-    dfs_validos = []
-    if df_valor is not None and not df_valor.empty:
-        dfs_validos.append(df_valor)
-    if df_estadao is not None and not df_estadao.empty:
-        dfs_validos.append(df_estadao)
-    if df_folha is not None and not df_folha.empty:
-        dfs_validos.append(df_folha)
-    if df_oglobo is not None and not df_oglobo.empty: # Adicionar O Globo
-        dfs_validos.append(df_oglobo)
-    
-    if dfs_validos:
-        df_combinado = pd.concat(dfs_validos, ignore_index=True)
+    if resultados:
+        df_combinado = pd.concat(resultados, ignore_index=True)
         
         # Remover duplicatas (caso haja notícias com títulos idênticos)
         df_combinado = df_combinado.drop_duplicates(subset=['titulo'])
@@ -1786,13 +1836,37 @@ def extrair_todas_noticias():
         # Gerar HTML com as notícias combinadas
         gerar_html_completo(df_combinado)
         
+        end_time = time.time()
+        tempo_total = end_time - start_time
         print(f"Total de notícias combinadas: {len(df_combinado)}")
+        print(f"Tempo total de execução: {tempo_total:.2f} segundos")
+        
+        # Limpar pool de drivers
+        limpar_pool_drivers()
+        
         return df_combinado
     else:
         print("Não foi possível combinar as notícias, pois nenhum scraper retornou dados válidos.")
         # Gerar HTML vazio ou com mensagem de erro
         gerar_html_completo(pd.DataFrame(columns=['titulo', 'categoria', 'fonte', 'data', 'hora', 'link'])) 
+        
+        # Limpar pool de drivers
+        limpar_pool_drivers()
+        
         return None
+
+def limpar_pool_drivers():
+    """
+    Limpa o pool de drivers fechando todos
+    """
+    with driver_lock:
+        while driver_pool:
+            driver = driver_pool.pop()
+            try:
+                driver.quit()
+            except:
+                pass
+        print("Pool de drivers limpo.")
 
 def gerar_html_completo(df):
     """
@@ -1848,7 +1922,6 @@ def gerar_html_completo(df):
         cor_padrao = '#9E9E9E' # Cinza
         
         # Gerar cores aleatórias para categorias que não estão no mapa
-        import random
         for categoria in categorias:
             if categoria not in cores_categorias:
                 # Gerar cor HSL para garantir boa saturação e luminosidade
@@ -2045,12 +2118,38 @@ def gerar_html_completo(df):
             pass
         return False
 
+def carregar_pagina_com_retry(driver, url, max_tentativas=3, timeout=25):
+    """
+    Tenta carregar uma página com múltiplas tentativas em caso de timeout
+    """
+    for tentativa in range(max_tentativas):
+        try:
+            print(f"Carregando página (tentativa {tentativa + 1}/{max_tentativas}): {url}")
+            
+            # Configurar timeout específico para esta tentativa
+            driver.set_page_load_timeout(timeout)
+            driver.get(url)
+            
+            # Aguardar um pouco para garantir carregamento
+            time.sleep(1)
+            return True
+        except Exception as e:
+            print(f"Erro na tentativa {tentativa + 1}: {e}")
+            if tentativa < max_tentativas - 1:
+                # Aumentar timeout progressivamente
+                timeout_progressivo = timeout + (tentativa * 10)
+                print(f"Tentando novamente em 3 segundos com timeout de {timeout_progressivo}s...")
+                time.sleep(3)
+                driver.set_page_load_timeout(timeout_progressivo)
+            else:
+                print(f"Falha ao carregar {url} após {max_tentativas} tentativas")
+                return False
+    return False
+
 # Atualizar o final do arquivo para incluir o novo scraper se executado diretamente
 if __name__ == "__main__":
     start_time = time.time()
-    # Exemplo: Extrair só O Globo se executar diretamente
-    # extrair_noticias_oglobo() 
-    # Ou extrair tudo:
-    extrair_todas_noticias()
+    # Usar modo rápido por padrão para atualizações mais frequentes
+    extrair_todas_noticias(modo_rapido=True)
     end_time = time.time()
     print(f"Tempo total de execução: {end_time - start_time:.2f} segundos") 

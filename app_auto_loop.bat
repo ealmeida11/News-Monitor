@@ -1,96 +1,44 @@
 @echo off
-echo Monitor de Noticias - Valor Economico, Estadao, Folha e O Globo
-echo Atualizando Github a cada minuto enquanto o servidor web roda
-echo.
+chcp 65001 >nul
+setlocal enabledelayedexpansion
 
-REM Definir pasta temporária local e caminho do Git
-set TEMP_DIR=%TEMP%\MonitorNoticias
-set SOURCE_DIR=%~dp0
-set GIT_CMD="%TEMP%\PortableGit\bin\git.exe"
-
-echo Criando pasta temporaria: %TEMP_DIR%
-if exist "%TEMP_DIR%" rmdir /s /q "%TEMP_DIR%"
-mkdir "%TEMP_DIR%"
-
-echo Copiando arquivos para pasta temporaria...
-copy "%SOURCE_DIR%*.py" "%TEMP_DIR%\" > nul
-copy "%SOURCE_DIR%requirements.txt" "%TEMP_DIR%\" > nul
-
-REM Mudar para a pasta temporária para executar o scraper
-cd /d "%TEMP_DIR%"
-
-REM Executando o scraper para gerar arquivos atualizados inicialmente
-echo Executando scraper para gerar arquivos atualizados...
-python scraper.py
-
-REM Copiando resultados de volta
-echo Copiando resultados de volta...
-if exist "monitor_noticias.html" copy "monitor_noticias.html" "%SOURCE_DIR%" > nul
-if exist "noticias_valor.json" copy "noticias_valor.json" "%SOURCE_DIR%" > nul
-if exist "noticias_estadao.json" copy "noticias_estadao.json" "%SOURCE_DIR%" > nul
-if exist "noticias_folha.json" copy "noticias_folha.json" "%SOURCE_DIR%" > nul
-if exist "noticias_oglobo.json" copy "noticias_oglobo.json" "%SOURCE_DIR%" > nul
-if exist "noticias_combinadas.json" copy "noticias_combinadas.json" "%SOURCE_DIR%" > nul
-
-REM Voltar para a pasta original ANTES dos comandos Git
-cd /d "%SOURCE_DIR%"
-
-REM Renomeando o arquivo para index.html
-echo Copiando monitor_noticias.html para index.html...
-copy /Y monitor_noticias.html index.html
-
-REM Primeiro push para o GitHub
-echo Enviando versao inicial para o GitHub...
-%GIT_CMD% add index.html noticias_valor.json noticias_estadao.json noticias_folha.json noticias_oglobo.json noticias_combinadas.json
-%GIT_CMD% commit -m "Atualizacao automatica inicial %DATE%_%TIME%"
-%GIT_CMD% push origin main
-
-REM Iniciando o servidor web em segundo plano
-echo Iniciando servidor web em segundo plano...
-start /b "Monitor de Noticias - Servidor Web" python app.py -w -a
-
-REM Loop principal para atualizar o GitHub
-echo Iniciando loop de atualizacao do GitHub. Pressione Ctrl+C para encerrar.
-echo.
+echo ========================================
+echo Monitor de Noticias - Loop Automatico
+echo ========================================
 
 :loop
-REM Esperando 60 segundos
-timeout /t 60 /nobreak > nul
+echo.
+echo [%date% %time%] Iniciando nova execucao...
 
-REM Mudar para a pasta temporária para executar o scraper
+REM Copiar arquivos Python para diretorio temporario
+set TEMP_DIR=%TEMP%\MonitorNoticias
+if not exist "%TEMP_DIR%" mkdir "%TEMP_DIR%"
+
+copy /Y "scraper.py" "%TEMP_DIR%\" >nul
+copy /Y "app.py" "%TEMP_DIR%\" >nul
+copy /Y "main.py" "%TEMP_DIR%\" >nul
+
+REM Executar scraper no diretorio temporario (modo rapido otimizado)
 cd /d "%TEMP_DIR%"
-
-REM Executando o scraper para atualizar os arquivos
-echo [%TIME%] Atualizando arquivos...
 python scraper.py
 
-REM Copiando resultados de volta
-if exist "monitor_noticias.html" copy "monitor_noticias.html" "%SOURCE_DIR%" > nul
-if exist "noticias_valor.json" copy "noticias_valor.json" "%SOURCE_DIR%" > nul
-if exist "noticias_estadao.json" copy "noticias_estadao.json" "%SOURCE_DIR%" > nul
-if exist "noticias_folha.json" copy "noticias_folha.json" "%SOURCE_DIR%" > nul
-if exist "noticias_oglobo.json" copy "noticias_oglobo.json" "%SOURCE_DIR%" > nul
-if exist "noticias_combinadas.json" copy "noticias_combinadas.json" "%SOURCE_DIR%" > nul
+REM Copiar resultados de volta para o diretorio original
+copy /Y "*.json" "\\jgprjfileserver\Research\Economics\Ealmeida\Brasil\News\" >nul
+copy /Y "*.html" "\\jgprjfileserver\Research\Economics\Ealmeida\Brasil\News\" >nul
 
-REM Voltar para a pasta original ANTES dos comandos Git
-cd /d "%SOURCE_DIR%"
+REM Usar PowerShell para comandos Git (suporta UNC paths)
+powershell -Command "cd '\\jgprjfileserver\Research\Economics\Ealmeida\Brasil\News'; if (git status --porcelain) { $timestamp = Get-Date -Format 'ddd MM/dd/yyyy_HH:mm:ss.ff'; git add .; git commit -m \"Atualizacao automatica $timestamp\"; git push; Write-Host 'Commit realizado com sucesso!' } else { Write-Host 'Nenhuma alteracao detectada.' }"
 
-REM Renomeando o arquivo para index.html
-copy /Y monitor_noticias.html index.html > nul
-
-REM Adiciona os arquivos específicos para o commit
-echo [%TIME%] Enviando para o GitHub...
-%GIT_CMD% add index.html noticias_valor.json noticias_estadao.json noticias_folha.json noticias_oglobo.json noticias_combinadas.json > nul
-
-REM Se houver mudanças, cria um commit
-%GIT_CMD% diff --quiet HEAD
-if %ERRORLEVEL% neq 0 (
-    %GIT_CMD% commit -m "Atualizacao automatica %DATE%_%TIME%" > nul
-    %GIT_CMD% push origin main > nul
-    echo [%TIME%] GitHub atualizado com sucesso!
+REM Iniciar servidor web em background se nao estiver rodando
+tasklist /FI "IMAGENAME eq python.exe" /FI "WINDOWTITLE eq Monitor*" 2>nul | find /I "python.exe" >nul
+if errorlevel 1 (
+    echo Iniciando servidor web...
+    start "Monitor Web Server" python app.py
 ) else (
-    echo [%TIME%] Nenhuma mudanca desde a ultima atualizacao.
+    echo Servidor web ja esta rodando.
 )
 
-REM Continuar o loop
+echo [%date% %time%] Execucao concluida. Aguardando 60 segundos...
+timeout /t 60 /nobreak >nul
+
 goto loop 
