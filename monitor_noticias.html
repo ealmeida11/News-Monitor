@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitor de Notícias - Brasil</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; background: #f5f5f5; color: #333; }
         .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         h1 { color: #1a5276; text-align: center; margin-bottom: 30px; }
         .data-atualizacao { text-align: center; color: #666; margin-bottom: 20px; font-style: italic; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #2c3e50; color: white; padding: 12px; text-align: left; cursor: pointer; }
+        th:hover { background: #1a252f; }
+        td { padding: 12px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f9f9f9; }
         a { color: #2980b9; text-decoration: none; }
         a:hover { text-decoration: underline; }
         .categoria { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; color: white; }
@@ -22,8 +26,8 @@
 <body>
     <div class="container">
         <h1>Monitor de Notícias - Brasil</h1>
-        <div class="data-atualizacao">Atualizado em: 27/05/2025 às 08:49:02</div>
-        <table id="tabela-noticias" class="table table-striped table-hover">
+        <div class="data-atualizacao">Atualizado em: 27/05/2025 às 09:05:31</div>
+        <table>
             <thead>
                 <tr>
                     <th>Título</th>
@@ -34,16 +38,100 @@
             </thead>
             <tbody>
                 <tr>
+                    <td><a href='https://oglobo.globo.com/brasil/sao-paulo/noticia/2025/05/27/aviso-de-multa-em-para-brisa-com-qr-code-e-falso-alerta-detran.ghtml' target='_blank'>Aviso de multa em para-brisa com QR Code é falso, alerta Detran</a></td>
+                    <td><span class='categoria' style='background-color: #C62828;'>São Paulo</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>09:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/brasil/noticia/2025/05/27/pec-da-seguranca-deputados-querem-evitar-ampliacao-do-poder-da-pf-e-devem-alterar-trecho-que-fortalece-instituicao.ghtml' target='_blank'>PEC da Segurança: deputados querem evitar ampliação do poder da PF e devem alterar trecho que fortalece instituição</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>09:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/link/empresas/ceo-do-duolingo-volta-atras-apos-comentarios-sobre-ia-nao-a-vejo-como-uma-substituicao/' target='_blank'>CEO do Duolingo volta atrás após comentários sobre IA: ‘Não a vejo como uma substituição’</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Não especificada</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>09:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/esportes/futebol/augusto-melo-cre-em-retorno-a-presidencia-mesmo-apos-impeachment-no-corinthians/' target='_blank'>Augusto Melo crê em retorno à presidência mesmo após impeachment no Corinthians</a></td>
+                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>09:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/cultura/musica/quanto-custa-o-ingresso-para-o-the-town-2025-nprec/' target='_blank'>Quanto custa o ingresso para o The Town 2025?</a></td>
+                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>09:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/economia/tesla-vendas-europa-abril-rivais-chineses/' target='_blank'>Tesla vê vendas na Europa caírem 49% em abril enquanto rivais chineses ganham mercado</a></td>
+                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>08:58</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/mundo/epoca/noticia/2025/05/27/lamborghini-rara-abandonada-ha-mais-de-40-anos-e-encontrada-em-deposito.ghtml' target='_blank'>Lamborghini rara abandonada há mais de 40 anos é encontrada em depósito</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Época</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>08:58</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/ela/noticia/2025/05/27/quem-e-juliana-drad-modelo-viraliza-com-ensaio-provocante-e-semelhanca-com-rafa-kalimann-versao-ousada.ghtml' target='_blank'>Quem é Juliana Drad? Modelo viraliza com ensaio provocante e semelhança com Rafa Kalimann: 'Versão ousada'</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ela</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>08:57</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/internacional/china-usina-quimica-explosao-nprei/' target='_blank'>Explosão atinge usina química na China e quebra janelas a 3 quilômetros de distância</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Internacional</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>08:57</td>
+                </tr>
+                <tr>
+                    <td><a href='https://f5.folha.uol.com.br/celebridades/2025/05/dentista-influencer-quem-sao-os-seis-filhos-de-carlos-alberto-de-nobrega.shtml' target='_blank'>Dentista, influencer: quem são os seis filhos de Carlos Alberto de Nóbrega</a></td>
+                    <td><span class='categoria' style='background-color: #D500F9;'>Celebridades</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>8:50</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/educacao/blog-da-tissen/ja-pensou-em-estudar-na-china/' target='_blank'>Já pensou em estudar na China?</a></td>
+                    <td><span class='categoria' style='background-color: #3F51B5;'>Educação</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>08:49</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/carrefour-brasil-terminar-deslistagem-da-bolsa-na-sexta-feira-30.ghtml' target='_blank'>Carrefour Brasil terminará deslistagem da bolsa na sexta-feira (30)</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>08:46</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/ao-vivo/2023/06/16/dolar-avanca-e-ibovespa-recua-em-dia-de-correcao-siga-os-mercados.ghtml' target='_blank'>IPCA-15 concentra as atenções no campo doméstico em meio à queda dos juros globais de longo prazo</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>08:45</td>
+                </tr>
+                <tr>
                     <td><a href='https://oglobo.globo.com/brasil/sao-paulo/noticia/2025/05/27/prefeitura-de-sp-coloca-faixa-de-alerta-em-avenida-onde-passageira-de-99-moto-morreu.ghtml' target='_blank'>Prefeitura de SP coloca faixa de alerta em avenida onde passageira de 99 Moto morreu</a></td>
                     <td><span class='categoria' style='background-color: #C62828;'>São Paulo</span></td>
                     <td class='fonte'>O Globo</td>
-                    <td class='hora'>08:42</td>
+                    <td class='hora'>08:41</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/esporte/2025/05/bia-haddad-cai-na-primeira-rodada-em-roland-garros.shtml' target='_blank'>Bia Haddad cai na primeira rodada em Roland Garros</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Esporte</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>8:38</td>
                 </tr>
                 <tr>
                     <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/27/bia-haddad-comeca-bem-mas-sofre-virada-e-e-eliminada-na-primeira-rodada-de-roland-garros.ghtml' target='_blank'>Bia Haddad começa bem, mas sofre virada e é eliminada na primeira rodada de Roland Garros</a></td>
                     <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
                     <td class='fonte'>O Globo</td>
-                    <td class='hora'>08:37</td>
+                    <td class='hora'>08:36</td>
                 </tr>
                 <tr>
                     <td><a href='https://www.estadao.com.br/sustentabilidade/alerta-de-perigo-para-queda-de-temperatura-veja-locais-afetados-nprm/' target='_blank'>Inmet emite alerta de perigo para queda de temperatura; veja locais afetados</a></td>
@@ -55,7 +143,7 @@
                     <td><a href='https://oglobo.globo.com/blogs/lauro-jardim/post/2025/05/justica-obriga-plano-a-fornecer-coracao-artificial-a-crianca-que-aguarda-transplante.ghtml' target='_blank'>Justiça obriga plano a fornecer 'coração artificial' a criança que aguarda transplante</a></td>
                     <td><span class='categoria' style='background-color: #9E9E9E;'>Lauro Jardim</span></td>
                     <td class='fonte'>O Globo</td>
-                    <td class='hora'>08:35</td>
+                    <td class='hora'>08:34</td>
                 </tr>
                 <tr>
                     <td><a href='https://www.estadao.com.br/jornal-do-carro/dodge-charger-seda-eletrico-chega-as-ruas-com-679-cv-e-futuro-incerto/' target='_blank'>Dodge Charger sedã elétrico chega às ruas com 679 cv e futuro incerto</a></td>
@@ -64,10 +152,10 @@
                     <td class='hora'>08:34</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/alcolumbre-prorroga-vigncia-de-mp-que-reajusta-soldos-militares-das-foras-armadas.ghtml' target='_blank'>Alcolumbre prorroga vigência de MP que reajusta soldos militares das Forças Armadas</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/05/27/manha-no-mercado-juros-globais-recuam-e-dolar-se-fortalece-com-emissoes-de-titulos-no-japao-no-foco.ghtml' target='_blank'>Manhã no mercado: Juros globais recuam e dólar se fortalece com emissões de títulos no Japão no foco</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:33</td>
+                    <td class='hora'>08:34</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/lojas-renner-anuncia-nova-estrutura-organizacional-para-melhorar-tomada-de-decises.ghtml' target='_blank'>Lojas Renner anuncia nova estrutura organizacional para melhorar tomada de decisões</a></td>
@@ -76,10 +164,10 @@
                     <td class='hora'>08:33</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/governo-cria-grupo-de-trabalho-para-elaborao-do-plano-nacional-de-cibersegurana.ghtml' target='_blank'>Governo cria grupo de trabalho para elaboração do Plano Nacional de Cibersegurança</a></td>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/alcolumbre-prorroga-vigncia-de-mp-que-reajusta-soldos-militares-das-foras-armadas.ghtml' target='_blank'>Alcolumbre prorroga vigência de MP que reajusta soldos militares das Forças Armadas</a></td>
                     <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
                     <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:28</td>
+                    <td class='hora'>08:33</td>
                 </tr>
                 <tr>
                     <td><a href='https://www.estadao.com.br/esportes/tenis/bia-haddad-maia-hailey-baptiste-rodada-1-roland-garros-2025-como-foi-o-jogo/' target='_blank'>Bia Haddad começa bem contra Baptiste, despenca e dá adeus a Roland Garros na estreia</a></td>
@@ -88,22 +176,10 @@
                     <td class='hora'>08:28</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/saude/stories/quais-sao-os-4-habitos-que-podem-ajudar-a-viver-ate-os-100-anos.ghtml' target='_blank'>Quais são os 4 hábitos que podem ajudar a viver até os 100 anos?</a></td>
-                    <td><span class='categoria' style='background-color: #F44336;'>Saúde</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>08:27</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/cultura/noticia/2025/05/27/angela-ro-ro-diz-que-esta-com-suspeita-de-cancer-e-pede-ajuda-em-pix-sem-perspectiva-de-alta-ou-cura-para-trabalhar.ghtml' target='_blank'>Angela Ro Ro diz que está com 'suspeita de câncer' e pede pix: 'sem perspectiva de alta ou cura para trabalhar'</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>08:27</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/brasil/noticia/2025/05/27/policia-do-mt-apreende-adolescente-de-15-anos-suspeito-de-liderar-grupo-que-estimulava-online-a-automutilacao-de-jovens.ghtml' target='_blank'>Polícia do MT apreende adolescente de 15 anos suspeito de liderar grupo que estimulava online a automutilação de jovens</a></td>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/governo-cria-grupo-de-trabalho-para-elaborao-do-plano-nacional-de-cibersegurana.ghtml' target='_blank'>Governo cria grupo de trabalho para elaboração do Plano Nacional de Cibersegurança</a></td>
                     <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>08:27</td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>08:28</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/indice-de-custo-da-construcao-sobe-026percent-em-maio-mostra-fgv-ibre.ghtml' target='_blank'>Índice de custo da construção sobe 0,26% em maio, mostra FGV Ibre</a></td>
@@ -112,16 +188,10 @@
                     <td class='hora'>08:26</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/economia/noticia/2025/05/27/valores-a-receber-ainda-restam-r-91-bilhoes-esquecidos-em-bancos-veja-como-consultar-e-sacar-quantia.ghtml' target='_blank'>Como consultar 'dinheiro esquecido' no sistema do Banco Central? Resgate, agora, é automático</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
+                    <td><a href='https://oglobo.globo.com/brasil/noticia/2025/05/27/policia-do-mt-apreende-adolescente-de-15-anos-suspeito-de-liderar-grupo-que-estimulava-online-a-automutilacao-de-jovens.ghtml' target='_blank'>Polícia do MT apreende adolescente de 15 anos suspeito de liderar grupo que estimulava online a automutilação de jovens</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
                     <td class='fonte'>O Globo</td>
-                    <td class='hora'>08:24</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/financas/ao-vivo/2023/06/16/dolar-avanca-e-ibovespa-recua-em-dia-de-correcao-siga-os-mercados.ghtml' target='_blank'>IPCA-15 concentra as atenções em meio à queda dos juros globais de longo prazo</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:23</td>
+                    <td class='hora'>08:26</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/financas/noticia/2025/05/27/vamos-continuar-a-elevar-os-juros-dependendo-das-condicoes-economicas-e-de-inflacao-diz-presidente-do-boj.ghtml' target='_blank'>Vamos continuar a elevar os juros, dependendo das condições econômicas e de inflação, diz presidente do BoJ</a></td>
@@ -130,28 +200,58 @@
                     <td class='hora'>08:23</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/play/noticia/2025/05/27/nota-10-a-entrevista-de-seu-jorge-no-fantastico-e-a-homenagem-a-carlos-alberto-de-nobrega-no-domingao.ghtml' target='_blank'>Nota 10: a entrevista de Seu Jorge no ‘Fantástico’ e a homenagem a Carlos Alberto de Nóbrega no ‘Domingão’</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Play</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>08:22</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/confianca-da-construcao-recua-em-maio-para-menor-nivel-desde-junho-de-2021-diz-fgv-ibre.ghtml' target='_blank'>Confiança da Construção recua em maio para menor nível desde junho de 2021, diz FGV Ibre</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>08:21</td>
-                </tr>
-                <tr>
                     <td><a href='https://www.estadao.com.br/emais/gente/rodrigo-lombardi-desmente-apoio-a-virginia-fonseca-apos-ser-criticado-por-luana-piovani-nprec/' target='_blank'>Rodrigo Lombardi desmente apoio à Virginia Fonseca após ser criticado por Luana Piovani</a></td>
                     <td><span class='categoria' style='background-color: #9E9E9E;'>Não especificada</span></td>
                     <td class='fonte'>Estadão</td>
                     <td class='hora'>08:20</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/27/empresas-alertam-que-tarifas-china-elevaro-preos-nos-eua-nas-prximas-semanas.ghtml' target='_blank'>Empresas alertam que tarifas à China elevarão preços nos EUA nas próximas semanas</a></td>
-                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
-                    <td class='fonte'>Valor Econômico</td>
+                    <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/27/especulado-no-botafogo-cristiano-ronaldo-pode-fechar-com-time-do-mexico-para-disputar-mundial-diz-jornal.ghtml' target='_blank'>Especulado no Botafogo, Cristiano Ronaldo pode fechar com time do México para disputar Mundial, diz jornal</a></td>
+                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>08:18</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/rio/bairros/tijuca-e-zona-norte/noticia/2025/05/27/aniversario-do-meier-principal-rua-do-bairro-recebe-melhorias-e-relogios-serao-recuperados.ghtml' target='_blank'>Aniversário do Méier: principal rua do bairro recebe melhorias, e relógios serão recuperados</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Tijuca e Zona Norte</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>08:18</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/rio/noticia/2025/05/27/operacao-mira-fraudes-no-bilhete-unico-intermunicipal-que-movimentam-r-900-milhoes-por-ano.ghtml' target='_blank'>Operação mira fraudes no Bilhete Único Intermunicipal que movimentam R$ 900 milhões por ano</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Rio</span></td>
+                    <td class='fonte'>O Globo</td>
                     <td class='hora'>08:17</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/blogs/lauro-jardim/post/2025/05/o-aumento-nas-queixas-sobre-credito-consignado-a-secretaria-nacional-do-consumidor.ghtml' target='_blank'>O aumento nas queixas sobre crédito consignado à Secretaria Nacional do Consumidor</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Lauro Jardim</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>08:09</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/esportes/futebol-2025/noticia/2025/05/27/vasco-x-melgar-onde-assistir-ao-vivo-ao-jogo-da-sul-americana.ghtml' target='_blank'>Vasco x Melgar: onde assistir ao vivo ao jogo da Sul-Americana</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Futebol 2025</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>08:08</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/27/homem-do-everest-nepales-quebra-proprio-recorde-ao-alcancar-o-cume-do-everest-pela-31a-vez.ghtml' target='_blank'>'Homem do Everest': Nepalês quebra próprio recorde ao alcançar o cume do Everest pela 31ª vez</a></td>
+                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>08:03</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/esportes/futebol-2025/noticia/2025/05/27/bola-de-cristal-botafogo-tem-58percent-de-chance-de-avancar-as-oitavas-de-final-da-libertadores.ghtml' target='_blank'>Bola de Cristal: Botafogo tem 58% de chance de avançar às oitavas de final da Libertadores</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Futebol 2025</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>08:03</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/blogs/saideira/post/2025/05/dia-do-hamburguer-tem-receitas-especiais-e-promocoes-no-rio.ghtml' target='_blank'>Dia do hambúrguer tem receitas especiais e promoções no Rio</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Saideira</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>08:03</td>
                 </tr>
                 <tr>
                     <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/transicao-energetica-o-que-portugal-e-brasil-podem-aprender-um-com-o-outro.shtml' target='_blank'>Transição energética: o que Portugal e Brasil podem aprender um com o outro</a></td>
@@ -160,26 +260,8 @@
                     <td class='hora'>8:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www.estadao.com.br/esportes/futebol/libertadores-e-sul-americana-o-que-esta-em-jogo-na-rodada-final-da-fase-de-grupos-npres/' target='_blank'>Libertadores e Sul-Americana: o que está em jogo na rodada final da fase de grupos?</a></td>
-                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
-                    <td class='fonte'>Estadão</td>
-                    <td class='hora'>08:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/bruno-gualano/2025/05/marketing-de-produtos-nocivos-ameaca-saude-infantil.shtml' target='_blank'>Marketing de produtos nocivos ameaça saúde infantil</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>8:00</td>
-                </tr>
-                <tr>
                     <td><a href='https://www1.folha.uol.com.br/ambiente/2025/05/agenda-ambiental-de-marina-caminha-para-5a-derrota-no-congresso-com-abandono-do-governo-lula.shtml' target='_blank'>Agenda ambiental de Marina caminha para 5ª derrota no Congresso, com abandono do governo Lula</a></td>
                     <td><span class='categoria' style='background-color: #9E9E9E;'>Ambiente</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>8:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/papo-de-responsa/2025/05/bolsas-de-estudo-sao-caminho-para-pais-mais-justo.shtml' target='_blank'>Bolsas de estudo são caminho para país mais justo</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
                     <td class='fonte'>Folha de S.Paulo</td>
                     <td class='hora'>8:00</td>
                 </tr>
@@ -196,22 +278,28 @@
                     <td class='hora'>8:00</td>
                 </tr>
                 <tr>
+                    <td><a href='https://www1.folha.uol.com.br/colunas/bruno-gualano/2025/05/marketing-de-produtos-nocivos-ameaca-saude-infantil.shtml' target='_blank'>Marketing de produtos nocivos ameaça saúde infantil</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>8:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/esportes/futebol/libertadores-e-sul-americana-o-que-esta-em-jogo-na-rodada-final-da-fase-de-grupos-npres/' target='_blank'>Libertadores e Sul-Americana: o que está em jogo na rodada final da fase de grupos?</a></td>
+                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>08:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/colunas/papo-de-responsa/2025/05/bolsas-de-estudo-sao-caminho-para-pais-mais-justo.shtml' target='_blank'>Bolsas de estudo são caminho para país mais justo</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>8:00</td>
+                </tr>
+                <tr>
                     <td><a href='https://www.estadao.com.br/economia/exportacoes-aco-china-onda-protecionismo-ocde/' target='_blank'>Exportações de aço da China disparam e provocam onda de protecionismo pelo mundo, diz OCDE</a></td>
                     <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
                     <td class='fonte'>Estadão</td>
                     <td class='hora'>07:59</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/ancelmo-gois/post/2025/05/mamba-forever-itens-usados-por-kobe-bryant-idolo-do-basquete-vao-a-leilao.ghtml' target='_blank'>'Mamba forever': itens usados por Kobe Bryant, ídolo do basquete, vão a leilão</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ancelmo Gois</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:58</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/play/entrevistas/noticia/2025/05/27/marcos-oliveira-fala-da-adaptacao-a-sua-nova-casa-no-retiro-dos-artistas-e-da-relacao-com-outros-moradores.ghtml' target='_blank'>Marcos Oliveira fala da adaptação ao Retiro dos Artistas e da gravidade de sua situação financeira: 'Várias prestações para pagar'</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Entrevistas</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:53</td>
                 </tr>
                 <tr>
                     <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/uber-e-99-deixam-de-oferecer-corridas-de-moto-em-sao-paulo.shtml' target='_blank'>Uber e 99 deixam de oferecer corridas de moto em São Paulo</a></td>
@@ -220,68 +308,20 @@
                     <td class='hora'>7:49</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/futebol-2025/noticia/2025/05/27/vasco-x-melgar-onde-assistir-ao-vivo-ao-jogo-da-sul-americana.ghtml' target='_blank'>Vasco x Melgar: onde assistir ao vivo ao jogo da Sul-Americana</a></td>
+                    <td><a href='https://oglobo.globo.com/blogs/ancelmo-gois/post/2025/05/mamba-forever-itens-usados-por-kobe-bryant-idolo-do-basquete-vao-a-leilao.ghtml' target='_blank'>'Mamba forever': itens usados por Kobe Bryant, ídolo do basquete, vão a leilão</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ancelmo Gois</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>07:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/esportes/futebol-2025/noticia/2025/05/27/botafogo-x-universidad-do-chile-onde-assistir-ao-vivo-ao-jogo-da-libertadores.ghtml' target='_blank'>Botafogo x Universidad do Chile: onde assistir ao vivo ao jogo da Libertadores</a></td>
                     <td><span class='categoria' style='background-color: #9E9E9E;'>Futebol 2025</span></td>
                     <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:48</td>
+                    <td class='hora'>07:04</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/27/homem-do-everest-nepales-quebra-proprio-recorde-ao-alcancar-o-cume-do-everest-pela-31a-vez.ghtml' target='_blank'>'Homem do Everest': Nepalês quebra próprio recorde ao alcançar o cume do Everest pela 31ª vez</a></td>
-                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/lauro-jardim/post/2025/05/o-aumento-nas-queixas-sobre-credito-consignado-a-secretaria-nacional-do-consumidor.ghtml' target='_blank'>O aumento nas queixas sobre crédito consignado à Secretaria Nacional do Consumidor</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Lauro Jardim</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/futebol-2025/noticia/2025/05/27/bola-de-cristal-botafogo-tem-58percent-de-chance-de-avancar-as-oitavas-de-final-da-libertadores.ghtml' target='_blank'>Bola de Cristal: Botafogo tem 58% de chance de avançar às oitavas de final da Libertadores</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Futebol 2025</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/brasil/noticia/2025/05/27/prefeito-de-wanderlandia-pede-desculpas-apos-interromper-show-com-ameacas-ao-publico-me-excedi.ghtml' target='_blank'>Prefeito de Wanderlândia pede desculpas após interromper show com ameaças ao público: 'me excedi'</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/rio/noticia/2025/05/27/policiais-do-bope-vao-dividir-premio-de-r-120-mil-por-apreensao-de-fuzis-no-rio.ghtml' target='_blank'>Policiais do Bope vão dividir prêmio de R$ 120 mil por apreensão de fuzis no Rio</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Rio</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/rio/noticia/2025/05/27/estado-do-rio-registra-queda-no-roubo-de-veiculos-mas-numero-de-celulares-levados-por-bandidos-dispara.ghtml' target='_blank'>Estado do Rio registra queda no roubo de veículos, mas número de celulares levados por bandidos dispara</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Rio</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/mundo/epoca/noticia/2025/05/27/apos-81-anos-restos-mortais-de-tripulantes-de-bombardeiro-da-segunda-guerra-sao-sepultados-nos-eua.ghtml' target='_blank'>Após 81 anos, restos mortais de tripulantes de bombardeiro da Segunda Guerra são sepultados nos EUA</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Época</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/mundo/noticia/2025/05/27/imagens-de-satelite-revelam-como-o-lancamento-do-maior-navio-de-guerra-da-coreia-do-norte-virou-um-vexame-militar.ghtml' target='_blank'>Imagens de satélite revelam como  o lançamento do maior navio de guerra da Coreia do Norte virou um vexame militar</a></td>
-                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>07:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/grupo-de-midia-de-trump-planeja-arrecadar-us-3-bilhoes-para-investir-em-criptomoedas.shtml' target='_blank'>Grupo de mídia de Trump planeja arrecadar US$ 3 bilhões para investir em criptomoedas</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>7:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/ilustrada/2025/05/fotografa-entrelaca-em-livro-suas-feridas-pessoais-com-as-cicatrizes-da-armenia.shtml' target='_blank'>Fotógrafa entrelaça em livro suas feridas pessoais com as cicatrizes da Armênia</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
+                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/por-que-40-das-mulheres-assassinadas-no-brasil-sao-evangelicas.shtml' target='_blank'>Por que 40% das mulheres assassinadas no Brasil são evangélicas?</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
                     <td class='fonte'>Folha de S.Paulo</td>
                     <td class='hora'>7:00</td>
                 </tr>
@@ -292,10 +332,34 @@
                     <td class='hora'>07:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www.estadao.com.br/politica/pt-trava-projeto-de-carteira-estudantil-gratuita-em-sp-para-manter-verba-de-entidades-estudantis/' target='_blank'>PT trava projeto de carteira estudantil gratuita em SP para manter verba de entidades estudantis</a></td>
-                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
-                    <td class='fonte'>Estadão</td>
-                    <td class='hora'>07:00</td>
+                    <td><a href='https://www1.folha.uol.com.br/folha-social-mais/2025/05/da-nota-fiscal-a-produtos-sociais-veja-como-doar-com-pouco-e-sem-esforco.shtml' target='_blank'>Da nota fiscal a produtos sociais, veja como doar com pouco e sem esforço</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Folha Social Mais</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>7:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/ilustrada/2025/05/fotografa-entrelaca-em-livro-suas-feridas-pessoais-com-as-cicatrizes-da-armenia.shtml' target='_blank'>Fotógrafa entrelaça em livro suas feridas pessoais com as cicatrizes da Armênia</a></td>
+                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>7:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/grupo-de-midia-de-trump-planeja-arrecadar-us-3-bilhoes-para-investir-em-criptomoedas.shtml' target='_blank'>Grupo de mídia de Trump planeja arrecadar US$ 3 bilhões para investir em criptomoedas</a></td>
+                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>7:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/colunas/miriangoldenberg/2025/05/quem-ri-mais-o-homem-ou-a-mulher.shtml' target='_blank'>Quem ri mais: o homem ou a mulher?</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>7:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/equilibrioesaude/2025/05/novo-estudo-sugere-tratar-mosquitos-com-medicamentos-para-controlar-malaria.shtml' target='_blank'>Novo estudo sugere tratar mosquitos com medicamentos para controlar malária</a></td>
+                    <td><span class='categoria' style='background-color: #F44336;'>Saúde</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>7:00</td>
                 </tr>
                 <tr>
                     <td><a href='https://f5.folha.uol.com.br/astrologia/2025/05/joao-fonseca-estreia-em-roland-garros-veja-as-previsoes-da-numerologia.shtml' target='_blank'>João Fonseca estreia em Roland Garros; veja as previsões da numerologia</a></td>
@@ -310,52 +374,10 @@
                     <td class='hora'>7:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www1.folha.uol.com.br/folha-social-mais/2025/05/da-nota-fiscal-a-produtos-sociais-veja-como-doar-com-pouco-e-sem-esforco.shtml' target='_blank'>Da nota fiscal a produtos sociais, veja como doar com pouco e sem esforço</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Folha Social Mais</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>7:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/por-que-40-das-mulheres-assassinadas-no-brasil-sao-evangelicas.shtml' target='_blank'>Por que 40% das mulheres assassinadas no Brasil são evangélicas?</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>7:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/equilibrioesaude/2025/05/novo-estudo-sugere-tratar-mosquitos-com-medicamentos-para-controlar-malaria.shtml' target='_blank'>Novo estudo sugere tratar mosquitos com medicamentos para controlar malária</a></td>
-                    <td><span class='categoria' style='background-color: #F44336;'>Saúde</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>7:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/miriangoldenberg/2025/05/quem-ri-mais-o-homem-ou-a-mulher.shtml' target='_blank'>Quem ri mais: o homem ou a mulher?</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>7:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/play/entrevistas/noticia/2025/05/27/marcos-oliveira-fala-da-adaptacao-a-sua-nova-casa-no-retiro-dos-artistas-e-da-relacao-com-outros-moradores.ghtml' target='_blank'>Marcos Oliveira fala da adaptação à sua nova casa no Retiro dos Artistas e da relação com outros moradores</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Entrevistas</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>06:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/futebol-2025/noticia/2025/05/27/botafogo-x-universidad-do-chile-onde-assistir-ao-vivo-ao-jogo-da-libertadores.ghtml' target='_blank'>Botafogo x Universidad do Chile: onde assistir ao vivo ao jogo da Libertadores</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Futebol 2025</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>06:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/27/video-mostra-atropelamento-que-interrompeu-festa-do-titulo-do-liverpool-com-27-feridos.ghtml' target='_blank'>Vídeo mostra atropelamento que deixou 27 feridos durante festa do título do Liverpool; imagens fortes</a></td>
-                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>06:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/saideira/post/2025/05/dia-do-hamburguer-tem-receitas-especiais-e-promocoes-no-rio.ghtml' target='_blank'>Dia do hambúrguer tem receitas especiais e promoções no Rio</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Saideira</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>06:48</td>
+                    <td><a href='https://www.estadao.com.br/politica/pt-trava-projeto-de-carteira-estudantil-gratuita-em-sp-para-manter-verba-de-entidades-estudantis/' target='_blank'>PT trava projeto de carteira estudantil gratuita em SP para manter verba de entidades estudantis</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>07:00</td>
                 </tr>
                 <tr>
                     <td><a href='https://www.estadao.com.br/podcasts/estadao-analisa/estadao-analisa-mordida-do-iof-governo-lula-da-aula-de-risco-brasil/' target='_blank'>Estadão Analisa: Mordida do IOF - governo Lula dá aula de Risco Brasil</a></td>
@@ -370,10 +392,118 @@
                     <td class='hora'>6:30</td>
                 </tr>
                 <tr>
+                    <td><a href='https://oglobo.globo.com/economia/negocios/noticia/2025/05/27/brasil-tem-a-melhor-matriz-energetica-para-data-centers-diz-lider-de-empresa-que-investe-r-5-bi-no-rio.ghtml' target='_blank'>‘Brasil tem a melhor matriz energética para data centers', diz líder de empresa que investe R$ 5 bi no Rio</a></td>
+                    <td><span class='categoria' style='background-color: #1976D2;'>Negócios</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:05</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/boa-viagem/noticia/2025/05/27/civita-di-bagnoregio-conheca-vilarejo-de-10-habitantes-na-italia-que-esta-desaparecendo.ghtml' target='_blank'>Civita di Bagnoregio: conheça vilarejo de 10 habitantes na Itália que está desaparecendo</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Boa Viagem</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:05</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/esportes/futebol/flamengo/noticia/2025/05/27/artilheiro-do-flamengo-no-carioca-wallace-yan-desponta-com-assistencia-importante-e-tenta-se-firmar.ghtml' target='_blank'>Artilheiro do Flamengo no Carioca, Wallace Yan desponta com assistência importante e tenta se firmar</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Flamengo</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:05</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/blogs/malu-gaspar/post/2025/05/o-destino-do-inquerito-contra-eduardo-bolsonaro-na-policia-federal.ghtml' target='_blank'>O destino do inquérito contra Eduardo Bolsonaro na Polícia Federal</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Malu Gaspar</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:05</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/mundo/noticia/2025/05/27/brigitte-macron-quem-e-a-primeira-dama-que-deu-empurrao-no-presidente-da-franca.ghtml' target='_blank'>Brigitte Macron: quem é a primeira-dama que deu empurrão no presidente da França</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:05</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/blogs/ancelmo-gois/post/2025/05/reconhecido-por-comedias-de-sucesso-roberto-santucci-vai-dirigir-seu-primeiro-filme-de-acao.ghtml' target='_blank'>Reconhecido por comédias de sucesso, Roberto Santucci vai dirigir seu primeiro filme de ação</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ancelmo Gois</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/play/novelas/noticia/2025/05/27/joao-camargo-sera-um-padre-em-eta-mundo-melhor.ghtml' target='_blank'>João Camargo será um padre em 'Êta mundo melhor!'</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Novelas</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/ela/noticia/2025/05/27/menopausa-e-saude-intima-saiba-tudo-sobre-a-sindrome-geniturinaria-e-como-tratar.ghtml' target='_blank'>Menopausa e saúde íntima: saiba tudo sobre a síndrome geniturinária e como tratar</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ela</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/rio/bairros/niteroi/noticia/2025/05/27/menos-de-1percent-do-orcamento-de-niteroi-foi-usado-para-promover-igualdade-de-raca-e-genero-aponta-estudo-da-uff.ghtml' target='_blank'>Menos de 1% do orçamento de Niterói foi usado para promover igualdade de raça e gênero, aponta estudo da UFF</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Niterói</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/esportes/intercolegial/noticia/2025/05/27/a-relacao-entre-boas-noites-de-sono-e-o-desempenho-de-jovens-nos-treinos-e-competicoes.ghtml' target='_blank'>A relação entre boas noites de sono e o desempenho de jovens nos treinos e competições</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Intercolegial</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/ela/noticia/2025/05/27/transplante-capilar-veja-por-que-virou-tendencia-entre-famosos-e-5-fatos-sobre-o-procedimento.ghtml' target='_blank'>Transplante capilar: veja por que virou tendência entre famosos e 5 fatos sobre o procedimento</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ela</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/mundo/noticia/2025/05/27/na-mira-de-trump-venezuelanos-aderem-a-autodeportacao-e-arriscam-a-vida-em-retorno-pela-america-latina.ghtml' target='_blank'>Na mira de Trump, venezuelanos aderem à 'autodeportação' e arriscam a vida em retorno pela América Latina</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/blogs/espiritualidade-e-bem-estar/post/2025/05/como-nao-se-infoxicar.ghtml' target='_blank'>Como não se 'infoxicar'</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Espiritualidade e Bem-estar</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/saude/noticia/2025/05/27/para-que-serve-o-cha-de-casca-de-laranja-estes-sao-seus-beneficios-para-a-saude-e-como-prepara-lo.ghtml' target='_blank'>Para que serve o chá de casca de laranja? Estes são seus benefícios para a saúde e como prepará-lo</a></td>
+                    <td><span class='categoria' style='background-color: #F44336;'>Saúde</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/blogs/malu-gaspar/post/2025/05/entorno-de-bolsonaro-esnoba-planos-de-zema-de-se-candidatar-a-presidencia.ghtml' target='_blank'>Entorno de Bolsonaro esnoba planos de Zema de se candidatar à presidência</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Malu Gaspar</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/blogs/miriam-leitao/post/2025/05/venda-de-imoveis-cresce-no-rio-veja-os-20-bairros-com-mais-transacoes-no-1o-trimestre.ghtml' target='_blank'>Venda de imóveis cresce no Rio; veja os 20 bairros com mais transações no 1º trimestre</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Míriam Leitão</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>06:04</td>
+                </tr>
+                <tr>
                     <td><a href='https://www1.folha.uol.com.br/ciencia/2025/05/estrutura-a-prova-de-fogo-salva-larvas-em-incendio-em-minas-gerais.shtml' target='_blank'>Estrutura à prova de fogo salva larvas em incêndio em Minas Gerais</a></td>
                     <td><span class='categoria' style='background-color: #00BFA5;'>Ciência</span></td>
                     <td class='fonte'>Folha de S.Paulo</td>
                     <td class='hora'>6:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/eldorado/programas/marcas-e-consumidores/marcas-e-consumidores-27052025/' target='_blank'>Marcas e Consumidores 27.05.2025</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Não especificada</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>06:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/paladar/prato-do-dia/penne-com-tomatinho-shitake-e-anchova/' target='_blank'>Penne com tomatinho, shitake e anchova</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Não especificada</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>06:00</td>
                 </tr>
                 <tr>
                     <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/seara-abate-67-mil-frangos-devido-a-proximidade-de-foco-de-gripe-aviaria-no-rs.shtml' target='_blank'>Seara abate 67 mil frangos devido à proximidade de foco de gripe aviária no RS</a></td>
@@ -406,76 +536,10 @@
                     <td class='hora'>6:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www.estadao.com.br/paladar/prato-do-dia/penne-com-tomatinho-shitake-e-anchova/' target='_blank'>Penne com tomatinho, shitake e anchova</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Não especificada</span></td>
+                    <td><a href='https://www.estadao.com.br/esportes/tenis/bia-haddad-x-hailey-baptiste-em-roland-garros-onde-assistir-ao-vivo-e-horario-npres/' target='_blank'>Bia Haddad x Hailey Baptiste em Roland Garros: onde assistir ao vivo e horário</a></td>
+                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
                     <td class='fonte'>Estadão</td>
-                    <td class='hora'>06:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www.estadao.com.br/eldorado/programas/marcas-e-consumidores/marcas-e-consumidores-27052025/' target='_blank'>Marcas e Consumidores 27.05.2025</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Não especificada</span></td>
-                    <td class='fonte'>Estadão</td>
-                    <td class='hora'>06:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/ela/noticia/2025/05/27/transplante-capilar-veja-por-que-virou-tendencia-entre-famosos-e-5-fatos-sobre-o-procedimento.ghtml' target='_blank'>Transplante capilar: veja por que virou tendência entre famosos e 5 fatos sobre o procedimento</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ela</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/mundo/noticia/2025/05/27/na-mira-de-trump-venezuelanos-aderem-a-autodeportacao-e-arriscam-a-vida-em-retorno-pela-america-latina.ghtml' target='_blank'>Na mira de Trump, venezuelanos aderem à 'autodeportação' e arriscam a vida em retorno pela América Latina</a></td>
-                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/espiritualidade-e-bem-estar/post/2025/05/como-nao-se-infoxicar.ghtml' target='_blank'>Como não se 'infoxicar'</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Espiritualidade e Bem-estar</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/saude/noticia/2025/05/27/para-que-serve-o-cha-de-casca-de-laranja-estes-sao-seus-beneficios-para-a-saude-e-como-prepara-lo.ghtml' target='_blank'>Para que serve o chá de casca de laranja? Estes são seus benefícios para a saúde e como prepará-lo</a></td>
-                    <td><span class='categoria' style='background-color: #F44336;'>Saúde</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/malu-gaspar/post/2025/05/entorno-de-bolsonaro-esnoba-planos-de-zema-de-se-candidatar-a-presidencia.ghtml' target='_blank'>Entorno de Bolsonaro esnoba planos de Zema de se candidatar à presidência</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Malu Gaspar</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/ancelmo-gois/post/2025/05/reconhecido-por-comedias-de-sucesso-roberto-santucci-vai-dirigir-seu-primeiro-filme-de-acao.ghtml' target='_blank'>Reconhecido por comédias de sucesso, Roberto Santucci vai dirigir seu primeiro filme de ação</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ancelmo Gois</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/miriam-leitao/post/2025/05/venda-de-imoveis-cresce-no-rio-veja-os-20-bairros-com-mais-transacoes-no-1o-trimestre.ghtml' target='_blank'>Venda de imóveis cresce no Rio; veja os 20 bairros com mais transações no 1º trimestre</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Míriam Leitão</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/intercolegial/noticia/2025/05/27/a-relacao-entre-boas-noites-de-sono-e-o-desempenho-de-jovens-nos-treinos-e-competicoes.ghtml' target='_blank'>A relação entre boas noites de sono e o desempenho de jovens nos treinos e competições</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Intercolegial</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/ela/noticia/2025/05/27/menopausa-e-saude-intima-saiba-tudo-sobre-a-sindrome-geniturinaria-e-como-tratar.ghtml' target='_blank'>Menopausa e saúde íntima: saiba tudo sobre a síndrome geniturinária e como tratar</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ela</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/play/novelas/noticia/2025/05/27/joao-camargo-sera-um-padre-em-eta-mundo-melhor.ghtml' target='_blank'>João Camargo será um padre em 'Êta mundo melhor!'</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Novelas</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>05:48</td>
+                    <td class='hora'>05:30</td>
                 </tr>
                 <tr>
                     <td><a href='https://www.estadao.com.br/cultura/musica/ingressos-the-town-venda-como-comprar-precos/' target='_blank'>Ingressos do The Town 2025: Venda começa ao meio-dia; veja preço e como comprar</a></td>
@@ -484,14 +548,56 @@
                     <td class='hora'>05:30</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www.estadao.com.br/esportes/tenis/bia-haddad-x-hailey-baptiste-em-roland-garros-onde-assistir-ao-vivo-e-horario-npres/' target='_blank'>Bia Haddad x Hailey Baptiste em Roland Garros: onde assistir ao vivo e horário</a></td>
-                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
-                    <td class='fonte'>Estadão</td>
-                    <td class='hora'>05:30</td>
+                    <td><a href='https://oglobo.globo.com/rioshow/shows-e-concertos/guia/festivais-de-musica-no-rio-de-janeiro-de-caetano-veloso-a-marisa-monte-veja-atracoes-datas-e-valores.ghtml' target='_blank'>Festivais de música no Rio de Janeiro: de Caetano Veloso a Marisa Monte, veja atrações, datas e valores</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Shows e concertos</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>05:05</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/opiniao/coluna/ruptura-tecnologica-transforma-a-guerra.ghtml' target='_blank'>Ruptura tecnológica transforma a guerra</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
+                    <td><a href='https://oglobo.globo.com/cultura/noticia/2025/05/27/mostra-de-cinema-socioambiental-em-sao-paulo-exibe-125-filmes-de-33-paises.ghtml' target='_blank'>Mostra de cinema socioambiental em São Paulo exibe 125 filmes de 33 países</a></td>
+                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>05:05</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/cultura/noticia/2025/05/27/produtora-espanhola-fala-sobre-parceria-de-mais-de-40-anos-com-pedro-almodovar-quase-um-messias.ghtml' target='_blank'>Rio2C: Esther Garcia fala sobre parceria de mais de 40 anos com Pedro Almodóvar: 'quase um messias'</a></td>
+                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>05:05</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/ela/noticia/2025/05/27/divorcio-do-sono-entenda-causas-e-tratamentos-para-melhorar-a-vida-a-dois.ghtml' target='_blank'>'Divórcio do sono': entenda causas e tratamentos para melhorar a vida a dois</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ela</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>05:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/play/noticia/2025/05/27/daniel-haidar-sera-walmor-chagas-em-filme-sobre-cacilda-becker.ghtml' target='_blank'>Daniel Haidar será Walmor Chagas em filme sobre Cacilda Becker</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Play</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>05:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://oglobo.globo.com/blogs/capital/post/2025/05/moda-dos-estudios-sobe-a-serra-do-rio-e-residencial-busca-r-150-milhoes.ghtml' target='_blank'>Moda dos ‘estúdios’ sobe a Serra do Rio, e residencial busca R$ 150 milhões</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Capital</span></td>
+                    <td class='fonte'>O Globo</td>
+                    <td class='hora'>05:04</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/legislacao/coluna/a-decisao-tempestiva-na-gestao-de-fundos.ghtml' target='_blank'>A decisão tempestiva na gestão de fundos</a></td>
+                    <td><span class='categoria' style='background-color: #795548;'>Legislação</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/legislacao/noticia/2025/05/27/destaque.ghtml' target='_blank'>Destaque</a></td>
+                    <td><span class='categoria' style='background-color: #795548;'>Legislação</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/agenda-do-dia-economistas-esperam-alta-de-044percent-na-previa-da-inflacao-oficial-de-maio.ghtml' target='_blank'>Agenda do dia: economistas esperam alta de 0,44% na prévia da inflação oficial de maio</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>05:01</td>
                 </tr>
@@ -502,50 +608,14 @@
                     <td class='hora'>05:01</td>
                 </tr>
                 <tr>
+                    <td><a href='https://valor.globo.com/legislacao/noticia/2025/05/27/sentenca-exclui-bonus-de-permanencia-de-calculo-de-verbas-rescisorias.ghtml' target='_blank'>Sentença exclui bônus de permanência de cálculo de verbas rescisórias</a></td>
+                    <td><span class='categoria' style='background-color: #795548;'>Legislação</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
                     <td><a href='https://valor.globo.com/financas/noticia/2025/05/27/wall-street-e-private-equity-disputam-universitarios.ghtml' target='_blank'>Wall Street e private equity disputam universitários</a></td>
                     <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:01</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/05/27/63ba9520-destaques.ghtml' target='_blank'>Destaques</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:01</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/opiniao/coluna/bolsonaro-definira-rumos-da-oposicao.ghtml' target='_blank'>Bolsonaro definirá rumos da oposição</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:01</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/opiniao/noticia/2025/05/27/6f3e09a3-cartas-de-leitores.ghtml' target='_blank'>Cartas de Leitores</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:01</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/05/27/modelo-de-taxa-fixa-em-assessorias-ganha-mais-adeptos.ghtml' target='_blank'>Modelo de taxa fixa em assessorias ganha mais adeptos</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:01</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/financas/noticia/2025/05/27/na-largada-nova-regra-de-transparencia-em-investimento-tem-alcance-limitado.ghtml' target='_blank'>Na largada, nova regra de transparência em investimento tem alcance limitado</a></td>
-                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:01</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/opiniao/noticia/2025/05/27/correcao.ghtml' target='_blank'>Correção</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:01</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/opiniao/coluna/quem-sao-os-trabalhadores-por-conta-propria-no-brasil.ghtml' target='_blank'>Quem são os trabalhadores por conta própria no Brasil</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>05:01</td>
                 </tr>
@@ -562,14 +632,86 @@
                     <td class='hora'>05:01</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www1.folha.uol.com.br/podcasts/2025/05/podcast-explica-mudancas-no-iof-recuo-do-governo-e-impactos-politicos-do-caso.shtml' target='_blank'>Podcast explica mudanças no IOF, recuo do governo e impactos políticos do caso</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Podcasts</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>5:00</td>
+                    <td><a href='https://valor.globo.com/opiniao/coluna/quem-sao-os-trabalhadores-por-conta-propria-no-brasil.ghtml' target='_blank'>Quem são os trabalhadores por conta própria no Brasil</a></td>
+                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/no-plano-da-kiko-milano-musica-internet-e-mais-lojas.ghtml' target='_blank'>No plano da Kiko Milano, música, internet e mais lojas</a></td>
+                    <td><a href='https://valor.globo.com/opiniao/noticia/2025/05/27/previsoes-para-o-pib-podem-estar-subestimadas-de-novo.ghtml' target='_blank'>Previsões para o PIB podem estar subestimadas de novo</a></td>
+                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/opiniao/noticia/2025/05/27/6f3e09a3-cartas-de-leitores.ghtml' target='_blank'>Cartas de Leitores</a></td>
+                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/eu-e/noticia/2025/05/27/quem-e-o-filho-de-sebastiao-salgado-artista-que-abre-sua-primeira-exposicao-em-uma-igreja-na-franca.ghtml' target='_blank'>Quem é o filho de Sebastião Salgado, artista que abre  sua primeira exposição em uma igreja na França</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Eu &</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/opiniao/noticia/2025/05/27/correcao.ghtml' target='_blank'>Correção</a></td>
+                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/05/27/na-largada-nova-regra-de-transparencia-em-investimento-tem-alcance-limitado.ghtml' target='_blank'>Na largada, nova regra de transparência em investimento tem alcance limitado</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/05/27/modelo-de-taxa-fixa-em-assessorias-ganha-mais-adeptos.ghtml' target='_blank'>Modelo de taxa fixa em assessorias ganha mais adeptos</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:01</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/mais-da-metade-da-industria-do-brasil-pode-sofrer-com-tarifa-dos-eua-aponta-ibre.ghtml' target='_blank'>Mais da metade da indústria do Brasil pode sofrer com tarifa dos EUA, aponta Ibre</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/corte-de-energia-desafia-empresas-e-reacende-alerta-para-consumidor.ghtml' target='_blank'>Corte de energia desafia empresas e reacende alerta para consumidor</a></td>
                     <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/deficit-para-de-crescer-mas-bc-ainda-tem-duvida-sobre-reversao-da-curva.ghtml' target='_blank'>Déficit para de crescer, mas BC ainda tem dúvida sobre reversão da curva</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/d40033ee-curta.ghtml' target='_blank'>Curta</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/os-interesses-e-as-razoes-por-tras-do-plano-de-opa-dos-socios-da-zamp.ghtml' target='_blank'>Os interesses e as razões por trás do plano de OPA dos sócios da Zamp</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/governo-deve-decidir-esta-semana-como-compensar-iof-afirma-haddad.ghtml' target='_blank'>Governo deve decidir esta semana como compensar IOF, afirma Haddad</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/brasil/coluna/esta-chegando-ao-fim-a-supremacia-ocidental.ghtml' target='_blank'>Está chegando ao fim a supremacia ocidental?</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>05:00</td>
                 </tr>
@@ -580,67 +722,13 @@
                     <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www1.folha.uol.com.br/blogs/politicas-e-justica/2025/05/carga-horaria-x-produtividade-como-o-equilibrio-pode-melhorar-resultados-e-a-seguranca-no-trabalho.shtml' target='_blank'>Carga horária x produtividade: como o equilíbrio pode melhorar resultados e a segurança no trabalho</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Blogs</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>5:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/sao-paulo-deve-ter-sol-e-calor-de-ate-280c-nesta-terca-27.shtml' target='_blank'>São Paulo deve ter sol e calor de até 28°C nesta terça (27)</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>5:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www.estadao.com.br/jornal-do-carro/golpe-da-multa-bandidos-estao-deixando-avisos-de-infracao-com-qr-code-para-pagamento/' target='_blank'>Golpe da multa: bandidos estão deixando avisos de infração com QR Code para pagamento</a></td>
-                    <td><span class='categoria' style='background-color: #827717;'>Automóveis</span></td>
-                    <td class='fonte'>Estadão</td>
-                    <td class='hora'>05:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/corte-de-energia-desafia-empresas-e-reacende-alerta-para-consumidor.ghtml' target='_blank'>Corte de energia desafia empresas e reacende alerta para consumidor</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/oracle-comprara-us-40-bi-em-chips-da-nvidia.ghtml' target='_blank'>Oracle comprará US$ 40 bi em chips da Nvidia</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/anatel-apreende-mais-de-15-mil-itens-em-marketplaces.ghtml' target='_blank'>Anatel apreende mais de 1,5 mil itens em marketplaces</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/coluna/ou-temos-estrategia-ou-seremos-dominados.ghtml' target='_blank'>Ou temos estratégia ou seremos dominados</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/sp-licita-ppp-do-parque-dom-pedro-ii.ghtml' target='_blank'>SP licita PPP do parque Dom Pedro II</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/renovaveis-tem-demissoes-e-buscam-ressarcimento.ghtml' target='_blank'>Renováveis têm demissões e buscam ressarcimento</a></td>
-                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
-                    <td class='fonte'>Valor Econômico</td>
-                    <td class='hora'>05:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/autoridades-cobram-politica-coordenada-para-o-clima.ghtml' target='_blank'>Autoridades cobram política coordenada para o clima</a></td>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/aposta-de-lula-para-saude-esta-perto-de-sair-do-papel.ghtml' target='_blank'>Aposta de Lula para saúde está perto de sair do papel</a></td>
                     <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/e-muito-mais-facil-pensar-no-fim-do-mundo-do-que-na-sua-reinvencao-diz-campea-da-juventude-da-cop30.ghtml' target='_blank'>É muito mais fácil pensar no fim do mundo do que na sua reinvenção’, diz campeã da Juventude da COP30</a></td>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/autoridades-cobram-politica-coordenada-para-o-clima.ghtml' target='_blank'>Autoridades cobram política coordenada para o clima</a></td>
                     <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>05:00</td>
@@ -670,52 +758,100 @@
                     <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/futebol/flamengo/noticia/2025/05/27/e-agora-saiba-o-que-pode-acontecer-com-bruno-henrique-apos-nao-comparecimento-a-audiencia-do-stjd.ghtml' target='_blank'>E agora? Saiba o que pode acontecer com Bruno Henrique após não comparecimento à audiência do STJD</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Flamengo</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>04:48</td>
+                    <td><a href='https://valor.globo.com/brasil/noticia/2025/05/27/e-muito-mais-facil-pensar-no-fim-do-mundo-do-que-na-sua-reinvencao-diz-campea-da-juventude-da-cop30.ghtml' target='_blank'>É muito mais fácil pensar no fim do mundo do que na sua reinvenção’, diz campeã da Juventude da COP30</a></td>
+                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/play/noticia/2025/05/27/daniel-haidar-sera-walmor-chagas-em-filme-sobre-cacilda-becker.ghtml' target='_blank'>Daniel Haidar será Walmor Chagas em filme sobre Cacilda Becker</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Play</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>04:48</td>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/renovaveis-tem-demissoes-e-buscam-ressarcimento.ghtml' target='_blank'>Renováveis têm demissões e buscam ressarcimento</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/boa-viagem/noticia/2025/05/27/com-malevola-cruella-e-outros-disney-estreia-espetaculo-dedicado-a-viloes-em-parque-de-orlando-veja-fotos.ghtml' target='_blank'>Com Malévola, Cruella e outros, Disney estreia espetáculo dedicado a vilões em parque de Orlando; veja fotos</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Boa Viagem</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>04:48</td>
+                    <td><a href='https://valor.globo.com/empresas/coluna/ou-temos-estrategia-ou-seremos-dominados.ghtml' target='_blank'>Ou temos estratégia ou seremos dominados</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/futebol/botafogo/noticia/2025/05/27/lider-recordista-e-armador-marlon-freitas-e-peca-importante-para-o-botafogo-em-decisao-pela-libertadores.ghtml' target='_blank'>Líder, recordista e armador, Marlon Freitas é peça importante para o Botafogo em 'decisão' pela Libertadores</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Botafogo</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>04:48</td>
+                    <td><a href='https://valor.globo.com/impresso/noticia/2025/05/27/tarifas-podem-afetar-mais-de-50-da-industria-do-pais.ghtml' target='_blank'>Tarifas podem afetar mais de 50% da indústria do país</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Impresso</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/rio/noticia/2025/05/27/gripe-fiocruz-alerta-que-rj-enfrenta-alto-risco-para-casos-de-influenza-saiba-onde-se-vacinar.ghtml' target='_blank'>Gripe: Fiocruz alerta que RJ enfrenta alto risco para casos de influenza; saiba onde se vacinar</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Rio</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>04:48</td>
+                    <td><a href='https://www.estadao.com.br/jornal-do-carro/golpe-da-multa-bandidos-estao-deixando-avisos-de-infracao-com-qr-code-para-pagamento/' target='_blank'>Golpe da multa: bandidos estão deixando avisos de infração com QR Code para pagamento</a></td>
+                    <td><span class='categoria' style='background-color: #827717;'>Automóveis</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/capital/post/2025/05/moda-dos-estudios-sobe-a-serra-do-rio-e-residencial-busca-r-150-milhoes.ghtml' target='_blank'>Moda dos ‘estúdios’ sobe a Serra do Rio, e residencial busca R$ 150 milhões</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Capital</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>04:48</td>
+                    <td><a href='https://valor.globo.com/impresso/noticia/2025/05/27/industria.ghtml' target='_blank'>Indústria</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Impresso</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/futebol/vasco/noticia/2025/05/27/com-diniz-e-sao-januario-como-trunfos-vasco-tenta-sobreviver-na-sul-americana.ghtml' target='_blank'>Com Diniz e São Januário como trunfos, Vasco tenta sobreviver na Sul-Americana</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Vasco</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>04:48</td>
+                    <td><a href='https://valor.globo.com/impresso/noticia/2025/05/27/justica-exclui-bonus-de-verba-rescisoria.ghtml' target='_blank'>Justiça exclui bônus de verba rescisória</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Impresso</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/ela/noticia/2025/05/27/divorcio-do-sono-entenda-causas-e-tratamentos-para-melhorar-a-vida-a-dois.ghtml' target='_blank'>'Divórcio do sono': entenda causas e tratamentos para melhorar a vida a dois</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ela</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>04:48</td>
+                    <td><a href='https://valor.globo.com/impresso/noticia/2025/05/27/nexa-entra-na-disputa-por-ativos-da-bhp.ghtml' target='_blank'>Nexa entra na disputa por ativos da BHP</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Impresso</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/impresso/noticia/2025/05/27/eua-deixam-no-ar-ameaca-de-abandonar-omc.ghtml' target='_blank'>EUA deixam no ar ameaça de abandonar OMC</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Impresso</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/impresso/noticia/2025/05/27/minoritarios-vao-buscar-preco-maior-para-zamp.ghtml' target='_blank'>Minoritários vão buscar preço maior para Zamp</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Impresso</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/podcasts/2025/05/podcast-explica-mudancas-no-iof-recuo-do-governo-e-impactos-politicos-do-caso.shtml' target='_blank'>Podcast explica mudanças no IOF, recuo do governo e impactos políticos do caso</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Podcasts</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>5:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/sao-paulo-deve-ter-sol-e-calor-de-ate-280c-nesta-terca-27.shtml' target='_blank'>São Paulo deve ter sol e calor de até 28°C nesta terça (27)</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>5:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/blogs/politicas-e-justica/2025/05/carga-horaria-x-produtividade-como-o-equilibrio-pode-melhorar-resultados-e-a-seguranca-no-trabalho.shtml' target='_blank'>Carga horária x produtividade: como o equilíbrio pode melhorar resultados e a segurança no trabalho</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Blogs</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>5:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/o-dificil-caminho-para-as-mulheres.ghtml' target='_blank'>O difícil caminho para as mulheres</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/rio2c-debate-criatividade-e-inovacao.ghtml' target='_blank'>Rio2C debate criatividade e inovação</a></td>
+                    <td><span class='categoria' style='background-color: #4CAF50;'>Empresas</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://valor.globo.com/impresso/noticia/2025/05/27/clima-jovem.ghtml' target='_blank'>Clima jovem</a></td>
+                    <td><span class='categoria' style='background-color: #9E9E9E;'>Impresso</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>05:00</td>
                 </tr>
                 <tr>
                     <td><a href='https://www1.folha.uol.com.br/poder/2025/05/dino-indica-investida-contra-emendas-impositivas-e-abre-novo-foco-de-embate-com-congresso.shtml' target='_blank'>Dino indica investida contra emendas impositivas e abre novo foco de embate com Congresso</a></td>
@@ -724,7 +860,13 @@
                     <td class='hora'>4:03</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/veja-melhores-horarios-para-entregar-o-imposto-de-renda-2025-e-saiba-declarar-em-15-minutos.shtml' target='_blank'>Veja melhores horários para entregar o Imposto de Renda 2025 e saiba declarar em 15 minutos</a></td>
+                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/previdencia-privada-pode-aumentar-a-restituicao-no-imposto-de-renda-entenda.shtml' target='_blank'>Previdência privada pode aumentar a restituição no Imposto de Renda; entenda</a></td>
+                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>4:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/aumento-de-iof-nao-garante-meta-fiscal-de-2026-nem-reducao-da-divida.shtml' target='_blank'>Aumento de IOF não garante meta fiscal de 2026 nem redução da dívida</a></td>
                     <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
                     <td class='fonte'>Folha de S.Paulo</td>
                     <td class='hora'>4:00</td>
@@ -736,28 +878,16 @@
                     <td class='hora'>4:00</td>
                 </tr>
                 <tr>
+                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/veja-melhores-horarios-para-entregar-o-imposto-de-renda-2025-e-saiba-declarar-em-15-minutos.shtml' target='_blank'>Veja melhores horários para entregar o Imposto de Renda 2025 e saiba declarar em 15 minutos</a></td>
+                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
+                    <td class='fonte'>Folha de S.Paulo</td>
+                    <td class='hora'>4:00</td>
+                </tr>
+                <tr>
                     <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/liberdade-em-sp-amplia-calcadas-sobre-vagas-de-estacionamento-e-comercio-pede-volta-dos-carros.shtml' target='_blank'>Liberdade, em SP, amplia calçadas sobre vagas de estacionamento e comércio pede volta dos carros</a></td>
                     <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
                     <td class='fonte'>Folha de S.Paulo</td>
                     <td class='hora'>4:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/aumento-de-iof-nao-garante-meta-fiscal-de-2026-nem-reducao-da-divida.shtml' target='_blank'>Aumento de IOF não garante meta fiscal de 2026 nem redução da dívida</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>4:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/previdencia-privada-pode-aumentar-a-restituicao-no-imposto-de-renda-entenda.shtml' target='_blank'>Previdência privada pode aumentar a restituição no Imposto de Renda; entenda</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>4:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/portugal-giro/post/2025/05/emigrantes-brasileiros-explicam-voto-na-ultradireita-anti-imigracao-em-portugal.ghtml' target='_blank'>Urnas do Brasil são apuradas e brasileiros explicam voto na ultradireita de Portugal</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Portugal Giro</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>03:48</td>
                 </tr>
                 <tr>
                     <td><a href='https://www.estadao.com.br/opiniao/rubens-barbosa/o-congresso-e-os-militares/' target='_blank'>O Congresso e os militares</a></td>
@@ -766,8 +896,8 @@
                     <td class='hora'>03:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www.estadao.com.br/politica/coluna-do-estadao/bolsonaristas-preparam-drible-no-stf-para-inviabilizar-uso-de-camera-corporal-pelos-policiais/' target='_blank'>Bolsonaristas preparam drible no STF para inviabilizar uso de câmera corporal pelos policiais</a></td>
-                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
+                    <td><a href='https://www.estadao.com.br/opiniao/quem-deve-teme/' target='_blank'>Quem deve teme</a></td>
+                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
                     <td class='fonte'>Estadão</td>
                     <td class='hora'>03:00</td>
                 </tr>
@@ -778,20 +908,14 @@
                     <td class='hora'>03:00</td>
                 </tr>
                 <tr>
+                    <td><a href='https://www.estadao.com.br/politica/coluna-do-estadao/bolsonaristas-preparam-drible-no-stf-para-inviabilizar-uso-de-camera-corporal-pelos-policiais/' target='_blank'>Bolsonaristas preparam drible no STF para inviabilizar uso de câmera corporal pelos policiais</a></td>
+                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>03:00</td>
+                </tr>
+                <tr>
                     <td><a href='https://www.estadao.com.br/economia/iof-qual-impacto-empresas-com-aumento-imposto/' target='_blank'>IOF: Qual será o impacto para as empresas com o aumento de imposto anunciado pelo governo</a></td>
                     <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>Estadão</td>
-                    <td class='hora'>03:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www.estadao.com.br/opiniao/forum-dos-leitores/forum-dos-leitores-27-5-2025/' target='_blank'>Fórum dos Leitores</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
-                    <td class='fonte'>Estadão</td>
-                    <td class='hora'>03:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www.estadao.com.br/opiniao/quem-deve-teme/' target='_blank'>Quem deve teme</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
                     <td class='fonte'>Estadão</td>
                     <td class='hora'>03:00</td>
                 </tr>
@@ -808,7 +932,13 @@
                     <td class='hora'>03:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www.estadao.com.br/opiniao/espaco-aberto/o-que-sera-do-direito-do-trabalho/' target='_blank'>O que será do Direito do Trabalho?</a></td>
+                    <td><a href='https://www.estadao.com.br/opiniao/ataque-a-razao/' target='_blank'>Ataque à razão</a></td>
+                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
+                    <td class='fonte'>Estadão</td>
+                    <td class='hora'>03:00</td>
+                </tr>
+                <tr>
+                    <td><a href='https://www.estadao.com.br/opiniao/forum-dos-leitores/forum-dos-leitores-27-5-2025/' target='_blank'>Fórum dos Leitores</a></td>
                     <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
                     <td class='fonte'>Estadão</td>
                     <td class='hora'>03:00</td>
@@ -820,118 +950,16 @@
                     <td class='hora'>03:00</td>
                 </tr>
                 <tr>
-                    <td><a href='https://www.estadao.com.br/opiniao/ataque-a-razao/' target='_blank'>Ataque à razão</a></td>
-                    <td><span class='categoria' style='background-color: #607D8B;'>Opinião</span></td>
-                    <td class='fonte'>Estadão</td>
-                    <td class='hora'>03:00</td>
+                    <td><a href='https://valor.globo.com/mundo/noticia/2025/05/27/japo-promete-us-155-bilhes-em-ajuda-a-pequenas-e-mdias-empresas-diante-de-tarifas-dos-eua.ghtml' target='_blank'>Japão promete US$ 15,5 bilhões em ajuda a pequenas e médias empresas diante de tarifas dos EUA</a></td>
+                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>01:30</td>
                 </tr>
                 <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/27/jatinho-bonus-de-r-32-milhoes-e-mansao-no-rio-veja-os-privilegios-de-ancelotti-para-assumir-o-comando-da-selecao.ghtml' target='_blank'>Jatinho, bônus de R$ 32 milhões e mansão no Rio: veja os privilégios de Ancelotti para assumir o comando da seleção</a></td>
-                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/rio/bairros/tijuca-e-zona-norte/noticia/2025/05/26/posto-de-gasolina-que-vendia-combustivel-adulterado-e-interditado-em-bras-de-pina.ghtml' target='_blank'>Posto de gasolina que vendia combustível adulterado é interditado em Brás de Pina</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Tijuca e Zona Norte</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/rio/noticia/2025/05/26/primeira-onda-de-frio-do-ano-vai-atingir-o-rj-nesta-semana.ghtml' target='_blank'>Primeira onda de frio polar do ano vai atingir o RJ? Confira</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Rio</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/rodrigo-capelo/coluna/2025/05/a-ver-o-que-samir-xaud-fara-na-cbf-de-agora-ate-2029.ghtml' target='_blank'>A ver o que Samir Xaud fará na CBF de agora até 2029</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Rodrigo Capelo</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/26/saiba-quando-e-o-proximo-jogo-da-selecao-brasileira-que-marcara-estreia-de-ancelotti.ghtml' target='_blank'>Saiba quando é o próximo jogo da seleção brasileira, que marcará estreia de Ancelotti</a></td>
-                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/26/carlos-augusto-vanderson-ederson-e-mais-conheca-nomes-alternativos-da-convocacao-de-ancelotti-para-a-selecao.ghtml' target='_blank'>Carlos Augusto, Vanderson, Ederson e mais: conheça nomes 'alternativos' da convocação de Ancelotti para a seleção</a></td>
-                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/26/apresentacao-de-ancelotti-tem-homenagens-de-ex-jogadores-presencas-vip-e-tiradas-do-tecnico.ghtml' target='_blank'>Apresentação de Ancelotti tem homenagens de ex-jogadores, presenças VIP e tiradas do técnico</a></td>
-                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/politica/noticia/2025/05/26/carlos-e-flavio-saem-em-defesa-de-eduardo-bolsonaro-apos-pgr-pedir-investigacao-por-atuacao-nos-eua.ghtml' target='_blank'>Carlos e Flávio saem em defesa de Eduardo Bolsonaro após PGR pedir investigação por atuação nos EUA</a></td>
-                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/economia/imposto-de-renda/noticia/2025/05/26/o-globo-tira-duvidas-em-live-na-reta-final-de-entrega-do-imposto-de-renda-2025.ghtml' target='_blank'>O GLOBO tira dúvidas em live na reta final de entrega do Imposto de Renda 2025</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Imposto de Renda</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/capital/post/2025/05/firjan-vai-abrir-centro-de-formacao-em-ia-e-ti-no-rio-e-reduzir-vazio-do-eco-sapucai.ghtml' target='_blank'>Firjan vai abrir centro de formação em IA e TI no Rio — e reduzir vazio do Eco Sapucaí</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Capital</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>02:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/cultura/horoscopo/noticia/2025/05/27/horoscopo-de-hoje-veja-previsao-para-seu-signo-no-dia-275.ghtml' target='_blank'>Horóscopo de hoje: veja previsão para seu signo no dia 27/5</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Horóscopo</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>01:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/brasil/noticia/2025/05/27/comissao-da-camara-debate-projeto-de-deputado-bolsonarista-que-veta-uso-de-cameras-corporais-como-prova-contra-policiais.ghtml' target='_blank'>Comissão da Câmara debate projeto de deputado bolsonarista que veta uso de câmeras corporais como prova contra policiais</a></td>
-                    <td><span class='categoria' style='background-color: #FF9800;'>Brasil</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>01:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/economia/imposto-de-renda/noticia/2025/05/27/imposto-de-renda-2025-prazo-esta-se-esgotando-o-que-acontece-com-quem-nao-declarar.ghtml' target='_blank'>Imposto de Renda 2025: prazo está se esgotando. O que acontece com quem não declarar?</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Imposto de Renda</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>01:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/clima-extremo/noticia/2025/05/27/massa-de-ar-frio-derruba-temperaturas-em-rio-sp-mg-e-mais-nove-estados-ao-longo-da-semana-veja-previsao-para-esta-terca.ghtml' target='_blank'>Massa de ar frio derruba temperaturas em Rio, SP, MG e mais nove estados ao longo da semana; veja previsão para esta terça</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Clima Extremo</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>01:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/economia/noticia/2025/05/27/valores-esquecidos-resgate-automatico-de-dinheiro-esquecido-em-bancos-comeca-a-funcionar-nesta-terca.ghtml' target='_blank'>Valores esquecidos: resgate automático de 'dinheiro esquecido' em bancos começa a funcionar nesta terça</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>01:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/cultura/noticia/2025/05/27/o-que-esperar-da-terceira-temporada-de-the-last-of-us-quando-deve-ir-ao-ar-saiba-mais-sobre-a-serie.ghtml' target='_blank'>O que esperar da terceira temporada de 'The last of us'? Quando deve ir ao ar? Saiba mais sobre a série</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>01:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/cultura/noticia/2025/05/27/debora-bloch-fala-da-relacao-com-sexo-e-drogas-na-juventude-de-casamentos-e-separacoes.ghtml' target='_blank'>Debora Bloch fala da relação com sexo e drogas na juventude, de casamentos e separações</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>01:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/cultura/noticia/2025/05/27/estrutura-de-shopping-e-hotel-5-estrelas-ate-para-caes-como-e-a-casa-onde-ana-hickmann-vive-com-edu-guedes-fotos.ghtml' target='_blank'>Estrutura de shopping e 'hotel 5 estrelas' até para cães: como é a casa onde Ana Hickmann vive com Edu Guedes; fotos</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>01:48</td>
+                    <td><a href='https://valor.globo.com/financas/noticia/2025/05/27/japo-perde-posio-de-maior-credor-mundial-pela-primeira-vez-em-34-anos.ghtml' target='_blank'>Japão perde posição de maior credor mundial pela primeira vez em 34 anos</a></td>
+                    <td><span class='categoria' style='background-color: #9C27B0;'>Finanças</span></td>
+                    <td class='fonte'>Valor Econômico</td>
+                    <td class='hora'>01:01</td>
                 </tr>
                 <tr>
                     <td><a href='https://valor.globo.com/empresas/noticia/2025/05/27/japo-vender-sistema-de-redes-de-fibra-tica-no-exterior-como-alternativa-huawei.ghtml' target='_blank'>Japão venderá sistema de redes de fibra ótica no exterior como alternativa à Huawei</a></td>
@@ -945,514 +973,9 @@
                     <td class='fonte'>Valor Econômico</td>
                     <td class='hora'>00:57</td>
                 </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/esportes/noticia/2025/05/26/com-cinco-na-lista-de-ancelotti-flamengo-bate-marca-de-corinthians-e-vasco-e-emplaca-novo-recorde-na-selecao-brasileira.ghtml' target='_blank'>Com cinco na lista de Ancelotti, Flamengo bate marca de Corinthians e Vasco e emplaca novo recorde na seleção brasileira</a></td>
-                    <td><span class='categoria' style='background-color: #FF5722;'>Esportes</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/mundo/noticia/2025/05/26/homem-e-preso-apos-atropelar-torcedores-do-liverpool-durante-comemoracao-da-vitoria-na-premier-league.ghtml' target='_blank'>Atropelamento em massa durante comemoração da vitória do Liverpool na Premier League deixa 27 feridos</a></td>
-                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/brasil/sao-paulo/noticia/2025/05/26/justica-reafirma-proibicao-ao-servico-de-mototaxis-em-sao-paulo-e-impoe-multa-diaria-de-r-30-mil.ghtml' target='_blank'>Justiça reafirma proibição ao serviço de mototáxis em São Paulo e impõe multa diária de R$ 30 mil</a></td>
-                    <td><span class='categoria' style='background-color: #C62828;'>São Paulo</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/miriam-leitao/post/2025/05/ipca-15-de-maio-sai-nesta-terca-energia-e-medicamentos-devem-pesar.ghtml' target='_blank'>IPCA-15 de maio sai nesta terça; energia e medicamentos devem pesar</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Míriam Leitão</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/cultura/noticia/2025/05/26/com-principais-shows-fora-da-madrugada-virada-cultural-de-sp-e-mais-segura-e-reafirma-programacao-diversa.ghtml' target='_blank'>Com principais shows fora da madrugada, Virada Cultural de SP é mais segura e reafirma programação diversa</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/rio/noticia/2025/05/26/cervo-e-resgatado-por-pescadores-em-lagoa-em-saquarema-rj-e-usa-touca-de-la-para-ficar-calmo-em-barco-video.ghtml' target='_blank'>Cervo é resgatado por pescadores em lagoa em Saquarema (RJ) e usa touca de lã para ficar calmo em barco; vídeo</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Rio</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/rio/noticia/2025/05/26/professor-da-uerj-e-eleito-personalidade-do-ano-pelo-coletivo-negro-patrice-lumumba.ghtml' target='_blank'>Professor da Uerj é eleito personalidade do ano pelo Coletivo Negro Patrice Lumumba</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Rio</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/economia/noticia/2025/05/26/governo-deve-discutir-nesta-segunda-compensacao-de-recuo-do-iof.ghtml' target='_blank'>Governo deve discutir nesta segunda compensação de recuo do IOF</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/ela/gente/noticia/2025/05/26/atleta-e-expulsa-de-time-apos-criar-perfil-em-plataforma-18-me-senti-injusticada-inclusive-por-outras-mulheres.ghtml' target='_blank'>Atleta é expulsa de time após criar perfil em plataforma +18: 'Me senti injustiçada, inclusive por outras mulheres'</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Gente</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/lauro-jardim/post/2025/05/as-fotos-que-sebastiao-salgado-doou-ao-itamaraty-e-os-tempos-sombrios-sob-bolsonaro.ghtml' target='_blank'>As fotos que Sebastião Salgado doou ao Itamaraty e os 'tempos sombrios' sob Bolsonaro</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Lauro Jardim</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/ela/noticia/2025/05/26/carol-nakamura-e-empresario-marcelo-viana-estao-juntos-veja-as-pistas.ghtml' target='_blank'>Carol Nakamura e empresário Marcelo Viana estão juntos? Veja as pistas</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ela</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/rio/noticia/2025/05/26/atropelamento-em-laranjeiras-teria-motivacao-politica-dizem-testemunhas.ghtml' target='_blank'>Atropelamento em Laranjeiras teria motivação política, dizem testemunhas</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Rio</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/economia/imposto-de-renda/noticia/2025/05/26/imposto-de-renda-2025-como-declarar-dinheiro-recebido-com-bets-e-loteria.ghtml' target='_blank'>Imposto de Renda 2025: como declarar dinheiro recebido com bets e loteria?</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Imposto de Renda</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/economia/noticia/2025/05/26/hugo-motta-afirma-que-vai-criar-comissao-para-analise-de-projeto-que-regula-trabalho-por-aplicativo.ghtml' target='_blank'>Hugo Motta afirma que vai criar comissão para análise de projeto que regula trabalho por aplicativo</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://oglobo.globo.com/blogs/miriam-leitao/post/2025/05/haddad-aquele-que-paga-imposto-fica-prejudicado-por-aquele-que-fez-do-lobby-a-sua-profissao-de-fe.ghtml' target='_blank'>Haddad: 'aquele que paga imposto fica prejudicado por aquele que fez do lobby a sua profissão de fé'</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Míriam Leitão</span></td>
-                    <td class='fonte'>O Globo</td>
-                    <td class='hora'>00:48</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/eduardosodre/2025/05/audi-apoia-nova-etapa-do-programa-que-leva-iluminacao-a-comunidades-ribeirinhas.shtml' target='_blank'>Audi apoia nova etapa do programa que leva iluminação a comunidades ribeirinhas</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/equilibrioesaude/2025/05/sem-vigilancia-integrada-e-constante-nao-ha-resposta-eficaz-contra-a-gripe-aviaria.shtml' target='_blank'>Sem vigilância integrada e constante, não há resposta eficaz contra a gripe aviária</a></td>
-                    <td><span class='categoria' style='background-color: #F44336;'>Saúde</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://guia.folha.uol.com.br/teatro/2025/05/portatil-com-gregorio-duvivier-e-monologo-lady-tempestade-de-andrea-beltrao-estreiam-em-sp.shtml' target='_blank'>'Portátil', com Gregório Duvivier, e monólogo 'Lady Tempestade' de Andrea Beltrão estreiam em SP</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Teatro</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/comida/2025/05/como-a-limonada-de-picles-se-tornou-uma-febre-nos-estados-unidos.shtml' target='_blank'>Como a limonada de picles se tornou uma febre nos Estados Unidos</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Comida</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/monicabergamo/2025/05/aliados-proximos-a-bolsonaro-esperam-que-trump-aplique-sancoes-a-moraes-nos-proximos-dez-dias.shtml' target='_blank'>Aliados próximos a Bolsonaro esperam que Trump aplique sanções a Moraes nos próximos dez dias</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/poder/2025/05/estatais-patrocinam-eventos-que-promovem-lula-e-dao-palco-ao-presidente.shtml' target='_blank'>Estatais patrocinam eventos que promovem Lula e dão palco ao presidente</a></td>
-                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/ilustrada/2025/05/como-marcel-ophuls-sob-o-signo-da-segunda-guerra-buscou-a-verdade-no-cinema.shtml' target='_blank'>Como Marcel Ophuls, sob o signo da Segunda Guerra, buscou a verdade no cinema</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/poder/2025/05/entenda-inquerito-no-stf-contra-eduardo-bolsonaro-apos-governo-trump-admitir-sancao-a-moraes.shtml' target='_blank'>Entenda inquérito contra Eduardo Bolsonaro no STF após governo Trump admitir sanção a Moraes</a></td>
-                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mundo/2025/05/enquanto-alemanha-fecha-fronteiras-refugiado-vira-heroi-em-hamburgo.shtml' target='_blank'>Enquanto Alemanha fecha fronteiras, refugiado vira herói em Hamburgo</a></td>
-                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/novo-iof-corresponde-a-alta-de-ate-050-ponto-na-selic-e-deve-influenciar-bc-estimam-economistas.shtml' target='_blank'>Novo IOF corresponde a alta de até 0,50 ponto na Selic e deve influenciar BC, estimam economistas</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>23:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/ambulantes-protestam-contra-novas-regras-para-comercio-na-orla-do-rio.shtml' target='_blank'>Ambulantes protestam contra novas regras para comércio na orla do Rio</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>22:55</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/vaivem/2025/05/cafe-de-rondonia-capta-23-vezes-mais-carbono-do-que-emite.shtml' target='_blank'>Café de Rondônia capta 2,3 vezes mais carbono do que emite</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>22:51</td>
-                </tr>
-                <tr>
-                    <td><a href='https://f5.folha.uol.com.br/celebridades/2025/05/filha-de-trump-posta-foto-treinando-jiu-jitsu-com-cunhado-de-gisele-bundchen.shtml' target='_blank'>Filha de Trump posta foto treinando jiu-jítsu com cunhado de Gisele Bündchen</a></td>
-                    <td><span class='categoria' style='background-color: #D500F9;'>Celebridades</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>22:25</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/opiniao/2025/05/imprevidencia-acelera-crise-no-inss.shtml' target='_blank'>Imprevidência acelera crise no INSS</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Opiniao</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>22:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/opiniao/2025/05/todos-pela-superacao-da-pobreza.shtml' target='_blank'>Todos pela superação da pobreza</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Opiniao</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>22:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/opiniao/2025/05/quem-tem-medo-da-cpi-das-fraudes-na-habitacao-popular.shtml' target='_blank'>Quem tem medo da CPI das fraudes na habitação popular?</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Opiniao</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>22:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/opiniao/2025/05/ancelotti-assume-selecao-brasileira-em-meio-a-caos-da-cbf.shtml' target='_blank'>Ancelotti assume seleção brasileira em meio a caos da CBF</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Opiniao</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>22:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/ilustrada/2025/05/the-town-anuncia-shows-de-mc-livinho-tihuana-e-kae-guajajara-para-este-ano.shtml' target='_blank'>The Town anuncia shows de MC Livinho, Tihuana e Kâe Guajajara para este ano</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>21:30</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/monicabergamo/2025/05/musico-jarbas-mariz-apresentara-decimo-cd-em-show-no-sesc-belenzinho.shtml' target='_blank'>Músico Jarbas Mariz apresentará décimo CD em show no Sesc Belenzinho</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>21:26</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/blogs/de-grao-em-grao/2025/05/vamos-deixar-como-esta-para-ver-se-muda.shtml' target='_blank'>Vamos deixar como está para ver se muda?</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Blogs</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>21:23</td>
-                </tr>
-                <tr>
-                    <td><a href='https://f5.folha.uol.com.br/bichos/2025/05/os-influencers-que-ganham-fama-exibindo-animais-selvagens-como-pets.shtml' target='_blank'>Os influencers que ganham fama exibindo animais selvagens como pets</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Bichos</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>21:17</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mundo/2025/05/o-que-se-sabe-sobre-organizacao-apoiada-por-trump-que-iniciou-plano-de-ajuda-na-faixa-de-gaza.shtml' target='_blank'>O que se sabe sobre organização apoiada por Trump que iniciou plano de ajuda na Faixa de Gaza</a></td>
-                    <td><span class='categoria' style='background-color: #E91E63;'>Mundo</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>21:05</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/paineldoleitor/2025/05/ancelotti-mostra-hombridade-ao-nao-convocar-neymar-de-primeira-diz-leitor.shtml' target='_blank'>Ancelotti mostra hombridade ao não convocar Neymar de primeira, diz leitor</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Paineldoleitor</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>21:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/monicabergamo/2025/05/marina-silva-se-reunira-com-hugo-motta-para-discutir-pl-do-licenciamento-ambiental.shtml' target='_blank'>Marina Silva se reunirá com Hugo Motta para discutir PL do licenciamento ambiental</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>20:43</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/esporte/2025/05/lista-de-lesionados-atrapalha-primeira-convocacao-de-ancelotti-na-selecao.shtml' target='_blank'>Lista de lesionados atrapalha primeira convocação de Ancelotti na seleção</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Esporte</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>20:33</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/joel-pinheiro-da-fonseca/2025/05/ninguem-gosta-de-corte-de-gastos-mas-nao-temos-como-evitar.shtml' target='_blank'>Ninguém gosta de corte de gastos, mas não temos como evitar</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>20:23</td>
-                </tr>
-                <tr>
-                    <td><a href='https://f5.folha.uol.com.br/celebridades/2025/05/boca-rosa-posta-foto-com-ator-diego-cruz-e-ele-reposta-deixa-tudo-mais-leve.shtml' target='_blank'>Boca Rosa posta foto com ator Diego Cruz e ele reposta: 'Deixa tudo mais leve'</a></td>
-                    <td><span class='categoria' style='background-color: #D500F9;'>Celebridades</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>20:20</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/ilustrada/2025/05/filme-de-jafar-panahi-e-adam-sandler-o-que-ver-na-tv-e-no-streaming-nesta-terca-feira.shtml' target='_blank'>Filme de Jafar Panahi e Adam Sandler: o que ver na TV e no streaming nesta terça-feira</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>20:07</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/estudante-de-medicina-e-afastado-de-universidade-apos-denuncias-de-racismo-e-lgbtfobia.shtml' target='_blank'>Estudante de medicina é afastado de universidade após denúncias de racismo e LGBTfobia</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>20:05</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/esporte/2025/05/melo-antecipa-derrota-em-votacao-de-impeachment-no-corinthians-saio-de-cabeca-erguida.shtml' target='_blank'>Conselho aprova impeachment de presidente do Corinthians</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Esporte</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:54</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/ambiente/2025/05/ibama-da-licenca-a-obra-de-explosao-de-pedral-onde-atuam-milhares-de-pescadores-e-mpf-diz-ser-ilegal.shtml' target='_blank'>Ibama dá licença a obra de explosão de pedral onde atuam milhares de pescadores, e MPF diz ser ilegal</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Ambiente</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:43</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/educacao/2025/05/lula-prepara-recomposicao-de-orcamento-para-universidades-apos-reduzir-repasses.shtml' target='_blank'>Lula prepara recomposição de orçamento para universidades após reduzir repasses</a></td>
-                    <td><span class='categoria' style='background-color: #3F51B5;'>Educação</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:36</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/governo-estuda-mudar-para-agua-branca-estacao-de-futuro-trem-que-deve-ligar-sp-a-campinas.shtml' target='_blank'>Governo estuda mudar para Água Branca estação de futuro trem que deve ligar SP a Campinas</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:32</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/painel/2025/05/centrais-sindicais-criticam-suspensao-de-membros-do-conselho-de-previdencia.shtml' target='_blank'>Centrais sindicais criticam suspensão de membros do conselho de Previdência</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:30</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/equilibrio/2025/05/o-que-aconteceu-com-coracao-de-homem-que-correu-366-maratonas-consecutivas.shtml' target='_blank'>O que aconteceu com coração de homem que correu 366 maratonas consecutivas</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Equilibrio</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:26</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/ilustrada/2025/05/lilo-e-stitch-supera-novo-missao-impossivel-nas-bilheterias-dos-eua.shtml' target='_blank'>'Lilo e Stitch' supera novo 'Missão Impossível' nas bilheterias dos EUA</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:18</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/monicabergamo/2025/05/lula-tem-vertigem-e-vai-a-hospital-para-exames.shtml' target='_blank'>Lula tem vertigem, vai a hospital e recebe diagnóstico de labirintite</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:16</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/monicabergamo/2025/05/maai-arquitetura-estreia-na-casacor-sao-paulo.shtml' target='_blank'>Maai Arquitetura estreia na Casacor São Paulo</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:12</td>
-                </tr>
-                <tr>
-                    <td><a href='https://f5.folha.uol.com.br/celebridades/2025/05/marina-ruy-barbosa-explica-braco-roxo-em-evento-em-cannes-vestido-pesava-15-quilos.shtml' target='_blank'>Marina Ruy Barbosa diz que vestido de 15 quilos foi a causa de braço roxo em evento em Cannes</a></td>
-                    <td><span class='categoria' style='background-color: #D500F9;'>Celebridades</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:10</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/poder/2025/05/lula-tem-mal-estar-cancela-compromissos-e-passa-por-exames-em-hospital.shtml' target='_blank'>Lula tem mal-estar, cancela compromissos e passa por exames em hospital</a></td>
-                    <td><span class='categoria' style='background-color: #2196F3;'>Política</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:09</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/equilibrioesaude/2025/05/justica-de-sp-determina-que-plano-de-saude-custeie-congelamento-de-ovulos-de-paciente-com-cancer.shtml' target='_blank'>Justiça de SP determina que plano de saúde custeie congelamento de óvulos de paciente com câncer</a></td>
-                    <td><span class='categoria' style='background-color: #F44336;'>Saúde</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:08</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/monicabergamo/2025/05/antonio-pitanga-atuara-ao-lado-de-atriz-de-pulp-fiction-em-suspense-psicologico.shtml' target='_blank'>Antônio Pitanga atuará ao lado de atriz de Pulp Fiction em suspense psicológico</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:07</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/educacao/2025/05/alunos-da-unesp-ficam-em-coma-apos-trote-em-jaboticabal-sp.shtml' target='_blank'>Alunos da Unesp ficam em coma após trote em Jaboticabal (SP)</a></td>
-                    <td><span class='categoria' style='background-color: #3F51B5;'>Educação</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>19:05</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/painel/2025/05/gestao-nunes-poe-faixa-indicando-que-passageira-morta-estava-em-mototaxi-da-99.shtml' target='_blank'>Nunes põe faixa dizendo que passageira morta estava em mototáxi da 99; empresa vê oportunismo</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:59</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/blogs/brasilia-hoje/2025/05/testemunhas-dizem-que-bolsonaro-se-afastou-de-augusto-heleno-ao-defender-ex-gsi-em-trama-golpista.shtml' target='_blank'>Testemunhas dizem que Bolsonaro se afastou de Augusto Heleno ao defender ex-GSI em trama golpista</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Blogs</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:56</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/turismo/2025/05/ruanda-sobreviveu-a-um-genocidio-e-e-um-dos-paises-africanos-mais-seguros.shtml' target='_blank'>Ruanda sobreviveu a um genocídio e é um dos países africanos mais seguros</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Turismo</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:44</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/nvidia-vai-lancar-chip-de-ia-mais-barato-para-a-china-apos-restricoes-dos-eua.shtml' target='_blank'>Nvidia vai lançar chip de IA mais barato para a China após restrições dos EUA</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:34</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/ilustrada/2025/05/vingadores-doomsday-e-adiado-e-deve-ser-lancado-em-dezembro-de-2026.shtml' target='_blank'>'Vingadores: Doomsday' é adiado e deve ser lançado em dezembro de 2026</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:32</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/blogs/claudio-hebdo/2025/05/trump-empurra-o-jipe-de-dudu-bananinha.shtml' target='_blank'>Trump empurra o jipe de Dudu Bananinha?</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Blogs</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:31</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/juliano-spyer/2025/05/pastores-gays-enfrentam-exclusao-silencio-e-conflito-espiritual.shtml' target='_blank'>Pastores gays enfrentam exclusão, silêncio e conflito espiritual</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:18</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/exportacao-de-frango-do-brasil-cai-15-apos-caso-de-gripe-aviaria.shtml' target='_blank'>Exportação de frango do Brasil cai 1,5% após caso de gripe aviária</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:12</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/esporte/2025/05/felipao-e-parreira-dao-boas-vindas-para-ancelotti-na-selecao.shtml' target='_blank'>Felipão e Parreira dão boas-vindas para Ancelotti na seleção</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Esporte</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:04</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/joaopereiracoutinho/2025/05/donald-trump-mostra-ser-um-barbaro-ao-atacar-universidades.shtml' target='_blank'>Donald Trump mostra ser um bárbaro ao atacar universidades</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>18:00</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/ilustrada/2025/05/the-town-anuncia-show-com-joelma-dona-odete-gaby-amarantos-e-zaynara.shtml' target='_blank'>The Town anuncia show com Joelma, Dona Onete, Gaby Amarantos e Zaynara</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:54</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/painel/2025/05/ibama-concede-licenca-para-facilitar-navegacao-no-rio-tocantins.shtml' target='_blank'>Ibama concede licença para facilitar navegação no rio Tocantins</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:49</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/ilustrada/2025/05/trama-de-sequencia-de-top-gun-ja-esta-pronta-diz-roteirista-do-segundo-filme.shtml' target='_blank'>Trama de sequência de 'Top Gun' já está 'pronta', diz roteirista do segundo filme</a></td>
-                    <td><span class='categoria' style='background-color: #009688;'>Cultura</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:46</td>
-                </tr>
-                <tr>
-                    <td><a href='https://f5.folha.uol.com.br/voceviu/2025/05/multidao-se-reune-na-turquia-para-celebrar-menino-de-seis-anos-que-venceu-o-cancer.shtml' target='_blank'>Multidão se reúne na Turquia para celebrar menino de seis anos que se recuperou do câncer</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Voceviu</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:45</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/justica-determina-suspensao-imediata-de-aplicativo-de-motos-em-sp.shtml' target='_blank'>Justiça determina suspensão imediata de aplicativo de motos em SP</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:44</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/pejotizacao-do-crime-organizado-ameaca-poder-publico-diz-promotor-de-sp.shtml' target='_blank'>'Pejotização do crime organizado' ameaça poder público, diz promotor de SP</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:41</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/em-disputa-com-ifood-rappi-promete-pagar-r-10-por-corrida-para-motociclistas.shtml' target='_blank'>Em disputa com iFood, Rappi promete pagar R$ 10 por corrida para motociclistas</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:38</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/cotidiano/2025/05/acusado-de-matar-ator-de-chiquititas-vai-a-juri-popular-na-quinta-feira-29.shtml' target='_blank'>Acusado de matar ator de 'Chiquititas' vai a júri popular na quinta-feira (29)</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Cotidiano</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:29</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/monicabergamo/2025/05/moradores-de-pinheiros-lancam-abaixo-assinado-contra-bares-em-que-clientes-invadem-calcadas-e-dizem-que-eles-ate-defecam-na-rua.shtml' target='_blank'>Moradores de Pinheiros lançam abaixo-assinado contra bares em que clientes invadem calçadas e dizem que eles até defecam na rua</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:27</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/colunas/painelsa/2025/05/aumento-do-iof-associacao-reclama-que-lula-rompeu-acordo-de-bolsonaro.shtml' target='_blank'>Aumento do IOF: Associação reclama que Lula rompeu acordo de Bolsonaro</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Colunas</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:20</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/educacao/2025/05/conselho-aprova-participacao-da-usp-no-enade-apos-21-anos.shtml' target='_blank'>Conselho aprova participação da USP no Enade após 21 anos</a></td>
-                    <td><span class='categoria' style='background-color: #3F51B5;'>Educação</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:16</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/esporte/2025/05/tres-italianos-um-ingles-e-dez-brasileiros-formam-comissao-de-ancelotti-no-brasil-veja-quem-e-quem.shtml' target='_blank'>Três italianos, um inglês e dez brasileiros formam comissão de Ancelotti no Brasil; veja quem é quem</a></td>
-                    <td><span class='categoria' style='background-color: #9E9E9E;'>Esporte</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:13</td>
-                </tr>
-                <tr>
-                    <td><a href='https://www1.folha.uol.com.br/mercado/2025/05/preco-das-empanadas-gera-polemica-entre-ator-argentino-ricardo-darin-e-ministro-de-milei.shtml' target='_blank'>Preço das empanadas gera polêmica entre ator argentino Ricardo Darín e ministro de Milei</a></td>
-                    <td><span class='categoria' style='background-color: #FFC107;'>Economia</span></td>
-                    <td class='fonte'>Folha de S.Paulo</td>
-                    <td class='hora'>17:09</td>
-                </tr>
             </tbody>
         </table>
-        <div class="stats">Total de notícias: 233</div>
+        <div class="stats">Total de notícias: 156</div>
     </div>
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-    
-    <script>
-        $(document).ready(function() {
-            $('#tabela-noticias').DataTable({
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
-                },
-                pageLength: 50,
-                order: [],
-                responsive: true,
-                lengthMenu: [10, 25, 50, 100]
-            });
-        });
-    </script>
 </body>
 </html>
