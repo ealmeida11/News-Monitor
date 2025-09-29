@@ -4,14 +4,28 @@ echo ===========================================================================
 echo                    MONITOR DE NOTICIAS - BRASIL
 echo ================================================================================
 echo Fontes: Valor Economico, Estadao, Folha de S.Paulo, O Globo
+echo Modo: LOOP CONTINUO (intervalo de 5 minutos)
 echo Data/Hora: %DATE% %TIME%
 echo ================================================================================
 echo.
+echo Pressione Ctrl+C para parar o loop
+echo.
 
+:start
 REM Definir pasta temporaria local e caminho do Git
 set TEMP_DIR=%TEMP%\MonitorNoticias
 set SOURCE_DIR=%~dp0
 set GIT_CMD="%TEMP%\PortableGit\bin\git.exe"
+
+REM Contador de execucoes
+if not defined EXECUCOES set EXECUCOES=0
+set /a EXECUCOES+=1
+echo ================================================================================
+echo                           EXECUCAO #%EXECUCOES%
+echo ================================================================================
+echo Data/Hora: %DATE% %TIME%
+echo ================================================================================
+echo.
 
 echo [1/6] PREPARANDO AMBIENTE...
 echo    - Criando pasta temporaria: %TEMP_DIR%
@@ -122,5 +136,14 @@ echo ===========================================================================
 echo Monitor de noticias atualizado e publicado em:
 echo https://ealmeida11.github.io/Brasil-News/
 echo.
-echo Pressione qualquer tecla para fechar...
-pause >nul 
+echo ================================================================================
+echo                           AGUARDANDO 5 MINUTOS...
+echo ================================================================================
+echo Proxima execucao em: 
+timeout /t 300 /nobreak >nul
+echo.
+echo ================================================================================
+echo                           INICIANDO NOVA EXECUCAO...
+echo ================================================================================
+echo.
+goto :start 
