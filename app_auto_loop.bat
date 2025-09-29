@@ -151,7 +151,8 @@ echo ===========================================================================
 echo                           AGUARDANDO 5 MINUTOS...
 echo ================================================================================
 echo Proxima execucao em: 
-timeout /t 300 /nobreak >nul
+echo Aguardando 5 minutos (300 segundos)...
+timeout /t 300 /nobreak
 echo.
 echo ================================================================================
 echo                           INICIANDO NOVA EXECUCAO...
