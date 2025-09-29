@@ -127,7 +127,18 @@ powershell -Command "$json = Get-Content '%SOURCE_DIR%noticias_combinadas.json' 
 echo.
 
 echo [6/6] ENVIANDO PARA GITHUB...
-powershell -Command "cd '%SOURCE_DIR%'; Write-Host '    - Adicionando arquivos ao Git...'; & '%TEMP%\PortableGit\bin\git.exe' add . 2>$null; Write-Host '    - Criando commit...'; & '%TEMP%\PortableGit\bin\git.exe' commit -m 'Atualizacao automatica %DATE% %TIME%' 2>$null; Write-Host '    - Enviando para GitHub...'; $pushResult = & '%TEMP%\PortableGit\bin\git.exe' push origin main 2>&1; if ($LASTEXITCODE -eq 0) { Write-Host '    - OK: GitHub atualizado com sucesso!' } else { Write-Host '    - ERRO: Falha ao enviar para GitHub' }" 2>nul
+cd /d "%SOURCE_DIR%"
+echo    - Adicionando arquivos ao Git...
+git add . >nul 2>&1
+echo    - Criando commit...
+git commit -m "Atualizacao automatica %DATE% %TIME%" >nul 2>&1
+echo    - Enviando para GitHub...
+git push origin main >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo    - OK: GitHub atualizado com sucesso!
+) else (
+    echo    - ERRO: Falha ao enviar para GitHub
+)
 
 echo.
 echo ================================================================================
