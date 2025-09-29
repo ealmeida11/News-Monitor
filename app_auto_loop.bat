@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 cls
 echo ================================================================================
 echo                    MONITOR DE NOTICIAS - BRASIL
@@ -153,7 +154,14 @@ echo ===========================================================================
 echo Proxima execucao em: 
 echo Aguardando 5 minutos (300 segundos)...
 echo Pressione Ctrl+C para parar o loop
-ping 127.0.0.1 -n 301 >nul
+echo.
+echo Iniciando contagem regressiva...
+for /l %%i in (300,-1,1) do (
+    set /a minutos=%%i/60
+    set /a segundos=%%i%%60
+    echo Aguardando... !minutos!:!segundos! restantes
+    ping 127.0.0.1 -n 2 >nul
+)
 echo.
 echo ================================================================================
 echo                           INICIANDO NOVA EXECUCAO...
