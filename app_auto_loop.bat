@@ -152,7 +152,8 @@ echo                           AGUARDANDO 5 MINUTOS...
 echo ================================================================================
 echo Proxima execucao em: 
 echo Aguardando 5 minutos (300 segundos)...
-timeout /t 300 /nobreak
+echo Pressione Ctrl+C para parar o loop
+ping 127.0.0.1 -n 301 >nul
 echo.
 echo ================================================================================
 echo                           INICIANDO NOVA EXECUCAO...
