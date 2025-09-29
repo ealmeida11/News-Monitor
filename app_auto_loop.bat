@@ -1,44 +1,126 @@
 @echo off
-chcp 65001 >nul
-setlocal enabledelayedexpansion
-
-echo ========================================
-echo Monitor de Noticias - Loop Automatico
-echo ========================================
-
-:loop
+cls
+echo ================================================================================
+echo                    MONITOR DE NOTICIAS - BRASIL
+echo ================================================================================
+echo Fontes: Valor Economico, Estadao, Folha de S.Paulo, O Globo
+echo Data/Hora: %DATE% %TIME%
+echo ================================================================================
 echo.
-echo [%date% %time%] Iniciando nova execucao...
 
-REM Copiar arquivos Python para diretorio temporario
+REM Definir pasta temporaria local e caminho do Git
 set TEMP_DIR=%TEMP%\MonitorNoticias
-if not exist "%TEMP_DIR%" mkdir "%TEMP_DIR%"
+set SOURCE_DIR=%~dp0
+set GIT_CMD="%TEMP%\PortableGit\bin\git.exe"
 
-copy /Y "scraper.py" "%TEMP_DIR%\" >nul
-copy /Y "app.py" "%TEMP_DIR%\" >nul
-copy /Y "main.py" "%TEMP_DIR%\" >nul
+echo [1/6] PREPARANDO AMBIENTE...
+echo    - Criando pasta temporaria: %TEMP_DIR%
+if exist "%TEMP_DIR%" rmdir /s /q "%TEMP_DIR%" 2>nul
+mkdir "%TEMP_DIR%" 2>nul
 
-REM Executar scraper no diretorio temporario (modo rapido otimizado)
+echo    - Copiando arquivos Python para pasta temporaria...
+copy "%SOURCE_DIR%*.py" "%TEMP_DIR%\" >nul 2>&1
+copy "%SOURCE_DIR%requirements.txt" "%TEMP_DIR%\" >nul 2>&1
+copy "%SOURCE_DIR%noticias.db" "%TEMP_DIR%\" >nul 2>&1
+copy "%SOURCE_DIR%categorias_excluidas.txt" "%TEMP_DIR%\" >nul 2>&1
+echo    - Ambiente preparado com sucesso!
+echo.
+
+REM Mudar para a pasta temporaria para executar o scraper
 cd /d "%TEMP_DIR%"
-python scraper.py
 
-REM Copiar resultados de volta para o diretorio original
-copy /Y "*.json" "\\jgprjfileserver\Research\Economics\Ealmeida\Brasil\News\" >nul
-copy /Y "*.html" "\\jgprjfileserver\Research\Economics\Ealmeida\Brasil\News\" >nul
+echo [2/6] EXECUTANDO SCRAPER...
+echo    - Iniciando extracao de noticias (modo otimizado)...
+echo    - Suprimindo alertas WebGL e warnings desnecessarios...
+echo.
+python scraper_otimizado.py 2>nul
+echo.
+echo    - Scraper executado com sucesso!
+echo.
 
-REM Usar PowerShell para comandos Git (suporta UNC paths)
-powershell -Command "cd '\\jgprjfileserver\Research\Economics\Ealmeida\Brasil\News'; if (git status --porcelain) { $timestamp = Get-Date -Format 'ddd MM/dd/yyyy_HH:mm:ss.ff'; git add .; git commit -m \"Atualizacao automatica $timestamp\"; git push; Write-Host 'Commit realizado com sucesso!' } else { Write-Host 'Nenhuma alteracao detectada.' }"
+echo [3/6] VERIFICANDO RESULTADOS...
+set FILES_FOUND=0
+if exist "monitor_noticias.html" (
+    echo    - OK: monitor_noticias.html gerado
+    set /a FILES_FOUND+=1
+)
+if exist "noticias_valor.json" (
+    echo    - OK: noticias_valor.json gerado
+    set /a FILES_FOUND+=1
+)
+if exist "noticias_estadao.json" (
+    echo    - OK: noticias_estadao.json gerado
+    set /a FILES_FOUND+=1
+)
+if exist "noticias_folha.json" (
+    echo    - OK: noticias_folha.json gerado
+    set /a FILES_FOUND+=1
+)
+if exist "noticias_oglobo.json" (
+    echo    - OK: noticias_oglobo.json gerado
+    set /a FILES_FOUND+=1
+)
+if exist "noticias_combinadas.json" (
+    echo    - OK: noticias_combinadas.json gerado
+    set /a FILES_FOUND+=1
+)
+if exist "noticias.db" (
+    echo    - OK: noticias.db atualizado
+    set /a FILES_FOUND+=1
+)
+echo    - Total de arquivos gerados: %FILES_FOUND%/7
+echo.
 
-REM Iniciar servidor web em background se nao estiver rodando
-tasklist /FI "IMAGENAME eq python.exe" /FI "WINDOWTITLE eq Monitor*" 2>nul | find /I "python.exe" >nul
-if errorlevel 1 (
-    echo Iniciando servidor web...
-    start "Monitor Web Server" python app.py
-) else (
-    echo Servidor web ja esta rodando.
+echo [4/6] COPIANDO RESULTADOS...
+if exist "monitor_noticias.html" (
+    copy "monitor_noticias.html" "%SOURCE_DIR%" >nul 2>&1
+    echo    - OK: monitor_noticias.html copiado
+)
+if exist "noticias_valor.json" (
+    copy "noticias_valor.json" "%SOURCE_DIR%" >nul 2>&1
+    echo    - OK: noticias_valor.json copiado
+)
+if exist "noticias_estadao.json" (
+    copy "noticias_estadao.json" "%SOURCE_DIR%" >nul 2>&1
+    echo    - OK: noticias_estadao.json copiado
+)
+if exist "noticias_folha.json" (
+    copy "noticias_folha.json" "%SOURCE_DIR%" >nul 2>&1
+    echo    - OK: noticias_folha.json copiado
+)
+if exist "noticias_oglobo.json" (
+    copy "noticias_oglobo.json" "%SOURCE_DIR%" >nul 2>&1
+    echo    - OK: noticias_oglobo.json copiado
+)
+if exist "noticias_combinadas.json" (
+    copy "noticias_combinadas.json" "%SOURCE_DIR%" >nul 2>&1
+    echo    - OK: noticias_combinadas.json copiado
+)
+if exist "noticias.db" (
+    copy "noticias.db" "%SOURCE_DIR%" >nul 2>&1
+    echo    - OK: noticias.db atualizado
 )
 
-echo [%date% %time%] Execucao concluida. Aguardando 60 segundos...
-timeout /t 60 /nobreak >nul
+echo    - Criando index.html para GitHub Pages...
+if exist "monitor_noticias.html" (
+    copy "monitor_noticias.html" "%SOURCE_DIR%index.html" >nul 2>&1
+    echo    - OK: index.html criado
+)
+echo.
 
-goto loop 
+echo [5/6] CONTANDO NOTICIAS EXTRAIDAS...
+powershell -Command "$json = Get-Content '%SOURCE_DIR%noticias_combinadas.json' -Raw -ErrorAction SilentlyContinue; if ($json) { $data = $json | ConvertFrom-Json; $total = $data.Count; $valor = ($data | Where-Object {$_.fonte -eq 'Valor Economico'}).Count; $estadao = ($data | Where-Object {$_.fonte -eq 'Estadao'}).Count; $folha = ($data | Where-Object {$_.fonte -eq 'Folha de S.Paulo'}).Count; $oglobo = ($data | Where-Object {$_.fonte -eq 'O Globo'}).Count; Write-Host '    - Valor Economico:' $valor 'noticias'; Write-Host '    - Estadao:' $estadao 'noticias'; Write-Host '    - Folha de S.Paulo:' $folha 'noticias'; Write-Host '    - O Globo:' $oglobo 'noticias'; Write-Host '    - TOTAL:' $total 'noticias extraidas' } else { Write-Host '    - Erro ao ler arquivo de noticias' }" 2>nul
+echo.
+
+echo [6/6] ENVIANDO PARA GITHUB...
+powershell -Command "cd '%SOURCE_DIR%'; Write-Host '    - Adicionando arquivos ao Git...'; & '%TEMP%\PortableGit\bin\git.exe' add . 2>$null; Write-Host '    - Criando commit...'; & '%TEMP%\PortableGit\bin\git.exe' commit -m 'Atualizacao automatica %DATE% %TIME%' 2>$null; Write-Host '    - Enviando para GitHub...'; $pushResult = & '%TEMP%\PortableGit\bin\git.exe' push origin main 2>&1; if ($LASTEXITCODE -eq 0) { Write-Host '    - OK: GitHub atualizado com sucesso!' } else { Write-Host '    - ERRO: Falha ao enviar para GitHub' }" 2>nul
+
+echo.
+echo ================================================================================
+echo                           PROCESSO CONCLUIDO!
+echo ================================================================================
+echo Monitor de noticias atualizado e publicado em:
+echo https://ealmeida11.github.io/Brasil-News/
+echo.
+echo Pressione qualquer tecla para fechar...
+pause >nul 
