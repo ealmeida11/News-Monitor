@@ -13,13 +13,10 @@ from datetime import datetime, timedelta
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.edge.service import Service as EdgeService
-from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from bs4 import BeautifulSoup
 
 # Suprimir warnings desnecessários
@@ -239,11 +236,11 @@ class UnifiedNewsScraper:
             return True
     
     def configurar_driver(self):
-        """Configura o driver do navegador para a automação (tenta Chrome primeiro, depois Edge)"""
-        print("Configurando driver do navegador...")
+        """Configura o driver do Chrome para a automação"""
+        print("Configurando driver do Chrome...")
         
-        # Configurações comuns para ambos os navegadores
-        common_args = [
+        # Configurações otimizadas para melhor performance e estabilidade
+        chrome_args = [
             "--headless",
             "--disable-gpu",
             "--no-sandbox",
@@ -256,43 +253,58 @@ class UnifiedNewsScraper:
             "--disable-features=IsolateOrigins,site-per-process",
             "--disable-blink-features=AutomationControlled",
             "--disable-images",  # Desabilitar carregamento de imagens para acelerar
-            "--disable-javascript",  # Desabilitar JS quando possível
             "--disable-plugins",
             "--disable-default-apps",
             "--disable-background-timer-throttling",
             "--disable-renderer-backgrounding",
             "--disable-backgrounding-occluded-windows",
-            "--disable-ipc-flooding-protection"
+            "--disable-ipc-flooding-protection",
+            "--disable-background-networking",
+            "--disable-sync",
+            "--disable-translate",
+            "--hide-scrollbars",
+            "--mute-audio",
+            "--no-first-run",
+            "--disable-popup-blocking",
+            "--disable-prompt-on-repost",
+            "--disable-hang-monitor",
+            "--disable-client-side-phishing-detection",
+            "--disable-component-update",
+            "--disable-domain-reliability",
+            "--disable-features=TranslateUI",
+            "--aggressive-cache-discard",
+            "--memory-pressure-off"
         ]
         
-        # Tentar Chrome primeiro
-        print("Tentando configurar Chrome...")
+        # Tentar configurar Chrome
         try:
             chrome_options = ChromeOptions()
-            for arg in common_args:
+            for arg in chrome_args:
                 chrome_options.add_argument(arg)
             chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
             chrome_options.add_experimental_option('useAutomationExtension', False)
             
             # Tentar baixar driver automaticamente
-            print("Tentando baixar ChromeDriver automaticamente...")
+            print("Baixando ChromeDriver automaticamente...")
             service = ChromeService(ChromeDriverManager().install())
             driver = webdriver.Chrome(service=service, options=chrome_options)
             
-            # Configurar timeouts
-            driver.set_page_load_timeout(60)  # 60 segundos para carregar página
-            driver.implicitly_wait(10)  # 10 segundos para encontrar elementos
+            # Configurar timeouts otimizados
+            driver.set_page_load_timeout(180)  # 3 minutos para carregar página
+            driver.implicitly_wait(15)  # 15 segundos para encontrar elementos
+            driver.set_script_timeout(60)  # 60 segundos para scripts
             
             print("Chrome configurado com sucesso!")
             return driver
+            
         except Exception as e:
-            print(f"Erro ao configurar Chrome: {e}")
+            print(f"Erro ao baixar ChromeDriver automaticamente: {e}")
             print("Tentando usar Chrome do sistema...")
             
             try:
                 # Tentar usar Chrome do sistema
                 chrome_options = ChromeOptions()
-                for arg in common_args:
+                for arg in chrome_args:
                     chrome_options.add_argument(arg)
                 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
                 chrome_options.add_experimental_option('useAutomationExtension', False)
@@ -300,99 +312,79 @@ class UnifiedNewsScraper:
                 service = ChromeService()  # Sem especificar caminho
                 driver = webdriver.Chrome(service=service, options=chrome_options)
                 
-                # Configurar timeouts
-                driver.set_page_load_timeout(60)
-                driver.implicitly_wait(10)
+                # Configurar timeouts otimizados
+                driver.set_page_load_timeout(180)
+                driver.implicitly_wait(15)
+                driver.set_script_timeout(60)
                 
                 print("Chrome do sistema configurado com sucesso!")
                 return driver
+                
             except Exception as e2:
                 print(f"Erro ao usar Chrome do sistema: {e2}")
-        
-        # Se Chrome falhar, tentar Edge
-        print("Tentando configurar Edge...")
-        try:
-            edge_options = EdgeOptions()
-            for arg in common_args:
-                edge_options.add_argument(arg)
-            edge_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            edge_options.add_experimental_option('useAutomationExtension', False)
-            
-            # Tentar baixar driver automaticamente
-            print("Tentando baixar EdgeDriver automaticamente...")
-            service = EdgeService(EdgeChromiumDriverManager().install())
-            driver = webdriver.Edge(service=service, options=edge_options)
-            
-            # Configurar timeouts
-            driver.set_page_load_timeout(60)
-            driver.implicitly_wait(10)
-            
-            print("Edge configurado com sucesso!")
-            return driver
-        except Exception as e:
-            print(f"Erro ao baixar EdgeDriver automaticamente: {e}")
-            print("Tentando usar Edge do sistema...")
-            
-            try:
-                # Tentar usar Edge do sistema
-                edge_options = EdgeOptions()
-                for arg in common_args:
-                    edge_options.add_argument(arg)
-                edge_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-                edge_options.add_experimental_option('useAutomationExtension', False)
-                
-                service = EdgeService()  # Sem especificar caminho
-                driver = webdriver.Edge(service=service, options=edge_options)
-                
-                # Configurar timeouts
-                driver.set_page_load_timeout(60)
-                driver.implicitly_wait(10)
-                
-                print("Edge do sistema configurado com sucesso!")
-                return driver
-            except Exception as e2:
-                print(f"Erro ao usar Edge do sistema: {e2}")
-                print("Tentando usar Edge sem especificar serviço...")
-                
-                try:
-                    # Última tentativa: usar Edge sem especificar serviço
-                    edge_options = EdgeOptions()
-                    for arg in common_args:
-                        edge_options.add_argument(arg)
-                    edge_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-                    edge_options.add_experimental_option('useAutomationExtension', False)
-                    
-                    driver = webdriver.Edge(options=edge_options)
-                    
-                    # Configurar timeouts
-                    driver.set_page_load_timeout(60)
-                    driver.implicitly_wait(10)
-                    
-                    print("Edge configurado com sucesso!")
-                    return driver
-                except Exception as e3:
-                    print(f"Erro final: {e3}")
-                    raise Exception("Não foi possível configurar nenhum driver. Verifique se o Chrome ou Edge estão instalados e se há conectividade com a internet.")
+                raise Exception("Não foi possível configurar o Chrome. Verifique se o Chrome está instalado e se há conectividade com a internet.")
     
     def fechar_driver(self):
         """Fecha o driver do navegador"""
         if self.driver:
-            self.driver.quit()
-            print("Driver fechado.")
+            try:
+                self.driver.quit()
+                print("Driver fechado.")
+            except Exception as e:
+                print(f"Erro ao fechar driver: {e}")
     
-    def acessar_pagina_com_retry(self, url, max_tentativas=3, timeout=60):
+    def reinicializar_driver(self):
+        """Reinicializa o driver em caso de problemas"""
+        print("Reinicializando driver...")
+        self.fechar_driver()
+        time.sleep(3)  # Aguardar um pouco antes de reinicializar
+        self.driver = self.configurar_driver()
+        print("Driver reinicializado com sucesso!")
+    
+    def acessar_pagina_com_retry(self, url, max_tentativas=3, timeout=180):
         """Acessa uma página com retry em caso de timeout"""
         for tentativa in range(max_tentativas):
             try:
                 print(f"   Tentativa {tentativa + 1}/{max_tentativas}: Acessando {url}")
                 self.driver.set_page_load_timeout(timeout)
+                
+                # Limpar cache e cookies antes de cada tentativa
+                if tentativa > 0:
+                    try:
+                        self.driver.delete_all_cookies()
+                        self.driver.execute_script("window.localStorage.clear();")
+                        self.driver.execute_script("window.sessionStorage.clear();")
+                    except:
+                        pass  # Ignorar erros de limpeza
+                
                 self.driver.get(url)
+                
+                # Aguardar um pouco para garantir que a página carregou completamente
+                time.sleep(2)
                 return True
+                
             except Exception as e:
-                print(f"   Erro na tentativa {tentativa + 1}: {str(e)[:100]}...")
+                error_msg = str(e)
+                print(f"   Erro na tentativa {tentativa + 1}: {error_msg[:100]}...")
+                
+                # Se for timeout específico ou erro de conexão, tentar reinicializar o driver
+                if ("timeout" in error_msg.lower() or "timed out" in error_msg.lower() or 
+                    "connection" in error_msg.lower() or "refused" in error_msg.lower()) and tentativa == 1:
+                    print("   Tentando reinicializar driver...")
+                    try:
+                        self.reinicializar_driver()
+                    except Exception as reinicializar_error:
+                        print(f"   Erro ao reinicializar driver: {reinicializar_error}")
+                
+                # Se for timeout específico, aguardar mais tempo
+                if "timeout" in error_msg.lower() or "timed out" in error_msg.lower():
+                    wait_time = 10 + (tentativa * 5)  # Aumentar tempo de espera progressivamente
+                else:
+                    wait_time = 5
+                
                 if tentativa < max_tentativas - 1:
-                    print(f"   Aguardando 5 segundos antes da próxima tentativa...")
-                    time.sleep(5)
+                    print(f"   Aguardando {wait_time} segundos antes da próxima tentativa...")
+                    time.sleep(wait_time)
                 else:
                     print(f"   Falha após {max_tentativas} tentativas")
                     return False
