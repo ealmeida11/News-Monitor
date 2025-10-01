@@ -9,6 +9,9 @@ import warnings
 import os
 import sqlite3
 import hashlib
+import atexit
+import signal
+import sys
 from datetime import datetime, timedelta
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -23,8 +26,13 @@ from bs4 import BeautifulSoup
 warnings.filterwarnings("ignore")
 os.environ['WDM_LOG_LEVEL'] = '0'
 
+# Variável global para rastrear instâncias do driver
+_driver_instance = None
+
 class UnifiedNewsScraper:
     def __init__(self):
+        global _driver_instance
+        
         self.noticias = []
         self.hoje = datetime.now().strftime("%d/%m/%Y")
         # Calcular data de 24 horas atrás
@@ -38,8 +46,9 @@ class UnifiedNewsScraper:
         self.db_path = 'noticias.db'
         self.inicializar_banco_dados()
         
-        # Configurar o driver do Edge uma única vez
+        # Configurar o driver do Chrome uma única vez
         self.driver = self.configurar_driver()
+        _driver_instance = self.driver  # Rastrear instância global
     
     def carregar_categorias_excluidas(self):
         """Carrega as categorias excluídas do arquivo de configuração"""
@@ -325,13 +334,28 @@ class UnifiedNewsScraper:
                 raise Exception("Não foi possível configurar o Chrome. Verifique se o Chrome está instalado e se há conectividade com a internet.")
     
     def fechar_driver(self):
-        """Fecha o driver do navegador"""
+        """Fecha o driver do navegador e mata processos Chrome residuais"""
         if self.driver:
             try:
                 self.driver.quit()
                 print("Driver fechado.")
             except Exception as e:
                 print(f"Erro ao fechar driver: {e}")
+        
+        # Garantir que todos os processos do Chrome sejam fechados
+        try:
+            import subprocess
+            import platform
+            
+            if platform.system() == "Windows":
+                # Matar processos chromedriver.exe e chrome.exe residuais
+                subprocess.run(["taskkill", "/F", "/IM", "chromedriver.exe"], 
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.run(["taskkill", "/F", "/IM", "chrome.exe"], 
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                print("Processos Chrome residuais finalizados.")
+        except Exception as e:
+            print(f"Aviso: Não foi possível matar processos residuais: {e}")
     
     def reinicializar_driver(self):
         """Reinicializa o driver em caso de problemas"""
@@ -1206,13 +1230,57 @@ class UnifiedNewsScraper:
             print("   ERRO: ao gerar HTML")
             return False
 
+# Função de limpeza global para garantir fechamento do Chrome
+def limpar_processos_chrome():
+    """Limpa todos os processos do Chrome e ChromeDriver"""
+    global _driver_instance
+    
+    try:
+        if _driver_instance:
+            _driver_instance.quit()
+            _driver_instance = None
+    except:
+        pass
+    
+    try:
+        import subprocess
+        import platform
+        
+        if platform.system() == "Windows":
+            subprocess.run(["taskkill", "/F", "/IM", "chromedriver.exe"], 
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["taskkill", "/F", "/IM", "chrome.exe"], 
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            print("Processos Chrome finalizados na saída.")
+    except:
+        pass
+
+# Registrar função de limpeza para ser executada na saída do programa
+atexit.register(limpar_processos_chrome)
+
+# Handler para Ctrl+C e outros sinais
+def signal_handler(sig, frame):
+    print("\nInterrompido pelo usuário. Fechando Chrome...")
+    limpar_processos_chrome()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
 # Função principal
 def extrair_todas_noticias():
-    scraper = UnifiedNewsScraper()
+    scraper = None
     try:
+        scraper = UnifiedNewsScraper()
         return scraper.extrair_todas_noticias()
+    except Exception as e:
+        print(f"Erro durante extração: {e}")
+        raise
     finally:
-        scraper.fechar_driver()
+        if scraper:
+            scraper.fechar_driver()
+        # Garantir limpeza adicional
+        limpar_processos_chrome()
 
 if __name__ == "__main__":
     extrair_todas_noticias() 
