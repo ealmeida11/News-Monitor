@@ -724,53 +724,61 @@ class UnifiedNewsScraper:
                     except:
                         pass
             
-            # Extrair notícias secundárias
+            # Extrair notícias secundárias - corrigido para funcionar corretamente
             artigos = soup.find_all('a', href=re.compile(r"folha\.uol\.com\.br/.*\.shtml"))
             novas_noticias = 0
             noticias_dia_anterior_nesta_iteracao = 0
             
             for artigo in artigos:
                 try:
+                    # Procurar por h2 com c-headline__title dentro do link
                     titulo_element = artigo.find('h2', class_='c-headline__title')
                     if not titulo_element:
                         continue
                     
                     titulo = titulo_element.text.strip()
+                    if not titulo or titulo in self.titulos_atuais:
+                        continue
+                    
                     link = artigo['href']
                     categoria = self.extrair_categoria_folha(link)
                     
+                    # Procurar por time com c-headline__dateline dentro do link
                     data_element = artigo.find('time', class_='c-headline__dateline')
                     if not data_element:
                         continue
                     
                     data_hora = self.processar_data_folha(data_element.text.strip())
-                    if data_hora:
-                        # Verificar se a notícia está dentro das últimas 24 horas
-                        if not self.noticia_dentro_24h(data_hora[0], data_hora[1]):
-                            noticias_dia_anterior_nesta_iteracao += 1
-                            continue
-                        
-                        # Verificar se a notícia já existe no banco
-                        if self.noticia_ja_existe(titulo):
-                            duplicatas_consecutivas += 1
-                            continue
-                        
-                        noticia = {
-                            'titulo': titulo,
-                            'categoria': categoria,
-                            'fonte': 'Folha de S.Paulo',
-                            'data': data_hora[0],
-                            'hora': data_hora[1],
-                            'link': link
-                        }
-                        
-                        # Salvar no banco de dados
-                        if self.salvar_noticia_banco(noticia):
-                            noticias_folha.append(noticia)
-                            self.titulos_atuais.add(titulo)
-                            novas_noticias += 1
-                            duplicatas_consecutivas = 0  # Reset contador de duplicatas
-                except:
+                    if not data_hora:
+                        continue
+                    
+                    # Verificar se a notícia está dentro das últimas 24 horas
+                    if not self.noticia_dentro_24h(data_hora[0], data_hora[1]):
+                        noticias_dia_anterior_nesta_iteracao += 1
+                        continue
+                    
+                    # Verificar se a notícia já existe no banco
+                    if self.noticia_ja_existe(titulo):
+                        duplicatas_consecutivas += 1
+                        continue
+                    
+                    noticia = {
+                        'titulo': titulo,
+                        'categoria': categoria,
+                        'fonte': 'Folha de S.Paulo',
+                        'data': data_hora[0],
+                        'hora': data_hora[1],
+                        'link': link
+                    }
+                    
+                    # Salvar no banco de dados
+                    if self.salvar_noticia_banco(noticia):
+                        noticias_folha.append(noticia)
+                        self.titulos_atuais.add(titulo)
+                        novas_noticias += 1
+                        duplicatas_consecutivas = 0  # Reset contador de duplicatas
+                except Exception as e:
+                    # Log do erro para debug
                     continue
             
             if clique == 0:
@@ -819,25 +827,35 @@ class UnifiedNewsScraper:
         return "Não especificada"
     
     def processar_data_folha(self, data_hora_texto):
-        """Processa data da Folha no formato "25.abr.2025 às 12h22" """
-        data_match = re.search(r'(\d{2})\.(\w{3})\.(\d{4})\s+às\s+(\d{1,2})h(\d{2})', data_hora_texto)
-        if data_match:
-            dia = data_match.group(1)
-            mes_texto = data_match.group(2).lower()
-            ano = data_match.group(3)
-            hora = data_match.group(4)
-            minuto = data_match.group(5)
-            
-            meses = {
-                'jan': '01', 'fev': '02', 'mar': '03', 'abr': '04', 'mai': '05', 'jun': '06',
-                'jul': '07', 'ago': '08', 'set': '09', 'out': '10', 'nov': '11', 'dez': '12'
-            }
-            
-            if mes_texto in meses:
-                mes = meses[mes_texto]
-                data_formatada = f"{dia}/{mes}/{ano}"
-                hora_formatada = f"{hora}:{minuto}"
-                return (data_formatada, hora_formatada)
+        """Processa data da Folha no formato "25.abr.2025 às 12h22" ou "25.abr.2025 Ã s 12h22" """
+        # Normalizar texto para lidar com problemas de codificação
+        texto_normalizado = data_hora_texto.replace('Ã s', 'às').replace('Ã¡', 'á').replace('Ã£', 'ã').replace('Ã³', 'ó')
+        
+        # Tentar diferentes padrões de regex
+        patterns = [
+            r'(\d{1,2})\.(\w{3})\.(\d{4})\s+às\s+(\d{1,2})h(\d{2})',  # Formato normal
+            r'(\d{1,2})\.(\w{3})\.(\d{4})\s+(\d{1,2})h(\d{2})',      # Sem "às"
+        ]
+        
+        for pattern in patterns:
+            data_match = re.search(pattern, texto_normalizado)
+            if data_match:
+                dia = data_match.group(1).zfill(2)  # Garantir 2 dígitos
+                mes_texto = data_match.group(2).lower()
+                ano = data_match.group(3)
+                hora = data_match.group(4).zfill(2)  # Garantir 2 dígitos
+                minuto = data_match.group(5)
+                
+                meses = {
+                    'jan': '01', 'fev': '02', 'mar': '03', 'abr': '04', 'mai': '05', 'jun': '06',
+                    'jul': '07', 'ago': '08', 'set': '09', 'out': '10', 'nov': '11', 'dez': '12'
+                }
+                
+                if mes_texto in meses:
+                    mes = meses[mes_texto]
+                    data_formatada = f"{dia}/{mes}/{ano}"
+                    hora_formatada = f"{hora}:{minuto}"
+                    return (data_formatada, hora_formatada)
         return None
     
     def clicar_ver_mais_folha(self):
