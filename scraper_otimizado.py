@@ -1235,11 +1235,11 @@ class UnifiedNewsScraper:
                 lengthMenu: [10, 25, 50, 100]
             }});
             
-            // Auto-reload silencioso a cada 20 segundos
-            console.log('Auto-reload iniciado: atualização a cada 20 segundos');
+            // Auto-reload silencioso a cada 5 minutos
+            console.log('Auto-reload iniciado: atualização a cada 5 minutos');
             setInterval(() => {{
                 window.location.reload();
-            }}, 20000);
+            }}, 300000);
         }});
     </script>
 </body>
