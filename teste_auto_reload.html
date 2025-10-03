@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Auto-Reload</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Teste de Auto-Reload</h1>
+    <p>Este teste atualiza a cada 10 segundos para verificar se está funcionando.</p>
+    <div id="timestamp">Carregado em: <span id="time"></span></div>
+    <div id="contador">Atualizações: <span id="count">0</span></div>
+    
+    <script>
+        let contador = 0;
+        
+        function atualizarTimestamp() {
+            const now = new Date();
+            document.getElementById('time').textContent = now.toLocaleTimeString();
+            contador++;
+            document.getElementById('count').textContent = contador;
+            console.log('Página atualizada:', now.toLocaleTimeString());
+        }
+        
+        // Atualizar timestamp inicial
+        atualizarTimestamp();
+        
+        // Configurar auto-reload a cada 10 segundos
+        setInterval(function() {
+            console.log('Iniciando atualização automática...');
+            
+            // Fazer requisição AJAX
+            $.ajax({
+                url: window.location.href,
+                type: 'GET',
+                cache: false,
+                success: function(data) {
+                    console.log('Dados recebidos via AJAX');
+                    atualizarTimestamp();
+                },
+                error: function(xhr, status, error) {
+                    console.log('Erro AJAX, recarregando página:', error);
+                    window.location.reload();
+                }
+            });
+        }, 10000); // 10 segundos
+        
+        console.log('Auto-reload de teste iniciado: atualização a cada 10 segundos');
+    </script>
+</body>
+</html>
