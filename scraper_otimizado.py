@@ -1234,6 +1234,28 @@ class UnifiedNewsScraper:
                 responsive: true,
                 lengthMenu: [10, 25, 50, 100]
             }});
+            
+            // Auto-reload simples e direto
+            console.log('Auto-reload iniciado: recarregará em 20 segundos');
+            
+            // Adicionar contador visual
+            const timer = document.createElement('div');
+            timer.id = 'timer';
+            timer.style.cssText = 'position:fixed;top:10px;right:10px;background:#007bff;color:white;padding:10px;border-radius:5px;z-index:9999;font-weight:bold;box-shadow:0 2px 10px rgba(0,0,0,0.3);';
+            timer.innerHTML = '⏱️ Atualização em: <span id="count">20</span>s';
+            document.body.appendChild(timer);
+            
+            let count = 20;
+            const interval = setInterval(() => {{
+                count--;
+                document.getElementById('count').textContent = count;
+                
+                if (count <= 0) {{
+                    clearInterval(interval);
+                    timer.innerHTML = '🔄 Recarregando...';
+                    setTimeout(() => window.location.reload(), 500);
+                }}
+            }}, 1000);
         }});
     </script>
 </body>
