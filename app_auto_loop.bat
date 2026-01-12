@@ -1,5 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
+REM Configurar codepage UTF-8 para evitar problemas de acentuacao
+chcp 65001 >nul 2>&1
 cls
 echo ================================================================================
 echo                    MONITOR DE NOTICIAS - BRASIL
@@ -36,7 +38,7 @@ mkdir "%TEMP_DIR%" 2>nul
 echo    - Copiando arquivos Python para pasta temporaria...
 copy "%SOURCE_DIR%*.py" "%TEMP_DIR%\" >nul 2>&1
 copy "%SOURCE_DIR%requirements.txt" "%TEMP_DIR%\" >nul 2>&1
-copy "%SOURCE_DIR%noticias.db" "%TEMP_DIR%\" >nul 2>&1
+REM NAO copiar o banco de dados - usar diretamente do SOURCE_DIR
 copy "%SOURCE_DIR%categorias_excluidas.txt" "%TEMP_DIR%\" >nul 2>&1
 echo    - Ambiente preparado com sucesso!
 echo.
@@ -47,10 +49,17 @@ cd /d "%TEMP_DIR%"
 echo [2/6] EXECUTANDO SCRAPER...
 echo    - Iniciando extracao de noticias (modo otimizado)...
 echo    - Suprimindo alertas WebGL e warnings desnecessarios...
+echo    - Usando banco de dados: %SOURCE_DIR%noticias.db
 echo.
+REM Setar variavel de ambiente para o script Python usar o banco do diretorio original
+set DB_PATH=%SOURCE_DIR%noticias.db
+REM Suprimir stderr completamente para evitar erros do Chrome/WebGL
 python scraper_otimizado.py 2>nul
-echo.
-echo    - Scraper executado com sucesso!
+if %ERRORLEVEL% NEQ 0 (
+    echo    - AVISO: Scraper finalizou com avisos, mas pode ter funcionado
+) else (
+    echo    - Scraper executado com sucesso!
+)
 echo.
 
 echo [3/6] VERIFICANDO RESULTADOS...
@@ -79,7 +88,7 @@ if exist "noticias_combinadas.json" (
     echo    - OK: noticias_combinadas.json gerado
     set /a FILES_FOUND+=1
 )
-if exist "noticias.db" (
+if exist "%SOURCE_DIR%noticias.db" (
     echo    - OK: noticias.db atualizado
     set /a FILES_FOUND+=1
 )
@@ -111,10 +120,7 @@ if exist "noticias_combinadas.json" (
     copy "noticias_combinadas.json" "%SOURCE_DIR%" >nul 2>&1
     echo    - OK: noticias_combinadas.json copiado
 )
-if exist "noticias.db" (
-    copy "noticias.db" "%SOURCE_DIR%" >nul 2>&1
-    echo    - OK: noticias.db atualizado
-)
+REM Nao precisa copiar o banco pois ele ja esta sendo usado do SOURCE_DIR
 
 echo    - Criando index.html para GitHub Pages...
 if exist "monitor_noticias.html" (

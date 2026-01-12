@@ -86,8 +86,14 @@ class UnifiedNewsScraper:
     def inicializar_banco_dados(self):
         """Inicializa o banco de dados SQLite e cria a tabela se não existir"""
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = sqlite3.connect(self.db_path, timeout=30.0)
             cursor = conn.cursor()
+            
+            # Habilitar WAL mode para melhor concorrência
+            cursor.execute('PRAGMA journal_mode=WAL')
+            cursor.execute('PRAGMA synchronous=NORMAL')
+            cursor.execute('PRAGMA temp_store=MEMORY')
+            cursor.execute('PRAGMA cache_size=-64000')  # 64MB cache
             
             # Criar tabela de notícias
             cursor.execute('''
@@ -121,48 +127,68 @@ class UnifiedNewsScraper:
     
     def noticia_ja_existe(self, titulo):
         """Verifica se uma notícia já existe no banco de dados"""
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            hash_titulo = self.gerar_hash_titulo(titulo)
-            cursor.execute('SELECT COUNT(*) FROM noticias WHERE hash_titulo = ?', (hash_titulo,))
-            count = cursor.fetchone()[0]
-            
-            conn.close()
-            return count > 0
-        except Exception as e:
-            print(f"Erro ao verificar notícia existente: {e}")
-            return False
+        max_retries = 3
+        for tentativa in range(max_retries):
+            try:
+                conn = sqlite3.connect(self.db_path, timeout=30.0)
+                cursor = conn.cursor()
+                
+                hash_titulo = self.gerar_hash_titulo(titulo)
+                cursor.execute('SELECT COUNT(*) FROM noticias WHERE hash_titulo = ?', (hash_titulo,))
+                count = cursor.fetchone()[0]
+                
+                conn.close()
+                return count > 0
+            except sqlite3.OperationalError as e:
+                if "locked" in str(e).lower() and tentativa < max_retries - 1:
+                    time.sleep(0.5)  # Aguardar antes de tentar novamente
+                    continue
+                else:
+                    print(f"Erro ao verificar notícia existente: {e}")
+                    return False
+            except Exception as e:
+                print(f"Erro ao verificar notícia existente: {e}")
+                return False
+        return False
     
     def salvar_noticia_banco(self, noticia):
         """Salva uma notícia no banco de dados"""
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            hash_titulo = self.gerar_hash_titulo(noticia['titulo'])
-            
-            cursor.execute('''
-                INSERT OR IGNORE INTO noticias 
-                (titulo, categoria, fonte, data, hora, link, hash_titulo)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                noticia['titulo'],
-                noticia['categoria'],
-                noticia['fonte'],
-                noticia['data'],
-                noticia['hora'],
-                noticia['link'],
-                hash_titulo
-            ))
-            
-            conn.commit()
-            conn.close()
-            return True
-        except Exception as e:
-            print(f"Erro ao salvar notícia no banco: {e}")
-            return False
+        max_retries = 3
+        for tentativa in range(max_retries):
+            try:
+                conn = sqlite3.connect(self.db_path, timeout=30.0)
+                cursor = conn.cursor()
+                
+                hash_titulo = self.gerar_hash_titulo(noticia['titulo'])
+                
+                cursor.execute('''
+                    INSERT OR IGNORE INTO noticias 
+                    (titulo, categoria, fonte, data, hora, link, hash_titulo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                ''', (
+                    noticia['titulo'],
+                    noticia['categoria'],
+                    noticia['fonte'],
+                    noticia['data'],
+                    noticia['hora'],
+                    noticia['link'],
+                    hash_titulo
+                ))
+                
+                conn.commit()
+                conn.close()
+                return True
+            except sqlite3.OperationalError as e:
+                if "locked" in str(e).lower() and tentativa < max_retries - 1:
+                    time.sleep(0.5)  # Aguardar antes de tentar novamente
+                    continue
+                else:
+                    print(f"Erro ao salvar notícia no banco: {e}")
+                    return False
+            except Exception as e:
+                print(f"Erro ao salvar notícia no banco: {e}")
+                return False
+        return False
     
     def contar_duplicatas_encontradas(self, titulos):
         """Conta quantas notícias dos títulos fornecidos já existem no banco"""
@@ -184,7 +210,7 @@ class UnifiedNewsScraper:
     def buscar_noticias_banco_6h(self):
         """Busca notícias do banco de dados publicadas até 6 horas atrás do momento atual"""
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = sqlite3.connect(self.db_path, timeout=30.0)
             cursor = conn.cursor()
             
             # Calcular 6 horas atrás do momento atual
@@ -261,7 +287,7 @@ class UnifiedNewsScraper:
             "--disable-web-security",
             "--disable-features=IsolateOrigins,site-per-process",
             "--disable-blink-features=AutomationControlled",
-            "--disable-images",  # Desabilitar carregamento de imagens para acelerar
+            "--disable-images",
             "--disable-plugins",
             "--disable-default-apps",
             "--disable-background-timer-throttling",
@@ -282,7 +308,20 @@ class UnifiedNewsScraper:
             "--disable-domain-reliability",
             "--disable-features=TranslateUI",
             "--aggressive-cache-discard",
-            "--memory-pressure-off"
+            "--memory-pressure-off",
+            # Suprimir erros WebGL e GPU
+            "--disable-software-rasterizer",
+            "--disable-webgl",
+            "--disable-webgl2",
+            "--disable-3d-apis",
+            "--disable-accelerated-2d-canvas",
+            "--disable-accelerated-video-decode",
+            "--use-gl=swiftshader",
+            "--enable-unsafe-swiftshader",
+            # Suprimir mais warnings
+            "--silent",
+            "--disable-infobars",
+            "--disable-notifications"
         ]
         
         # Tentar configurar Chrome
@@ -290,12 +329,20 @@ class UnifiedNewsScraper:
             chrome_options = ChromeOptions()
             for arg in chrome_args:
                 chrome_options.add_argument(arg)
-            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
             chrome_options.add_experimental_option('useAutomationExtension', False)
+            
+            # Suprimir logs do ChromeDriver
+            os.environ['WDM_LOG'] = '0'
+            os.environ['WDM_PRINT_FIRST_LINE'] = 'False'
+            os.environ['WDM_LOG_LEVEL'] = '0'
             
             # Tentar baixar driver automaticamente
             print("Baixando ChromeDriver automaticamente...")
-            service = ChromeService(ChromeDriverManager().install())
+            service = ChromeService(
+                ChromeDriverManager().install(),
+                log_output=os.devnull  # Suprimir logs do ChromeDriver
+            )
             driver = webdriver.Chrome(service=service, options=chrome_options)
             
             # Configurar timeouts otimizados
@@ -315,10 +362,10 @@ class UnifiedNewsScraper:
                 chrome_options = ChromeOptions()
                 for arg in chrome_args:
                     chrome_options.add_argument(arg)
-                chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+                chrome_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
                 chrome_options.add_experimental_option('useAutomationExtension', False)
                 
-                service = ChromeService()  # Sem especificar caminho
+                service = ChromeService(log_output=os.devnull)  # Suprimir logs
                 driver = webdriver.Chrome(service=service, options=chrome_options)
                 
                 # Configurar timeouts otimizados
