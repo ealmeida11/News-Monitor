@@ -51,5 +51,14 @@
       "editorial", "opinião", "análise", "coluna", "artigo de opinião", "comentário"
     ],
     "ativo": true
+  },
+  "Mundo": {
+    "keywords": [
+      "guerra", "ucrânia", "rússia", "china", "estados unidos", "EUA", "OTAN",
+      "conflito", "geopolítica", "exportação de armas", "kiev", "moscou", "pequim",
+      "washington", "sanções", "internacional", "relações exteriores", "MRE",
+      "comércio global", "trump", "bidem", "xi jinping", "putin", "zelensky"
+    ],
+    "ativo": true
   }
 }
