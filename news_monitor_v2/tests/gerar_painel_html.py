@@ -16,7 +16,10 @@ from datetime import datetime
 from html import escape
 
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
-ARQUIVO_JSON = OUTPUT_DIR / "valor_classificado_24h.json"
+ARQUIVOS_JSON = [
+    OUTPUT_DIR / "valor_classificado_24h.json",
+    OUTPUT_DIR / "estadao_classificado_24h.json",
+]
 ARQUIVO_PAINEL = OUTPUT_DIR / "painel_dashboard.html"
 
 CORES_TEMAS = {
@@ -41,31 +44,45 @@ def _chave_ordem(n):
 
 
 def gerar_painel():
-    if not ARQUIVO_JSON.exists():
-        print(f"Arquivo {ARQUIVO_JSON} não encontrado.")
-        print("Rode primeiro: python test_valor_classificar_todas.py")
+    # Carregar e mesclar todos os JSONs disponíveis (Valor, Estadão)
+    por_tema_merged = {}
+    data_coleta = ""
+    periodo_horas = 24
+    for arq in ARQUIVOS_JSON:
+        if not arq.exists():
+            continue
+        try:
+            with open(arq, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            por_tema_raw = data.get("por_tema", {})
+            for k, v in por_tema_raw.items():
+                if k == "Mundo":
+                    continue
+                filtrada = [n for n in v if (n.get("categoria") or "").strip() != "Mundo"]
+                if filtrada:
+                    por_tema_merged.setdefault(k, []).extend(filtrada)
+            dc = data.get("data_coleta", "")
+            if dc and (not data_coleta or dc > data_coleta):
+                data_coleta = dc
+            periodo_horas = data.get("periodo_horas", 24)
+        except Exception as e:
+            print(f"Aviso: não foi possível carregar {arq.name}: {e}")
+
+    if not por_tema_merged:
+        print("Nenhum dado encontrado em valor_classificado_24h.json nem estadao_classificado_24h.json")
+        print("Rode: python test_valor_classificar_todas.py e/ou python test_estadao_classificar_todas.py")
         return
 
-    with open(ARQUIVO_JSON, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    por_tema_raw = data.get("por_tema", {})
-    por_tema = {k: v for k, v in por_tema_raw.items() if k != "Mundo"}
-    por_tema_filtrado = {}
-    for tema, lista in por_tema.items():
-        filtrada = [n for n in lista if (n.get("categoria") or "").strip() != "Mundo"]
-        if filtrada:
-            por_tema_filtrado[tema] = filtrada
-
     todas = []
-    for tema, lista in por_tema_filtrado.items():
+    for tema, lista in por_tema_merged.items():
         for n in lista:
             n_copy = dict(n)
             n_copy["tema"] = tema
             todas.append(n_copy)
     todas.sort(key=_chave_ordem, reverse=True)
 
-    data_coleta = data.get("data_coleta", "")
+    if not data_coleta:
+        data_coleta = datetime.now().isoformat()
     if data_coleta:
         try:
             dt = datetime.fromisoformat(data_coleta.replace("Z", "+00:00"))

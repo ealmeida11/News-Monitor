@@ -13,7 +13,11 @@ import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
 BASE = Path(__file__).resolve().parent.parent
-ARQUIVO_JSON = BASE / "tests" / "output" / "valor_classificado_24h.json"
+OUTPUT_DIR = BASE / "tests" / "output"
+ARQUIVOS_JSON = [
+    OUTPUT_DIR / "valor_classificado_24h.json",
+    OUTPUT_DIR / "estadao_classificado_24h.json",
+]
 
 ORDEM_TEMAS = [
     "Fiscal", "Banco Central", "Inflação", "Governo/Congresso",
@@ -37,39 +41,46 @@ def _chave_ordem(n):
 
 
 def _carregar_dados():
-    """Carrega JSON. Exclui tema Mundo e notícias cuja categoria do site é Mundo."""
-    if not ARQUIVO_JSON.exists():
+    """Carrega e mescla JSONs (Valor e Estadão). Exclui tema Mundo e categoria Mundo."""
+    por_tema_merged = {}
+    data_coleta = None
+    for arq in ARQUIVOS_JSON:
+        if not arq.exists():
+            continue
+        try:
+            with open(arq, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            por_tema_raw = data.get("por_tema", {})
+            for k, v in por_tema_raw.items():
+                if k == "Mundo":
+                    continue
+                filtrada = [n for n in v if (n.get("categoria") or "").strip() != "Mundo"]
+                if filtrada:
+                    por_tema_merged.setdefault(k, []).extend(filtrada)
+            dc = data.get("data_coleta")
+            if dc and (data_coleta is None or dc > data_coleta):
+                data_coleta = dc
+        except Exception:
+            continue
+
+    if not por_tema_merged:
         return [], {}, None
-    with open(ARQUIVO_JSON, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    
-    por_tema_raw = data.get("por_tema", {})
-    # Excluir tema Mundo
-    por_tema = {k: v for k, v in por_tema_raw.items() if k != "Mundo"}
-    
-    # Dentro de cada tema, excluir notícias cuja categoria do site é "Mundo"
-    por_tema_filtrado = {}
-    for tema, lista in por_tema.items():
-        filtrada = [n for n in lista if (n.get("categoria") or "").strip() != "Mundo"]
-        if filtrada:
-            por_tema_filtrado[tema] = filtrada
-    
+
     todas = []
-    for tema, lista in por_tema_filtrado.items():
+    for tema, lista in por_tema_merged.items():
         for n in lista:
             n_copy = dict(n)
             n_copy["tema"] = tema
             todas.append(n_copy)
-    
     todas.sort(key=_chave_ordem, reverse=True)
-    return todas, por_tema_filtrado, data.get("data_coleta")
+    return todas, por_tema_merged, data_coleta
 
 
 st.set_page_config(layout="wide", page_title="Monitor Macro Brasil", page_icon="📡")
 st_autorefresh(interval=120_000, key="refresh")
 
 st.title("📡 Monitor Macro Brasil")
-st.caption("Últimas 24h | Fonte: Valor Econômico")
+st.caption("Últimas 24h | Fontes: Valor Econômico, Estadão")
 
 todas, por_tema, data_coleta = _carregar_dados()
 if data_coleta:
@@ -80,7 +91,7 @@ if data_coleta:
         pass
 
 if not todas:
-    st.warning("Nenhum dado encontrado. Rode: `python tests/test_valor_classificar_todas.py` (e reclassificar_json.py se precisar).")
+    st.warning("Nenhum dado encontrado. Rode: `python tests/test_valor_classificar_todas.py` e/ou `python tests/test_estadao_classificar_todas.py`")
     st.stop()
 
 # ---------- SEÇÃO 1: DESTAQUES POR TEMA (TOPO) ----------

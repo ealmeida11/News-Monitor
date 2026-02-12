@@ -107,7 +107,7 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html, 
     linhas.append(".noticia a{color:#2980b9;text-decoration:none;} .resumo{color:#555;font-size:0.95em;margin:6px 0;} .info{font-size:0.85em;color:#7f8c8d;}")
     linhas.append("</style></head><body><div class='container'>")
     linhas.append("<h1>Estadão – Classificação por tema (últimas 24h)</h1>")
-    linhas.append("<p class='meta'><strong>Estadão:</strong> sem resumo no site; classificação apenas pelo título. Categorias excluídas da coleta: Esportes, Cultura, Automóveis, Internacional.</p>")
+    linhas.append("<p class='meta'><strong>Estadão:</strong> sem resumo no site; classificação apenas pelo título. Categorias excluídas da coleta: Esportes, Cultura, Automóveis, Internacional, Educação, São Paulo.</p>")
     if limite_24h is not None and intervalo_noticias is not None:
         de_dt, ate_dt = intervalo_noticias
         linhas.append(f"<p class='meta janela'><strong>Janela de 24h:</strong> incluídas notícias entre {escape(limite_24h.strftime('%d/%m/%Y %H:%M'))} e agora. "
@@ -197,6 +197,7 @@ def main():
         clique = 0
         tentativas_sem_novas = 0
         antigas_consecutivas = 0
+        duplicatas_consecutivas = 0
         max_cliques = 30  # Aumentado para pegar mais notícias das 24h
 
         while True:
@@ -226,7 +227,7 @@ def main():
                     categoria = _extrair_categoria_estadao(link)
 
                     # Excluir categorias que geram classificação indevida (ex.: Esportes -> Governo/Congresso por "MP-SP")
-                    categorias_excluidas_estadao = {"Esportes", "Automóveis", "Cultura", "Internacional"}
+                    categorias_excluidas_estadao = {"Esportes", "Automóveis", "Cultura", "Internacional", "Educação", "São Paulo"}
                     if categoria in categorias_excluidas_estadao:
                         continue
 
