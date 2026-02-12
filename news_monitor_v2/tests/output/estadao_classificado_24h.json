@@ -1,9 +1,23 @@
 {
-  "data_coleta": "2026-02-12T14:54:35.035208",
+  "data_coleta": "2026-02-12T15:15:28.862164",
   "periodo_horas": 24,
-  "total_coletado": 27,
+  "total_coletado": 193,
   "por_tema": {
     "Governo/Congresso": [
+      {
+        "titulo": "Fachin convoca ministros a ‘diálogo’ reservado para entregar relatório da PF que cita Toffoli",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "15:09",
+        "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/fachin-convoca-ministros-a-dialogo-reservado-para-entregar-relatorio-da-pf-que-cita-toffoli/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
       {
         "titulo": "Ministro do STF pode ter empresa? Saiba o que diz a lei",
         "resumo": "",
@@ -115,9 +129,444 @@
         "scores_todos": {
           "Governo/Congresso": 1
         }
+      },
+      {
+        "titulo": "Congresso aponta artilharia pra Toffoli, pressiona por CPI e pretende pautar quebra de sigilo",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "11:42",
+        "link": "https://www.estadao.com.br/politica/congresso-aponta-artilharia-pra-toffoli-pressiona-por-cpi-e-pretende-pautar-quebra-de-sigilo/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
+      {
+        "titulo": "Propriedades do ex-primeiro-ministro da Noruega ligadas ao caso Epstein são alvo de buscas",
+        "resumo": "",
+        "categoria": "Internacional",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "11:28",
+        "link": "https://www.estadao.com.br/internacional/propriedades-thorbjorn-jagland-ex-primeiro-ministro-noruega-caso-epstein-alvo-de-buscas-npr/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Deputado pede ao TCU auditoria de US$ 2,5 milhões em gastos do Itamaraty com 30 diplomatas",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "11:28",
+        "link": "https://www.estadao.com.br/politica/deputado-pede-ao-tcu-auditoria-de-us-25-milhoes-em-gastos-do-itamaraty-com-30-diplomatas/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "MP junto ao TCU pede para que STJ suspenda remuneração de Marco Buzzi, ministro acusado de assédio",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "11:24",
+        "link": "https://www.estadao.com.br/politica/mp-junto-ao-tcu-pede-para-que-stj-suspenda-remuneracao-de-marco-buzzi-ministro-acusado-de-assedio/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
+      {
+        "titulo": "Quando a PGR vai pedir a suspeição do ministro Toffoli no caso Master?",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "11:13",
+        "link": "https://www.estadao.com.br/politica/raquel-landim/quando-a-pgr-vai-pedir-a-suspeicao-do-ministro-toffoli-no-caso-master/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
+      {
+        "titulo": "Fachin tem o destino de Toffoli em suas mãos; o que fará o presidente do Supremo?",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "10:51",
+        "link": "https://www.estadao.com.br/politica/carolina-brigido/o-destino-de-toffoli-nas-maos-de-fachin/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 3,
+        "scores_todos": {
+          "Governo/Congresso": 3
+        }
+      },
+      {
+        "titulo": "Toffoli e Master: por que a PF investiga relação e o que significa o pedido de suspeição?",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "10:42",
+        "link": "https://www.estadao.com.br/politica/toffoli-e-master-por-que-a-pf-investiga-relacao-e-o-que-significa-o-pedido-de-suspeicao-npr/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Os 7 erros e 1 ‘acerto’ do suspeito Dias Toffoli no caso Master",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "10:41",
+        "link": "https://www.estadao.com.br/politica/ricardo-correa/os-7-erros-e-1-acerto-do-suspeito-dias-toffoli-no-caso-master/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Nova revelação da PF põe Toffoli em sinuca: vai ficar na relatoria do Master como investigado?",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "09:53",
+        "link": "https://www.estadao.com.br/politica/francisco-leali/nova-revelacao-da-pf-poe-toffoli-em-sinuca-vai-ficar-na-relatoria-do-master-como-investigado/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "CGU: Se Master corrompeu servidor, podemos abrir processo pela lei anticorrupção, diz ministro",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "09:51",
+        "link": "https://www.estadao.com.br/economia/cgu-se-master-corrompeu-servidor-podemos-abrir-processo-pela-lei-anticorrupcao-diz-ministro/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Toffoli nega ‘amizade’ com Vorcaro, mas confirma ser sócio de empresa que negociou com cunhado dele",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "09:43",
+        "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/toffoli-nega-amizade-com-vorcaro-mas-confirma-ser-socio-de-empresa-que-negociou-com-cunhado-dele/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Redução da jornada de trabalho ganha força no Congresso",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "09:30",
+        "link": "https://www.estadao.com.br/politica/silvio-cascione/reducao-da-jornada-de-trabalho-ganha-forca-no-congresso/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Argentina: Senado aprova reforma trabalhista de Milei em meio a protestos",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "07:58",
+        "link": "https://www.estadao.com.br/economia/argentina-senado-aprova-reforma-trabalhista-de-milei-em-meio-a-protestos/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Centrão chantageou um ministro do TCU para acabar com liquidação do Master, diz Renan Calheiros",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "07:21",
+        "link": "https://www.estadao.com.br/economia/centrao-ministro-tcu-liquidacao-master-renan-calheiros/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Incontrolável e imprevisível: caso Master já virou caso Dias Toffoli | Estadão Analisa",
+        "resumo": "",
+        "categoria": "Não especificada",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "06:35",
+        "link": "https://www.estadao.com.br/podcasts/estadao-analisa/incontrolavel-e-imprevisivel-caso-master-ja-virou-caso-dias-toffoli-estadao-analisa/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Governo e Congresso divergem sobre formato para aprovar fim da escala 6x1, bandeira de Lula",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "05:30",
+        "link": "https://www.estadao.com.br/economia/governo-congresso-divergem-formato-fim-escala-6x1-bandeira-lula/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1,
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "Toffoli recebeu dinheiro de empresa que fez negócios com fundo de cunhado de Vorcaro",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "00:52",
+        "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/toffoli-recebeu-dinheiro-de-empresa-que-fez-negocios-com-fundo-de-cunhado-de-vorcaro/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Antissemitismo na Austrália é ‘aterrorizante’, diz presidente israelense",
+        "resumo": "",
+        "categoria": "Internacional",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "00:39",
+        "link": "https://www.estadao.com.br/internacional/antissemitismo-na-australia-e-aterrorizante-diz-presidente-israelense-npr/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "CPI do Crime Organizado vota quebra de sigilo de pessoas ligadas a Toffoli após carnaval",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "22:47",
+        "link": "https://www.estadao.com.br/politica/cpi-crime-organizado-votara-quebra-sigilo-empresa-irmaos-toffoli-apos-carnaval-nprp/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "MP pede que Justiça proíba PMs de darem aula em escolas cívico-militares em SP",
+        "resumo": "",
+        "categoria": "Educação",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "22:07",
+        "link": "https://www.estadao.com.br/educacao/mp-pede-que-justica-proiba-pms-de-darem-aula-em-escolas-civico-militares-em-sp/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "STF mantém ‘lobista dos tribunais’ em prisão de segurança máxima onde está Marcola do PCC",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "20:34",
+        "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/stf-mantem-lobista-dos-tribunais-em-prisao-de-seguranca-maxima-onde-esta-marcola-do-pcc/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "PF encontra conversas de Toffoli com Vorcaro em celular e pede suspeição de ministro",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "20:23",
+        "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/pf-encontra-mencoes-a-toffoli-em-celular-de-vorcaro-e-leva-caso-a-fachin/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
+      {
+        "titulo": "Processo que pode levar ao fim contrato da Enel em SP deve ser julgado em 2 semanas, prevê ministro",
+        "resumo": "",
+        "categoria": "São Paulo",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "20:17",
+        "link": "https://www.estadao.com.br/sao-paulo/processo-que-pode-levar-ao-fim-contrato-da-enel-em-sp-deve-ser-julgado-em-2-semanas-preve-ministro/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Ex-presidente da Câmara, Arthur Lira anuncia que disputará o Senado por Alagoas",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "20:17",
+        "link": "https://www.estadao.com.br/politica/ex-presidente-da-camara-arthut-lira-anuncia-disputara-senado-alagoas-nprp/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 4,
+        "scores_todos": {
+          "Governo/Congresso": 4
+        }
+      },
+      {
+        "titulo": "Redução de jornada tem perdas e ganhos para a economia e tema deve avançar com cautela no Congresso",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "20:01",
+        "link": "https://www.estadao.com.br/economia/alvaro-gribel/reducao-de-jornada-tem-perdas-e-ganhos-para-a-economia-e-tema-deve-avancar-com-cautela-no-congresso/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Associações de juízes e do MP defendem ‘penduricalhos’ e pedem a Dino para rever decisão",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "19:34",
+        "link": "https://www.estadao.com.br/politica/associacoes-de-juizes-e-do-mp-defendem-penduricalhos-pedem-dino-revisao-decisao-nprp/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "MPF e governo federal determinam que Grok, do X, pare de produzir conteúdo sexualizado de crianças",
+        "resumo": "",
+        "categoria": "Brasil",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "19:16",
+        "link": "https://www.estadao.com.br/brasil/mpf-e-governo-federal-determinam-que-grok-do-x-pare-de-produzir-conteudo-sexualizado-de-criancas/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Com proximidade do carnaval, Câmara e Senado já estão esvaziados nesta quarta-feira",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "18:28",
+        "link": "https://www.estadao.com.br/politica/com-proximidade-do-carnaval-camara-e-senado-ja-estao-esvaziados-nesta-quarta-feira/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
+      {
+        "titulo": "Tarcísio é recebido por quatro ministros do STF em tentativa de reconstruir ponte com Judiciário",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "18:05",
+        "link": "https://www.estadao.com.br/politica/tarcisio-e-recebido-por-quatro-ministros-do-stf-em-tentativa-de-reconstruir-ponte-com-judiciario/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Moraes vota contra aposentadoria especial do vigilante; placar no STF está em 2x1",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "17:24",
+        "link": "https://www.estadao.com.br/economia/votacao-stf-aposentadoria-vigilante/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
       }
     ],
     "Eleições": [
+      {
+        "titulo": "Conversa de Lula e Tebet deve ocorrer logo após carnaval para aproveitar ‘timing eleitoral’",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "15:04",
+        "link": "https://www.estadao.com.br/politica/conversa-eleitoral-de-lula-e-tebet-deve-ocorrer-logo-apos-carnaval-para-aproveitar-timing-eleitoral/",
+        "tema_classificado": "Eleições",
+        "score": 2,
+        "scores_todos": {
+          "Eleições": 2
+        }
+      },
       {
         "titulo": "TSE rejeita pedido para barrar desfile que homenageará Lula no carnaval",
         "resumo": "",
@@ -131,26 +580,351 @@
         "scores_todos": {
           "Eleições": 2
         }
-      }
-    ],
-    "Atividade": [
+      },
       {
-        "titulo": "Governo de SP marca para maio leilão de serviços de remoção e guarda de veículos",
+        "titulo": "TSE rejeita pedido de cassação do mandato de Jorge Seif",
         "resumo": "",
         "categoria": "Política",
         "fonte": "Estadão",
         "data": "12/02/2026",
-        "hora": "12:00",
-        "link": "https://www.estadao.com.br/politica/coluna-do-estadao/governo-de-sp-marca-para-maio-leilao-de-servicos-de-remocao-e-guarda-de-veiculos/",
+        "hora": "11:51",
+        "link": "https://www.estadao.com.br/politica/tse-rejeita-pedido-de-cassacao-do-mandato-de-jorge-seif/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "Lula perde para Flávio Bolsonaro, Tarcísio e Ratinho Jr. no 2º turno em SP, diz pesquisa",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "10:20",
+        "link": "https://www.estadao.com.br/politica/lula-perde-para-flavio-bolsonaro-tarcisio-e-ratinho-jr-no-2-turno-em-sp-diz-pesquisa-nprp/",
+        "tema_classificado": "Eleições",
+        "score": 3,
+        "scores_todos": {
+          "Eleições": 3
+        }
+      },
+      {
+        "titulo": "A guerra permanente de Lula",
+        "resumo": "",
+        "categoria": "Opinião",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "03:00",
+        "link": "https://www.estadao.com.br/opiniao/a-guerra-permanente-de-lula/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "Como destravar a armadilha do baixo crescimento que herdaremos de Lula",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "22:00",
+        "link": "https://www.estadao.com.br/economia/raul-velloso/para-destravar-a-armadilha-do-baixo-crescimento/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "Justiça manda prender oito vereadores no caso de prefeito acusado de ficar com 90% de desvios",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "21:13",
+        "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/justica-manda-prender-oito-vereadores-no-caso-de-prefeito-acusado-de-ficar-com-90-de-desvios/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "A candidatura de Flávio começa a avançar em setores refratários ao clã Bolsonaro",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "21:04",
+        "link": "https://www.estadao.com.br/politica/william-waack/a-candidatura-de-flavio-comeca-a-avancar-em-setores-refratarios-ao-cla-bolsonaro/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "TCU arquiva processo que contestava indicação de Otto Lobo para CVM, feita por Lula",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "19:41",
+        "link": "https://www.estadao.com.br/economia/tcu-arquiva-processo-que-contestava-indicacao-de-otto-lobo-feita-por-lula-para-cvm/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "Genial/Quaest: Polarização trava terceira via; alto desconhecimento e baixa rejeição são esperança",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "19:29",
+        "link": "https://www.estadao.com.br/politica/genialquaest-polarizacao-trava-terceira-via-alto-desconhecimento-e-baixa-rejeicao-sao-esperanca/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "Lula dará uma boa resposta a Galípolo se cuidar melhor do dinheiro público",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "18:25",
+        "link": "https://www.estadao.com.br/economia/lula-dara-uma-boa-resposta-a-galipolo-se-cuidar-melhor-do-dinheiro-publico/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "Ministra indicada por Lula será relatora de ação no TSE contra desfile em homenagem ao presidente",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "18:10",
+        "link": "https://www.estadao.com.br/politica/ministra-indicada-por-lula-sera-relatora-de-acao-no-tse-contra-desfile-em-homenagem-ao-presidente-nprp/",
+        "tema_classificado": "Eleições",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 1,
+          "Eleições": 2
+        }
+      },
+      {
+        "titulo": "As boas e más notícias para Lula na pesquisa Genial/Quaest e a grande dúvida para os próximos meses",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "17:14",
+        "link": "https://www.estadao.com.br/politica/ricardo-correa/as-boas-e-mas-noticias-para-lula-na-pesquisa-genialquaest-e-a-grande-duvida-para-os-proximos-meses/",
+        "tema_classificado": "Eleições",
+        "score": 2,
+        "scores_todos": {
+          "Eleições": 2
+        }
+      },
+      {
+        "titulo": "Governo Lula não vê risco de colapso no setor de carne por salvaguarda chinesa",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "16:56",
+        "link": "https://www.estadao.com.br/economia/governo-lula-nao-ve-risco-de-colapso-no-setor-de-carne-por-salvaguarda-chinesa/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "Flávio regressa de viagem e mira em Lula: ‘Que não tome cachaça antes de reunião com Trump’",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "16:33",
+        "link": "https://www.estadao.com.br/politica/flavio-regressa-de-viagem-e-mira-em-lula-que-nao-tome-cachaca-antes-de-reuniao-com-trump/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      },
+      {
+        "titulo": "Genial/Quaest: Ratinho Júnior é o pré-candidato do PSD mais competitivo entre os três nomes da sigla",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "15:45",
+        "link": "https://www.estadao.com.br/politica/genialquaest-ratinho-junior-e-o-pre-candidato-do-psd-mais-competitivo-entre-os-tres-nomes-da-sigla/",
+        "tema_classificado": "Eleições",
+        "score": 2,
+        "scores_todos": {
+          "Eleições": 2
+        }
+      },
+      {
+        "titulo": "Costa Filho define saída do governo e diz que Lula prefere integrantes da equipe nas trocas",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "15:41",
+        "link": "https://www.estadao.com.br/politica/costa-filho-define-saida-do-governo-e-diz-que-lula-prefere-integrantes-da-equipe-nas-trocas-nprp/",
+        "tema_classificado": "Eleições",
+        "score": 1,
+        "scores_todos": {
+          "Eleições": 1
+        }
+      }
+    ],
+    "Atividade": [
+      {
+        "titulo": "Volume de serviços recua 0,4% em dezembro, mas fecha 2025 com alta de 2,8%",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "09:35",
+        "link": "https://www.estadao.com.br/economia/volume-de-servicos-recua-04-em-dezembro-mas-fecha-2025-com-alta-de-28/",
         "tema_classificado": "Atividade",
         "score": 1,
         "scores_todos": {
           "Atividade": 1
         }
       }
+    ],
+    "Mercado": [
+      {
+        "titulo": "O que você precisa saber sobre a proposta de cobrança de IOF sobre investimento em criptomoedas",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "09:30",
+        "link": "https://www.estadao.com.br/economia/duquesa-de-tax/o-que-voce-precisa-saber-sobre-a-proposta-de-cobranca-de-iof-sobre-investimento-em-ativos-virtuais/",
+        "tema_classificado": "Mercado",
+        "score": 1,
+        "scores_todos": {
+          "Mercado": 1
+        }
+      },
+      {
+        "titulo": "Citi vê abertura de janela de ofertas públicas de ações no Brasil no primeiro semestre",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "21:59",
+        "link": "https://www.estadao.com.br/economia/coluna-do-broad/citi-ve-abertura-de-janela-de-ofertas-publicas-de-acoes-no-brasil-no-primeiro-semestre/",
+        "tema_classificado": "Mercado",
+        "score": 1,
+        "scores_todos": {
+          "Mercado": 1
+        }
+      },
+      {
+        "titulo": "Azul: Cade aprova investimento de US$ 100 mi da United Airlines em ações da companhia",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "20:04",
+        "link": "https://www.estadao.com.br/economia/negocios/azul-cade-aprova-investimento-de-us-100-mi-da-united-airlines-em-acoes-da-companhia/",
+        "tema_classificado": "Mercado",
+        "score": 1,
+        "scores_todos": {
+          "Mercado": 1
+        }
+      },
+      {
+        "titulo": "EUA afirmam que drones de cartel mexicano provocaram fechamento de aeroporto no Texas",
+        "resumo": "",
+        "categoria": "Internacional",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "16:32",
+        "link": "https://www.estadao.com.br/internacional/eua-afirmam-drones-cartel-mexicano-provocaram-fechamento-aeroporto-texas-npr/",
+        "tema_classificado": "Mercado",
+        "score": 1,
+        "scores_todos": {
+          "Mercado": 1
+        }
+      }
+    ],
+    "Banco Central": [
+      {
+        "titulo": "Treze entidades financeiras criticam restrição ao acesso do BC a processo do Master no TCU",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "19:21",
+        "link": "https://www.estadao.com.br/economia/treze-entidades-financeiras-criticam-restricao-ao-acesso-do-bc-a-processo-do-master-no-tcu/",
+        "tema_classificado": "Banco Central",
+        "score": 1,
+        "scores_todos": {
+          "Banco Central": 1
+        }
+      }
+    ],
+    "Fiscal": [
+      {
+        "titulo": "Governo libera setores estratégicos do pré-sal para maior leilão do regime de partilha",
+        "resumo": "",
+        "categoria": "Economia",
+        "fonte": "Estadão",
+        "data": "11/02/2026",
+        "hora": "15:22",
+        "link": "https://www.estadao.com.br/economia/governo-libera-setores-estrategicos-do-pre-sal-para-maior-leilao-do-regime-de-partilha-npr/",
+        "tema_classificado": "Fiscal",
+        "score": 2,
+        "scores_todos": {
+          "Fiscal": 2
+        }
+      }
     ]
   },
   "nao_classificadas": [
+    {
+      "titulo": "Morena Leite, a chef que tem gula de viver, traça novos caminhos que levam a Minas Gerais",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "15:00",
+      "link": "https://www.estadao.com.br/paladar/restaurantes-e-bares/morena-leite-a-chef-que-tem-gula-de-viver-traca-novos-caminhos-que-levam-a-minas-gerais/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Vorcaro pede para viajar em jatinho a caminho de depoimentos e alega ‘questões de segurança’",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "14:50",
+      "link": "https://www.estadao.com.br/politica/coluna-do-estadao/vorcaro-pede-para-viajar-de-jatinho-a-caminho-de-depoimentos-e-alega-questoes-de-seguranca/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
     {
       "titulo": "Calote da Braskem tem impacto de R$ 3,6 bi no BB e eleva inadimplência do banco",
       "resumo": "",
@@ -212,13 +986,25 @@
       "scores_todos": {}
     },
     {
-      "titulo": "Filha de Kin Jong-un deve ser designada como futura líder da Coreia do Norte, diz agência de Seul",
+      "titulo": "Vírus Nipah chegou ao Brasil? O carnaval é motivo de preocupação? Entenda",
       "resumo": "",
-      "categoria": "Internacional",
+      "categoria": "Saúde",
       "fonte": "Estadão",
       "data": "12/02/2026",
-      "hora": "13:14",
-      "link": "https://www.estadao.com.br/internacional/filha-de-kin-jong-un-designada-futura-lider-coreia-do-norte-npr/",
+      "hora": "12:54",
+      "link": "https://www.estadao.com.br/saude/virus-nipah-chegou-ao-brasil-o-carnaval-e-motivo-de-preocupacao-entenda-nprm/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Belo revela bastidores da cena do beijo com Viviane Araújo em ‘Três Graças’: ‘Química verdadeira’",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:50",
+      "link": "https://www.estadao.com.br/emais/tv/belo-revela-bastidores-da-cena-do-beijo-com-viviane-araujo-em-tres-gracas-quimica-verdadeira-nprec/",
       "tema_classificado": "Não classificado",
       "score": 0,
       "scores_todos": {}
@@ -308,6 +1094,30 @@
       "scores_todos": {}
     },
     {
+      "titulo": "A revolução do sachê: como a Fugini antecipou novas formas de consumir",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:00",
+      "link": "https://www.estadao.com.br/paladar/a-revolucao-do-sache-como-a-fugini-antecipou-novas-formas-de-consumir/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Trump está mais preocupado com recursos do Brasil que no resultado da eleição, diz Ian Bremmer",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:00",
+      "link": "https://www.estadao.com.br/internacional/trump-esta-mais-preocupado-com-recursos-do-brasil-que-no-resultado-da-eleicao-diz-ian-bremmer/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
       "titulo": "Penduricalho da Alesp impactado por decisão de Dino custa R$ 47,3 milhões por ano",
       "resumo": "",
       "categoria": "Política",
@@ -332,25 +1142,1321 @@
       "scores_todos": {}
     },
     {
-      "titulo": "A revolução do sachê: como a Fugini antecipou novas formas de consumir",
+      "titulo": "O fracasso das instituições",
       "resumo": "",
-      "categoria": "Não especificada",
+      "categoria": "Política",
       "fonte": "Estadão",
       "data": "12/02/2026",
-      "hora": "12:00",
-      "link": "https://www.estadao.com.br/paladar/a-revolucao-do-sache-como-a-fugini-antecipou-novas-formas-de-consumir/",
+      "hora": "11:45",
+      "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/o-fracasso-das-instituicoes/",
       "tema_classificado": "Não classificado",
       "score": 0,
       "scores_todos": {}
     },
     {
-      "titulo": "Trump está mais preocupado com recursos do Brasil que no resultado da eleição, diz Ian Bremmer",
+      "titulo": "Uma defesa pragmática do uso de inteligência artificial generativa na prática jurídica",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "11:35",
+      "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/uma-defesa-pragmatica-do-uso-de-inteligencia-artificial-generativa-na-pratica-juridica/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Desmatamento na Amazônia em 2025 cai 11,08% na comparação anual",
+      "resumo": "",
+      "categoria": "Sustentabilidade",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "11:28",
+      "link": "https://www.estadao.com.br/sustentabilidade/dados-desmatamento-amazonia-2025-prodes-inpe/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Prestação de contas na cultura: entre Sísifo e o controle por resultados",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "11:25",
+      "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/prestacao-de-contas-na-cultura-entre-sisifo-e-o-controle-por-resultados/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Quatro maiores bancos lucraram R$ 107,8 bi no ano passado",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "11:05",
+      "link": "https://www.estadao.com.br/economia/negocios/quatro-maiores-bancos-lucraram-r-1078-bi-no-ano-passado/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Como criar bons negócios e empregos na Amazônia?",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "11:00",
+      "link": "https://www.estadao.com.br/economia/salo-coslovsky/como-criar-bons-negocios-e-empregos-na-amazonia/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Cade: saída antecipada de conselheiro surpreende e embaralha sucessão no órgão",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:48",
+      "link": "https://www.estadao.com.br/economia/cade-saida-antecipada-de-conselheiro-surpreende-e-embaralha-sucessao-no-orgao/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Secretário municipal de Itumbiara atira contra os filhos, mata o mais velho e tira a própria vida",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:42",
+      "link": "https://www.estadao.com.br/brasil/secretario-municipal-atira-contra-os-filhos-mata-o-mais-velho-e-tira-a-propria-vida-em-itumbiara-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Como sabores latinos conquistam os menus dos restaurantes europeus",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:30",
+      "link": "https://www.estadao.com.br/paladar/comida/da-america-latina-para-a-europa-como-chefs-e-sabores-latinos-conquistam-os-menus-dos-restaurantes-europeus/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Iguatemi assina proposta vinculante para compra de fatia do Pátio Paulista por R$ 113,4 milhões",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:24",
+      "link": "https://www.estadao.com.br/economia/negocios/iguatemi-assina-proposta-vinculante-para-compra-de-fatia-do-patio-paulista-por-r-1134-milhoes/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Como Epstein e sua rede de aliciadores agiram no Brasil por mais de 10 anos",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:18",
+      "link": "https://www.estadao.com.br/eldorado/programas/jornal-eldorado/como-epstein-e-sua-rede-de-aliciadores-agiram-no-brasil-por-mais-de-10-anos/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Governo estuda mecanismo para controle de exportação em cota de carne bovina à China",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:12",
+      "link": "https://www.estadao.com.br/economia/governo-estuda-mecanismo-para-controle-de-exportacao-em-cota-de-carne-bovina-a-china/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "‘Se Master corrompeu servidor, podemos abrir processo pela Lei Anticorrupção’, diz chefe da CGU",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:08",
+      "link": "https://www.estadao.com.br/politica/se-master-corrompeu-servidor-podemos-abrir-processo-pela-lei-anticorrupcao-diz-chefe-da-cgu/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Sol Vega diz estar ‘em paz’ após saída do BBB 26; veja vídeo",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:01",
+      "link": "https://www.estadao.com.br/emais/gente/sol-vega-diz-estar-em-paz-apos-saida-do-bbb-26-veja-video-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Fazer exercício é especialmente importante em duas fases da vida para evitar demência, diz estudo",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:00",
+      "link": "https://www.estadao.com.br/saude/fazer-exercicio-e-especialmente-importante-em-duas-fases-da-vida-para-evitar-demencia-diz-estudo/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "O que falta para os abadás deixarem de ser ‘um problema ambiental’ no carnaval, segundo especialista",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "10:00",
+      "link": "https://www.estadao.com.br/economia/governanca/o-que-falta-para-os-abadas-deixarem-de-ser-um-problema-ambiental-no-carnaval-segundo-especialista/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Viúva de Henrique Maderite publica última ‘pegadinha’ do influenciador e agradece apoio",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "09:54",
+      "link": "https://www.estadao.com.br/emais/tv/viuva-de-henrique-maderite-publica-ultima-pegadinha-do-influenciador-e-agradece-apoio-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Sexta antes do Carnaval é feriado? Veja o que diz a legislação sobre a folga na data",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "09:42",
+      "link": "https://www.estadao.com.br/brasil/sexta-antes-do-carnaval-e-feriado-veja-o-que-diz-a-legislacao-sobre-a-folga-na-data-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BTG Pactual conclui aquisição de 48% da plataforma digital meutudo",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "09:35",
+      "link": "https://www.estadao.com.br/economia/btg-pactual-conclui-aquisicao-de-48-da-plataforma-digital-meutudo-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Tumbler Ridge: o que se sabe sobre o massacre a tiros no Canadá",
       "resumo": "",
       "categoria": "Internacional",
       "fonte": "Estadão",
       "data": "12/02/2026",
-      "hora": "12:00",
-      "link": "https://www.estadao.com.br/internacional/trump-esta-mais-preocupado-com-recursos-do-brasil-que-no-resultado-da-eleicao-diz-ian-bremmer/",
+      "hora": "09:34",
+      "link": "https://www.estadao.com.br/internacional/tumbler-ridge-o-que-se-sabe-sobre-o-massacre-a-tiros-no-canada-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Chuvas provocam desabamento e interditam rodovia que liga Lisboa e Porto, em Portugal",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "09:26",
+      "link": "https://www.estadao.com.br/internacional/chuvas-provocam-desabamento-e-interditam-rodovia-que-liga-lisboa-e-porto-em-portugal-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Vaquinha para família de James Van Der Beek supera R$ 5,9 milhões em horas",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "09:00",
+      "link": "https://www.estadao.com.br/emais/gente/vaquinha-para-familia-de-james-van-der-beek-supera-r-59-milhoes-em-horas-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Modelo white label muda o desenho da distribuição da proteção financeira no Brasil",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "09:00",
+      "link": "https://www.estadao.com.br/economia/modelo-white-label-muda-o-desenho-da-distribuicao-da-protecao-financeira-no-brasil/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BBB 26: Festa do líder tem flerte com Ana Paula e beijo na boca; veja o resumo da madrugada",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "08:45",
+      "link": "https://www.estadao.com.br/emais/tv/bbb-26-festa-do-lider-tem-flerte-com-ana-paula-e-beijo-na-boca-veja-o-resumo-da-madrugada-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "‘Casa do Patrão’: Evaristo Costa vai apresentar o novo reality da Record",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "08:27",
+      "link": "https://www.estadao.com.br/emais/tv/casa-do-patrao-evaristo-costa-vai-apresentar-o-novo-reality-da-record-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Líderes da UE se reúnem para combater a pressão da Rússia, China e Trump",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "08:26",
+      "link": "https://www.estadao.com.br/internacional/lideres-da-ue-se-reunem-para-combater-a-pressao-da-russia-china-e-trump-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Polícia mira máfia chinesa que lavou R$ 1 bilhão do PCC em sete meses",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "08:22",
+      "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/policia-mira-mafia-chinesa-que-lavou-r-1-bilhao-do-pcc-em-sete-meses/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "O melhor queijo quente dos últimos tempos",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "08:00",
+      "link": "https://www.estadao.com.br/paladar/por-ai/o-melhor-queijo-quente-dos-ultimos-tempos/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Excitação com a IA não pode nos fazer esquecer que nós estamos no comando",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "07:45",
+      "link": "https://www.estadao.com.br/brasil/macaco-eletrico/excitacao-com-a-ia-nao-pode-nos-fazer-esquecer-que-nos-estamos-no-comando/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Lena: um restaurante para repensar Minas em São Paulo",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "06:50",
+      "link": "https://www.estadao.com.br/paladar/na-mesa-com-fred/lena-um-restaurante-para-repensar-minas-em-sao-paulo/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Doces inesquecíveis dos anos 1980",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "06:00",
+      "link": "https://www.estadao.com.br/web-stories/paladar/comida/doces-inesqueciveis-dos-anos-1980/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Qual o melhor azeite de dendê",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "06:00",
+      "link": "https://www.estadao.com.br/paladar/comida/qual-o-melhor-azeite-de-dende/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Cine Drops - O Agente Secreto",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:36",
+      "link": "https://www.estadao.com.br/eldorado/programas/cine-drops/cine-drops-o-agente-secreto-2/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Marcas e Consumidores 12.02.2026",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:35",
+      "link": "https://www.estadao.com.br/eldorado/programas/marcas-e-consumidores/marcas-e-consumidores-12022026/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Cine Drops - Valor Sentimental",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:30",
+      "link": "https://www.estadao.com.br/eldorado/programas/cine-drops/cine-drops-valor-sentimental/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Como Epstein e sua rede de aliciadores agiram no Brasil por mais de uma década",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:30",
+      "link": "https://www.estadao.com.br/internacional/como-epstein-e-sua-rede-de-aliciadores-agiram-no-brasil-por-mais-de-uma-decada/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Grupo de WhatsApp e reunião de emergência: As estratégias do STJ para lidar com o caso Buzzi",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:30",
+      "link": "https://www.estadao.com.br/politica/coluna-do-estadao/grupo-de-whatsapp-e-reuniao-de-emergencia-as-estrategias-do-stj-para-lidar-com-o-caso-buzzi/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Decisão de Dino afeta R$ 4,8 bilhões em penduricalhos previstos no TJ-SP para 2026",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:30",
+      "link": "https://www.estadao.com.br/politica/decisao-de-dino-afeta-r-48-bilhoes-em-penduricalhos-previstos-no-tj-sp-para-2026/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Blocos de São Paulo em 2026: conheça 35 imperdíveis no mais eclético Carnaval do Brasil",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:30",
+      "link": "https://www.estadao.com.br/viagem/de-ivete-pabllo-30-bloquinhos-imperdiveis-carnaval-rua-sao-paulo-2026/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Carnaval é feriado ou ponto facultativo?",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:29",
+      "link": "https://www.estadao.com.br/brasil/carnaval-e-feriado-ou-ponto-facultativo/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Crise hídrica em SP: por que alguns imóveis sofrem mais com a falta d’água? Quais têm mais risco?",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:28",
+      "link": "https://www.estadao.com.br/sao-paulo/crise-hidrica-em-sp-por-que-alguns-imoveis-sofrem-mais-com-a-falta-dagua-quais-tem-mais-risco/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Da ‘periculosidade’ à utilidade social: a reviravolta sobre a expertise no cultivo de Cannabis",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "05:00",
+      "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/da-periculosidade-a-utilidade-social-a-reviravolta-sobre-a-expertise-no-cultivo-de-cannabis/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Desventuras de um banco estatal",
+      "resumo": "",
+      "categoria": "Opinião",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "03:00",
+      "link": "https://www.estadao.com.br/opiniao/desventuras-de-um-banco-estatal/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Estado das contas públicas e cenários: parte II",
+      "resumo": "",
+      "categoria": "Opinião",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "03:00",
+      "link": "https://www.estadao.com.br/opiniao/felipe-salto/estado-das-contas-publicas-e-cenarios-parte-ii/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Um mundo surreal",
+      "resumo": "",
+      "categoria": "Opinião",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "03:00",
+      "link": "https://www.estadao.com.br/opiniao/jose-serra/um-mundo-surreal/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Fórum dos Leitores",
+      "resumo": "",
+      "categoria": "Opinião",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "03:00",
+      "link": "https://www.estadao.com.br/opiniao/forum-dos-leitores/forum-dos-leitores-12-2-2026/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Limites para as bets",
+      "resumo": "",
+      "categoria": "Opinião",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "03:00",
+      "link": "https://www.estadao.com.br/opiniao/limites-para-as-bets/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Rússia: cidade é desocupada após ataque de míssil ucraniano",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "02:52",
+      "link": "https://www.estadao.com.br/internacional/russia-cidade-e-desocupada-apos-ataque-de-missil-ucraniano-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "WhatsApp diz que Rússia tentou bloquear o aplicativo no país",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "02:36",
+      "link": "https://www.estadao.com.br/link/whatsapp-diz-que-russia-tentou-bloquear-o-aplicativo-no-pais-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Tailândia: adolescente toma arma de policial, ataca estudantes e mata diretor",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "01:46",
+      "link": "https://www.estadao.com.br/internacional/tailandia-adolescente-toma-arma-de-policial-ataca-estudantes-e-mata-diretor-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BBB 26 mostra reação de Sol Vega com expulsão; veja vídeo",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "00:09",
+      "link": "https://www.estadao.com.br/emais/tv/bbb-26-mostra-reacao-de-sol-vega-com-expulsao-veja-video-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "México e EUA apreendem cocaína em operação conjunta no Pacífico; veja vídeo",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "00:01",
+      "link": "https://www.estadao.com.br/internacional/mexico-e-eua-apreendem-cocaina-em-operacao-conjunta-no-pacifico-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Celular apreendido de Vorcaro irá mostrar quem é quem da elite brasileira",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "23:25",
+      "link": "https://www.estadao.com.br/politica/fabiano-lana/celular-apreendido-de-vorcaro-ira-mostrar-quem-e-quem-da-elite-brasileira/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Vídeo: incêndio atinge carro na Santa Cecília, região central de São Paulo",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "23:05",
+      "link": "https://www.estadao.com.br/sao-paulo/video-incendio-atinge-carro-santa-cecilia-regiao-central-sao-paulo-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Defesa de adolescente diz que soco dado por ex-piloto Pedro Turra ‘foi causa da morte’",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "22:56",
+      "link": "https://www.estadao.com.br/brasil/defesa-adolescente-diz-soco-dado-ex-piloto-pedro-turra-foi-causa-morte-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Amigos de James Van Der Beek criam vaquinha para ajudar família do ator após morte: ‘Futuro incerto’",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "22:40",
+      "link": "https://www.estadao.com.br/emais/gente/amigos-de-james-van-der-beek-criam-vaquinha-para-ajudar-familia-do-ator-apos-morte-futuro-incerto-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BBB 26: Milena é vetada da Festa do Líder por Jonas: ‘Não valoriza as festas’",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "22:36",
+      "link": "https://www.estadao.com.br/emais/tv/bbb-26-milena-e-vetada-da-festa-do-lider-por-jonas-nao-valoriza-as-festas-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Drinque de framboesa sem álcool",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "22:22",
+      "link": "https://www.estadao.com.br/paladar/receita/drinque-de-framboesa-sem-alcool/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Polícia indicia sócios de academia onde mulher passou mal e morreu: ‘Nada fizeram pelas vítimas’",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "22:13",
+      "link": "https://www.estadao.com.br/sao-paulo/policia-indicia-socios-academia-mulher-passou-mal-piscina-morreu-nada-fizeram-pelas-vitimas-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Qual o horário do BBB 26 nesta quarta, 11?",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "22:06",
+      "link": "https://www.estadao.com.br/emais/tv/qual-o-horario-do-bbb-26-nesta-quarta-11-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Drinque de limão e hortelã sem álcool",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "22:05",
+      "link": "https://www.estadao.com.br/paladar/receita/drinque-de-limao-e-hortela-sem-alcool/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Leitor volta a cobrar retirada de árvore com risco de queda na Vila Mariana",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "22:00",
+      "link": "https://www.estadao.com.br/sao-paulo/seus-direitos/leitor-volta-a-cobrar-retirada-de-arvore-com-risco-de-queda-na-vila-mariana/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Nio, ex-Oi Fibra, conclui separação de antiga dona e vai buscar fusões e aquisições",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "22:00",
+      "link": "https://www.estadao.com.br/economia/coluna-do-broad/nio-ex-oi-fibra-conclui-separacao-de-antiga-dona-e-vai-buscar-fusoes-e-aquisicoes/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Ressaca no Carnaval? Chefs ensinam receitas infalíveis para recuperar a energia no dia seguinte",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "21:55",
+      "link": "https://www.estadao.com.br/paladar/comida/ressaca-no-carnaval-chefs-ensinam-receitas-infaliveis-para-recuperar-a-energia-no-dia-seguinte/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "A vez do queijista",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "20:44",
+      "link": "https://www.estadao.com.br/paladar/so-queijo/a-vez-do-queijista/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Empresa de pesquisas Gallup deixará de acompanhar os índices de aprovação presidencial nos EUA",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "20:36",
+      "link": "https://www.estadao.com.br/internacional/empresa-pesquisas-gallup-deixara-acompanhar-indices-aprovacao-presidencial-eua-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Por que o exercício tem poder de remédio depois de um câncer",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "20:00",
+      "link": "https://www.estadao.com.br/saude/vencer-o-cancer/por-que-o-exercicio-tem-poder-de-remedio-depois-de-um-cancer/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Edição Limitada 11.02.2026",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "20:00",
+      "link": "https://www.estadao.com.br/eldorado/programas/edicao-limitada/edicao-limitada-11022026/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "EUA preparam envio de segundo porta-aviões ao Oriente Médio, diz jornal",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "19:35",
+      "link": "https://www.estadao.com.br/internacional/eua-prepara-envio-segundo-porta-avioes-ao-oriente-medio-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Izabel Goulart nega relação com Epstein após ser citada em troca de e-mails; leia nota",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "19:32",
+      "link": "https://www.estadao.com.br/emais/gente/izabel-goulart-nega-relacao-com-epstein-apos-ser-citada-em-troca-de-e-mails-leia-nota-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Cassoulet Le Jazz",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "19:25",
+      "link": "https://www.estadao.com.br/paladar/receita/cassoulet-le-jazz/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BBB 26: Mari Maria defende base após Maxiane viralizar com maquiagem ‘derretida’; veja vídeo",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "19:20",
+      "link": "https://www.estadao.com.br/emais/gente/mari-maria-defende-base-apos-maxiane-viralizar-com-maquiagem-derretida-veja-video-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Fim de Tarde 1833",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "19:16",
+      "link": "https://www.estadao.com.br/eldorado/programas/fim-de-tarde/fim-de-tarde-1833/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Vídeo mostra momento da colisão entre picape elétrica da Tesla e motociclista em SP",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "19:16",
+      "link": "https://www.estadao.com.br/sao-paulo/video-mostra-momento-colisao-picape-eletrica-tesla-motociclista-sp-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Exportações do Brasil para os EUA caem 25,5% em janeiro, pelo 6º mês consecutivo",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "19:03",
+      "link": "https://www.estadao.com.br/economia/exportacoes-do-brasil-para-os-eua-caem-255-em-janeiro-pelo-6-mes-consecutivo/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Por que o tiramisù vive uma nova era nos restaurantes",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "19:00",
+      "link": "https://www.estadao.com.br/web-stories/paladar/por-que-o-tiramisu-vive-uma-nova-era-nos-restaurantes/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Carnaval saudável: 11 receitas de sanduíches para aproveitar a folia",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "19:00",
+      "link": "https://www.estadao.com.br/paladar/caderno-de-receitas/pre-carnaval-saudavel-11-receitas-de-lanche-para-aproveitar-a-folia/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Unesp cria graduação inédita sobre a China, com foco em comércio e 2 anos de aulas no exterior",
+      "resumo": "",
+      "categoria": "Educação",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "18:39",
+      "link": "https://www.estadao.com.br/educacao/unesp-cria-graduacao-inedita-sobre-a-china-com-foco-em-comercio-e-2-anos-de-aulas-no-exterior/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Ministros do STJ ficaram irritados com silêncio de Buzzi após denúncia; veja bastidores",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "18:31",
+      "link": "https://www.estadao.com.br/politica/coluna-do-estadao/ministros-do-stj-ficaram-irritados-com-silencio-de-buzzi-apos-denuncia-veja-bastidores/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Governo Trump dá sinal verde para investimento em processamento e refino de terras raras no Brasil",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "18:22",
+      "link": "https://www.estadao.com.br/internacional/governo-trump-da-sinal-verde-para-investimento-em-processamento-e-refino-de-terras-raras-no-brasil/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Fundo de pensão do Amapá descumpriu normas e aportou R$ 250 milhões no BRB após investir no Master",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "18:03",
+      "link": "https://www.estadao.com.br/economia/fundo-pensao-amapa-descumpriu-normas-aportou-250-milhoes-brb-apos-investir-master/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Morte de tio, roubo e herança milionária: entenda novos acontecimentos ligados a Suzane Richthofen",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "18:00",
+      "link": "https://www.estadao.com.br/brasil/morte-de-tio-roubo-e-heranca-milionaria-entenda-os-novos-acontecimentos-ligados-a-suzane-richthofen-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Bandeira da ética para crimes de poderosos é refresco",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "18:00",
+      "link": "https://www.estadao.com.br/politica/carolina-brigido/bandeira-da-etica-para-crimes-de-poderosos-e-refresco/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "O rearmamento japonês tornou-se mera questão de tempo",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "18:00",
+      "link": "https://www.estadao.com.br/internacional/filipe-figueiredo/o-rearmamento-japones-tornou-se-mera-questao-de-tempo/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Ano de 2026 pode ser um ‘vai ou racha’ para OpenAI, dizem especialistas",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "18:00",
+      "link": "https://www.estadao.com.br/economia/ano-de-2026-pode-ser-um-vai-ou-racha-para-openai-dizem-especialistas/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "O que diz relatório que pode definir se Enel continua em SP após apagões: ‘Baixa produtividade’",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "17:57",
+      "link": "https://www.estadao.com.br/sao-paulo/aneel-aponta-atuacao-insatisfatoria-da-enel-durante-apagao-em-sp/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Procuradoria denuncia Manga como ‘peça-chave’ de organização criminosa  na prefeitura de Sorocaba",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "17:44",
+      "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/procuradoria-denuncia-manga-como-peca-chave-de-organizacao-criminosa-na-prefeitura-de-sorocaba/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Rússia diz que manterá limites de armas nucleares do Novo START enquanto EUA fizerem o mesmo",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "17:39",
+      "link": "https://www.estadao.com.br/internacional/russia-diz-mantera-limites-armas-nucleares-novo-start-enquanto-eua-fizerem-mesmo-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BBB 26: Equipe de Jonas pede por expulsão de Milena após saída de Sol Vega; entenda",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "17:38",
+      "link": "https://www.estadao.com.br/emais/tv/bbb-26-equipe-de-jonas-pede-por-expulsao-de-milena-apos-saida-de-sol-vega-entenda-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Ex-funcionário terceirizado da USP é preso suspeito de participar de roubo na universidade",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "17:36",
+      "link": "https://www.estadao.com.br/sao-paulo/ex-funcionario-terceirizado-da-usp-e-preso-suspeito-de-participar-de-roubo-a-universidade-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Luciana Gimenez volta a negar ligação com Epstein e explica transferências; veja vídeo",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "17:30",
+      "link": "https://www.estadao.com.br/emais/gente/luciana-gimenez-nega-ligacao-com-caso-epstein-veja-video-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Netanyahu se reúne com Trump por mais de 3 horas e insiste em necessidades de segurança de Israel",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "17:27",
+      "link": "https://www.estadao.com.br/internacional/netanyahu-se-reune-com-trump-por-mais-de-3-horas-e-insiste-em-necessidades-de-seguranca-de-israel-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Mais da metade dos brasileiros usa fintechs e bancos digitais, aponta pesquisa",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "17:13",
+      "link": "https://www.estadao.com.br/economia/mais-da-metade-dos-brasileiros-usa-fintechs-e-bancos-digitais-aponta-pesquisa/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Jovem que sumiu na Grande BH é encontrada morta com sinais de violência",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "17:00",
+      "link": "https://www.estadao.com.br/brasil/jovem-sumiu-grande-bh-encontrada-morta-sinais-violencia-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Agentes da PRF pegam três toneladas de maconha em carga de soja no Paraná; assista",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "16:57",
+      "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/agentes-da-prf-pegam-tres-toneladas-de-maconha-em-carga-de-soja-no-parana-assista/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BBB 26: Em quatro semanas, reality teve desistência, duas expulsões e saída por questões de saúde",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "16:45",
+      "link": "https://www.estadao.com.br/emais/tv/bbb-26-em-quatro-semanas-reality-teve-desistencia-duas-expulsoes-e-saida-por-questoes-de-saude-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "‘Insegurança sistêmica’, diz Tribunal de São Paulo sobre decisão de Dino que atingiu ‘penduricalhos’",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "16:32",
+      "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/inseguranca-sistemica-diz-tribunal-de-sao-paulo-sobre-decisao-de-dino-que-atingiu-penduricalhos/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Sinal de Frank: marca na orelha de Henrique Maderite pode indicar maior risco cardíaco? Entenda",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "16:30",
+      "link": "https://www.estadao.com.br/saude/sinal-de-frank-marca-na-orelha-de-henrique-maderite-pode-indicar-maior-risco-cardiaco-entenda-nprm/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Vídeo em que criança relata cenas de canibalismo não tem relação com Epstein; depoimento é falso",
+      "resumo": "",
+      "categoria": "Fato ou Fake",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "16:23",
+      "link": "https://www.estadao.com.br/estadao-verifica/falso-crianca-relata-canibalismo-jeffrey-epstein-ritual-satanico/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "A nossa capacidade de manter a atenção está diminuindo — veja como você pode melhorar a sua",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "16:06",
+      "link": "https://www.estadao.com.br/saude/a-nossa-capacidade-de-manter-a-atencao-esta-diminuindo-veja-como-voce-pode-melhorar-a-sua/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BBB 26: Ana Paula Renault comenta expulsão de Sol Vega. ‘Sei que é frustrante’",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "16:03",
+      "link": "https://www.estadao.com.br/emais/tv/bbb-26-ana-paula-renault-comenta-expulsao-de-sol-vega-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Drinque Sóbrio",
+      "resumo": "",
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "16:00",
+      "link": "https://www.estadao.com.br/paladar/receita/receita-de-drinque-de-maracuja-sem-alcool/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "André Esteves é citado em arquivos de Epstein, mas nega presença em reunião",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "15:57",
+      "link": "https://www.estadao.com.br/internacional/andre-esteves-e-citado-em-arquivos-de-epstein-mas-nega-presenca-em-reuniao/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Latam demite piloto preso por suspeita de chefiar rede de exploração sexual e abuso de crianças",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "15:57",
+      "link": "https://www.estadao.com.br/sao-paulo/latam-demite-piloto-preso-por-suspeita-de-chefiar-rede-de-exploracao-sexual-e-abuso-de-criancas-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Macron afirma que Europa deve ser uma potência independente diante de ameaças de EUA e China",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "15:51",
+      "link": "https://www.estadao.com.br/internacional/macron-afirma-europa-deve-ser-potencia-independente-diante-eua-china-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Parque Villa-Lobos reabre orquidário após quase dez anos e obras de R$ 2 milhões; veja como ficou",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "15:42",
+      "link": "https://www.estadao.com.br/sao-paulo/parque-villa-lobos-reabre-orquidario-apos-quase-dez-anos-e-obras-de-r-2-milhoes-veja-como-ficou/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "USP oficializa demissão de professor da Faculdade de Direito acusado de assediar dez alunos",
+      "resumo": "",
+      "categoria": "Educação",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "15:39",
+      "link": "https://www.estadao.com.br/educacao/usp-oficializa-demissao-de-professor-da-faculdade-de-direito-acusado-de-assediar-dez-alunos-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BTG não fez nada de errado ao distribuir CDBs do Banco Master, diz André Esteves",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "15:27",
+      "link": "https://www.estadao.com.br/economia/btg-nao-fez-nada-de-errado-ao-distribuir-cdbs-do-banco-master-diz-andre-esteves/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Macron diz que tarifas dos EUA sobre a economia da Europa são mecanismo de coerção",
+      "resumo": "",
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "15:22",
+      "link": "https://www.estadao.com.br/economia/macron-diz-tarifas-eua-sobre-economia-europa-mecanismo-coercao-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Adolescente é vítima de estupro coletivo após ser confundida com namorada de traficante no RJ",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "Estadão",
+      "data": "11/02/2026",
+      "hora": "15:16",
+      "link": "https://www.estadao.com.br/brasil/adolescente-vitima-estupro-coletivo-apos-confundida-namorada-traficante-rj-npr/",
       "tema_classificado": "Não classificado",
       "score": 0,
       "scores_todos": {}

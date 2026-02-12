@@ -200,7 +200,13 @@ def main():
         max_cliques = 30  # Aumentado para pegar mais notícias das 24h
 
         while True:
-            soup = BeautifulSoup(driver.page_source, "html.parser")
+            try:
+                soup = BeautifulSoup(driver.page_source, "html.parser")
+            except Exception as e:
+                err = str(e).lower()
+                if "connection" in err or "refused" in err or "10061" in err or "target machine" in err:
+                    print("  AVISO: conexao com o browser caiu; usando noticias ja coletadas.")
+                break
             artigos = soup.find_all("a", attrs={"data-component-name": "lista-ultimas"})
 
             novas_nesta_rodada = 0
@@ -271,7 +277,7 @@ def main():
                 print("  PARADA: limite de cliques em Carregar mais")
                 break
 
-            # Clicar em "Carregar mais" (igual ao scraper_otimizado: scroll, remover banners, JS click)
+            # Clicar no botão "Carregar mais notícias": <button data-component-name="lista-ultimas" type="button" class="see-more">Carregar mais notícias</button>
             try:
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 time.sleep(1.5)
@@ -280,10 +286,10 @@ def main():
                     for(var i=0;i<b.length;i++) b[i].remove();
                 """)
                 botao = None
+                # Seletor exato do botão do Estadão
                 for seletor in [
                     "button.see-more[data-component-name='lista-ultimas']",
-                    "button.see-more",
-                    "button[data-component-name='lista-ultimas']",
+                    "button[data-component-name='lista-ultimas'].see-more",
                 ]:
                     try:
                         botao = WebDriverWait(driver, 8).until(
@@ -292,6 +298,12 @@ def main():
                         break
                     except Exception:
                         continue
+                # Fallback: botão cujo texto contém "Carregar mais notícias"
+                if not botao:
+                    try:
+                        botao = driver.find_element(By.XPATH, "//button[contains(., 'Carregar mais notícias')]")
+                    except Exception:
+                        pass
                 if not botao:
                     print("  PARADA: botao Carregar mais nao encontrado")
                     break
@@ -301,7 +313,11 @@ def main():
                 time.sleep(2.5)
                 clique += 1
             except Exception as e:
-                print("  PARADA: botao Carregar mais nao clicavel:", str(e)[:50])
+                err = str(e).lower()
+                if "connection" in err or "refused" in err or "10061" in err or "target machine" in err:
+                    print("  AVISO: conexao com o browser caiu; usando noticias ja coletadas.")
+                else:
+                    print("  PARADA: botao Carregar mais nao clicavel:", str(e)[:50])
                 break
 
         print()
