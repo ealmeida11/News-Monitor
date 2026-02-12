@@ -174,6 +174,15 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
     if melhor_tema == "Eleições" and melhor_score < 2:
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
+    # Não classificar notícias sobre política de outros países (ex.: "Argentina: Senado aprova reforma...")
+    titulo_lower = (titulo or "").strip().lower()
+    prefixos_pais = ("argentina:", "chile:", "uruguai:", "paraguai:", "colômbia:", "colombia:", "peru:", "méxico:", "mexico:", "venezuela:", "bolívia:", "bolivia:", "equador:", "estados unidos:", "eua:", "reino unido:", "frança:", "franca:", "alemanha:", "espanha:", "itália:", "italia:")
+    if titulo_lower.startswith(prefixos_pais):
+        return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+    # Milei + Senado/reforma no título = Argentina, não Brasil
+    if "milei" in titulo_lower and ("senado" in titulo_lower or "reforma" in titulo_lower or "argentina" in titulo_lower):
+        return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+
     return {"tema": melhor_tema, "score": melhor_score, "scores": scores}
 
 
