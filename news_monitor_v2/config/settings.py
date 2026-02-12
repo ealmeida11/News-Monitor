@@ -33,4 +33,6 @@ TEMAS = [
     "Banco Central",
     "Mercado",
     "Editorial",
+    "Mundo",
+    "Atividade",
 ]

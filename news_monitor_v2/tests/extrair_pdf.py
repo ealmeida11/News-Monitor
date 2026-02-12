@@ -6,10 +6,7 @@ Se o PDF for inválido, tenta extrair a imagem embutida e rodar OCR.
 import re
 from pathlib import Path
 
-pdf_path = Path(
-    r"c:\Users\ealmeida\AppData\Roaming\Cursor\User\workspaceStorage"
-    r"\0d038e664fc55f9ec11f55e78cb57629\pdfs\b2bf99eb-ba49-4f50-a23e-f5311fda2ba4\Feedback.pdf"
-)
+pdf_path = Path(r"C:\Users\ealmeida\Downloads\Feedback.pdf")
 output_dir = Path(__file__).resolve().parent / "output"
 out_txt = output_dir / "feedback_extraido.txt"
 out_jpg = output_dir / "feedback_pagina.jpg"

@@ -26,7 +26,7 @@ def gerar_html_revisao():
     # Temas disponíveis para correção
     temas_disponiveis = [
         "Governo/Congresso", "Fiscal", "Eleições", "Inflação",
-        "Banco Central", "Mercado", "Editorial", "Mundo", "Não classificado"
+        "Banco Central", "Mercado", "Editorial", "Mundo", "Atividade", "Não classificado"
     ]
 
     html = []

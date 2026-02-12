@@ -73,7 +73,7 @@ def processar_feedback():
             destino = corr.get("tema_correto", "?")
             por_tema_destino[destino].append(corr)
         for destino, corrs in sorted(por_tema_destino.items()):
-            linhas.append(f"    → {destino}:")
+            linhas.append(f"    -> {destino}:")
             for c in corrs[:5]:  # Mostrar até 5 exemplos
                 linhas.append(f"      - {c['titulo'][:70]}...")
                 if c.get('comentario'):

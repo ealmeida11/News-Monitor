@@ -1,0 +1,84 @@
+{
+  "data_revisao": "2026-02-12",
+  "total_noticias": 83,
+  "correcoes": [
+    {
+      "titulo": "Maioria das bolsas da Ásia fecha em alta após instabilidade em Wall Street",
+      "tema_atual": "Eleições",
+      "tema_correto": "Não classificado",
+      "comentario": "Eleições apenas do Brasil, nesse caso você está falando sobre eleições parlamentares que ocorreram no japão"
+    },
+    {
+      "titulo": "Maus resultados no Enamed impulsionam o debate sobre a qualificação dos médicos",
+      "tema_atual": "Eleições",
+      "tema_correto": "Não classificado",
+      "comentario": "Nem deveria ser classificada como nada, está falando sobre qualificações dos médicos, isso não tem relevância no acompanhamento macro econômico brasileiro"
+    },
+    {
+      "titulo": "No período da Magnitsky contra Moraes fomos muito atacados, mas clientes sempre estiveram conosco, diz CEO do BB",
+      "tema_atual": "Governo/Congresso",
+      "tema_correto": "Não classificado",
+      "comentario": "Ainda que fale sobre ministro do STF, matéria está focada na situação do Banco do BB, melhor evitar essas matérias de opiniões ou de comentários para os temas exceto editorial"
+    },
+    {
+      "titulo": "Na Quaest, Lula lidera, mas Flávio se aproxima",
+      "tema_atual": "Governo/Congresso",
+      "tema_correto": "Eleições",
+      "comentario": "Lula ou Flávio Bolsonaro, pesquisa eleitoral, tudo isso é eleição"
+    },
+    {
+      "titulo": "Banco Central lançará página dedicada ao IBC-Br na quinta-feira após o Carnaval",
+      "tema_atual": "Não classificado",
+      "tema_correto": "Banco Central",
+      "comentario": ""
+    },
+    {
+      "titulo": "Serviços acumulam alta de 31% em cinco anos seguidos, após queda de 7,8% em 2020, diz IBGE",
+      "tema_atual": "Não classificado",
+      "tema_correto": "Atividade",
+      "comentario": "deveria ter tema chamado Atividade para falar de indicadores de atividade quando tiver informações relevantes com impacto na atividade do brasil"
+    },
+    {
+      "titulo": "Bitcoin sobe depois de respeitar suporte dos US$ 65 mil no dia anterior",
+      "tema_atual": "Não classificado",
+      "tema_correto": "Mercado",
+      "comentario": "Bitcoin"
+    },
+    {
+      "titulo": "Justiça Federal de São Paulo livra varejista do adicional de 10% sobre o lucro presumido",
+      "tema_atual": "Não classificado",
+      "tema_correto": "Fiscal",
+      "comentario": "IRPJ, CSLL"
+    },
+    {
+      "titulo": "Crédito rural recua 13% em cenário de endividamento crescente dos produtores",
+      "tema_atual": "Não classificado",
+      "tema_correto": "Fiscal",
+      "comentario": "Plano Safra, Crédito Rural"
+    },
+    {
+      "titulo": "Senadores se reúnem com Fachin para defender acesso ao inquérito do Banco Master",
+      "tema_atual": "Não classificado",
+      "tema_correto": "Governo/Congresso",
+      "comentario": "Toffoli, Fachin, Senadores"
+    },
+    {
+      "titulo": "PF encontra citações a Toffoli em celular de Vorcaro",
+      "tema_atual": "Não classificado",
+      "tema_correto": "Governo/Congresso",
+      "comentario": "Toffoli"
+    },
+    {
+      "titulo": "Governo inclui 18 blocos do pré-sal na oferta permanente e prepara maior rodada sob partilha",
+      "tema_atual": "Não classificado",
+      "tema_correto": "Fiscal",
+      "comentario": "partilha"
+    },
+    {
+      "titulo": "Estrangeiros aportaram R$ 573 milhões na Bolsa em 10 de fevereiro",
+      "tema_atual": "Não classificado",
+      "tema_correto": "Banco Central",
+      "comentario": "Bolsa"
+    }
+  ]
+}
