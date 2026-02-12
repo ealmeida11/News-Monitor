@@ -170,6 +170,10 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
         if "leilão" in texto_lower and ("remoção" in texto_lower or "guarda" in texto_lower):
             return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
+    # Eleições: só classificar se score >= 2 (evitar matches fracos)
+    if melhor_tema == "Eleições" and melhor_score < 2:
+        return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+
     return {"tema": melhor_tema, "score": melhor_score, "scores": scores}
 
 

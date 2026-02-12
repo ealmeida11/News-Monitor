@@ -211,11 +211,15 @@ def main():
 
             novas_nesta_rodada = 0
             antigas_nesta_rodada = 0
+            repetidas_nesta_rodada = 0  # já estavam em titulos_unicos (como no stop por "banco" do scraper)
 
             for artigo in artigos:
                 try:
                     titulo = (artigo.get("title") or "").strip()
-                    if not titulo or titulo in titulos_unicos:
+                    if not titulo:
+                        continue
+                    if titulo in titulos_unicos:
+                        repetidas_nesta_rodada += 1
                         continue
 
                     link = artigo.get("href") or "#"
@@ -261,10 +265,19 @@ def main():
             else:
                 antigas_consecutivas = 0
 
-            print(f"  Rodada (clique {clique}): {novas_nesta_rodada} novas, {antigas_nesta_rodada} antigas")
+            # Stop por duplicatas: 2 rodadas seguidas com muitas notícias já vistas (como no scraper com banco)
+            if repetidas_nesta_rodada >= 5:
+                duplicatas_consecutivas += 1
+            else:
+                duplicatas_consecutivas = 0
+
+            print(f"  Rodada (clique {clique}): {novas_nesta_rodada} novas, {antigas_nesta_rodada} antigas, {repetidas_nesta_rodada} repetidas")
 
             if antigas_nesta_rodada >= 3:
                 print("  PARADA: muitas noticias antigas (fora de 24h)")
+                break
+            if duplicatas_consecutivas >= 2:
+                print("  PARADA: muitas noticias repetidas (ja coletadas)")
                 break
             if novas_nesta_rodada == 0:
                 tentativas_sem_novas += 1
