@@ -108,14 +108,6 @@ def gerar_painel():
 
     html.append('<div class="container">')
 
-    # Stats bar
-    html.append('<div class="stats-bar">')
-    html.append(f'<div class="stat-card"><div class="label">Total Coletado</div><div class="value">{total_coletado}</div></div>')
-    html.append(f'<div class="stat-card"><div class="label">Classificadas</div><div class="value">{total_classificadas}</div></div>')
-    html.append(f'<div class="stat-card"><div class="label">Fontes</div><div class="value">1</div></div>')
-    html.append(f'<div class="stat-card"><div class="label">Temas</div><div class="value">{len(temas_visiveis)}</div></div>')
-    html.append('</div>')
-
     # Temas
     html.append('<div class="temas-grid">')
     for tema in temas_ordenados:

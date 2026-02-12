@@ -231,15 +231,20 @@ def main():
         nao_classificadas = []
 
         for noticia in noticias_coletadas:
-            # Classificar com léxico (Mundo desativado, não aparece mais)
+            # Classificar com léxico
             resultado = classificar(noticia['titulo'], resumo=noticia.get('resumo', ''))
             tema = resultado['tema']
+            
+            # Excluir completamente notícias classificadas como Mundo (não coletar)
+            if tema == "Mundo":
+                continue  # Pula esta notícia, não salva em lugar nenhum
+            
             noticia['tema_classificado'] = tema
             noticia['score'] = resultado['score']
             noticia['scores_todos'] = resultado['scores']
 
-            # Ignorar Mundo e não classificadas (não aparecem mais)
-            if tema == NAO_CLASSIFICADO or tema == "Mundo":
+            # Ignorar não classificadas (não aparecem mais)
+            if tema == NAO_CLASSIFICADO:
                 nao_classificadas.append(noticia)
             else:
                 noticias_por_tema[tema].append(noticia)
