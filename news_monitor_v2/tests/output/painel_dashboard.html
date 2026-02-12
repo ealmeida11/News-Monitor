@@ -3,399 +3,528 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monitor Macro Brasil</title>
+<title>Newsflow Macro Brasil</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Segoe UI',-apple-system,sans-serif;background:#f0f2f5;color:#333;line-height:1.5;}
-.header{background:linear-gradient(135deg,#1a5276 0%,#2980b9 100%);color:#fff;padding:20px 28px;}
-.header h1{font-size:24px;font-weight:600;}
-.header .meta{font-size:13px;opacity:.9;margin-top:6px;}
-.container{max-width:1400px;margin:0 auto;padding:24px 28px;}
-h2{margin:24px 0 16px;font-size:18px;color:#2c3e50;}
-.temas-row{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:24px;}
-.tema-card{flex:1;min-width:280px;max-width:400px;background:#fff;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.08);overflow:hidden;}
-.tema-header{padding:14px 16px;font-size:15px;font-weight:600;color:#fff;display:flex;justify-content:space-between;align-items:center;}
-.tema-body{padding:12px 16px;font-size:14px;}
-.tema-body a{color:#2980b9;text-decoration:none;display:block;margin-bottom:8px;}
-.tema-body a:hover{text-decoration:underline;}
-.tema-body .h{color:#666;font-size:12px;margin-bottom:4px;}
-table{width:100%;border-collapse:collapse;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.08);border-radius:8px;overflow:hidden;}
-th{text-align:left;padding:12px 14px;background:#1a5276;color:#fff;font-size:13px;font-weight:600;}
-td{padding:12px 14px;border-bottom:1px solid #eee;font-size:14px;vertical-align:top;}
-tr:hover td{background:#f8f9fa;}
-td a{color:#2980b9;text-decoration:none;}
-td a:hover{text-decoration:underline;}
-.badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:500;color:#fff;}
-.resumo-cell{max-width:380px;color:#555;font-size:13px;line-height:1.45;}
-.dh{white-space:nowrap;font-size:13px;color:#666;}
+body{font-family:'Segoe UI',-apple-system,sans-serif;background:#f5f7fa;color:#2c3e50;line-height:1.6;}
+.header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#1a5276 0%,#2980b9 100%);color:#fff;padding:12px 24px;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.header h1{font-size:20px;font-weight:600;margin-bottom:4px;}
+.header .meta{font-size:12px;opacity:.9;}
+.container{max-width:1600px;margin:0 auto;padding:28px 32px;}
+.controls{background:#fff;padding:20px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.08);margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.controls input[type='text']{flex:1;min-width:250px;padding:10px 14px;border:1px solid #ddd;border-radius:6px;font-size:14px;}
+.controls select{padding:10px 14px;border:1px solid #ddd;border-radius:6px;font-size:14px;background:#fff;cursor:pointer;}
+.controls .count{color:#666;font-size:14px;margin-left:auto;}
+.table-wrapper{background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+thead{background:#1a5276;color:#fff;}
+th{padding:14px 16px;text-align:left;font-size:13px;font-weight:600;cursor:pointer;user-select:none;position:relative;}
+th:hover{background:#164a6b;}
+th.sortable::after{content:' ↕';opacity:.5;font-size:11px;margin-left:4px;}
+th.sort-asc::after{content:' ↑';opacity:1;}
+th.sort-desc::after{content:' ↓';opacity:1;}
+tbody tr{border-bottom:1px solid #e9ecef;transition:background .15s;}
+tbody tr:hover{background:#f8f9fa;}
+tbody tr:last-child{border-bottom:none;}
+td{padding:14px 16px;font-size:14px;vertical-align:top;}
+.titulo-cell{font-weight:500;color:#2c3e50;max-width:400px;}
+.resumo-cell{max-width:450px;color:#555;font-size:13px;line-height:1.5;}
+.badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:500;color:#fff;white-space:nowrap;}
+.link-cell a{color:#2980b9;text-decoration:none;font-weight:500;padding:6px 12px;border:1px solid #2980b9;border-radius:4px;display:inline-block;transition:all .2s;}
+.link-cell a:hover{background:#2980b9;color:#fff;}
+.fonte-cell{font-size:13px;color:#555;white-space:nowrap;}
+.dh-cell{white-space:nowrap;font-size:13px;color:#666;font-family:monospace;}
+.pagination{display:flex;justify-content:center;gap:8px;padding:20px;background:#fff;border-top:1px solid #e9ecef;}
+.pagination button{padding:8px 14px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer;font-size:14px;transition:all .2s;}
+.pagination button:hover:not(:disabled){background:#2980b9;color:#fff;border-color:#2980b9;}
+.pagination button:disabled{opacity:.5;cursor:not-allowed;}
+.pagination .active{background:#2980b9;color:#fff;border-color:#2980b9;}
+@media (max-width:1200px){.resumo-cell{max-width:300px;}.titulo-cell{max-width:250px;}}
+@media (max-width:768px){.container{padding:16px;}.controls{flex-direction:column;align-items:stretch;}.controls .count{margin-left:0;margin-top:8px;}table{font-size:12px;}th,td{padding:10px 8px;}}
 </style>
 </head><body>
 <div class="header">
-<h1>Monitor Macro Brasil</h1>
-<div class="meta">Última atualização: 12/02/2026 14:14 | Últimas 24h | Valor Econômico</div>
+<h1>📡 Newsflow Macro Brasil</h1>
+<div class="meta">Última atualização: 12/02/2026 14:14 | Notícias das últimas 24 horas</div>
 </div>
 <div class="container">
-<h2>Destaques por Tema</h2>
-<div class="temas-row">
-<div class="tema-card">
-<div class="tema-header" style="background:#c0392b;">
-<span>Fiscal</span><span>2</span>
+<div class="controls">
+<input type="text" id="searchInput" placeholder="🔍 Buscar por título ou resumo..." />
+<select id="filterCategoria">
+<option value="">Todas as categorias</option>
+<option value="Atividade">Atividade</option>
+<option value="Banco Central">Banco Central</option>
+<option value="Eleições">Eleições</option>
+<option value="Fiscal">Fiscal</option>
+<option value="Governo/Congresso">Governo/Congresso</option>
+<option value="Inflação">Inflação</option>
+<option value="Mercado">Mercado</option>
+</select>
+<span class="count" id="resultCount">Mostrando todas as notícias</span>
 </div>
-<div class="tema-body">
-<span class="h">05:02</span>
-<a href="https://valor.globo.com/legislacao/noticia/2026/02/12/justica-federal-de-sao-paulo-livra-varejista-do-adicional-de-10-sobre-o-lucro-presumido.ghtml" target="_blank">Justiça Federal de São Paulo livra varejista do adicional de 10% sobre...</a>
-<span class="h">05:00</span>
-<a href="https://valor.globo.com/impresso/noticia/2026/02/12/credito-rural-recua-13-em-cenario-de-endividamento-crescente-dos-produtores.ghtml" target="_blank">Crédito rural recua 13% em cenário de endividamento crescente dos prod...</a>
-</div></div>
-<div class="tema-card">
-<div class="tema-header" style="background:#16a085;">
-<span>Banco Central</span><span>2</span>
-</div>
-<div class="tema-body">
-<span class="h">05:03</span>
-<a href="https://valor.globo.com/legislacao/coluna/bc-avanca-no-enquadramento-prudencial-de-criptoativos.ghtml" target="_blank">BC avança no enquadramento prudencial de criptoativos</a>
-<span class="h">19:40</span>
-<a href="https://valor.globo.com/financas/noticia/2026/02/11/entidades-do-setor-financeiro-criticam-tcu-por-restringir-acesso-do-bc-ao-processo-do-master.ghtml" target="_blank">Entidades do setor financeiro criticam TCU por restringir acesso do BC...</a>
-</div></div>
-<div class="tema-card">
-<div class="tema-header" style="background:#d35400;">
-<span>Inflação</span><span>3</span>
-</div>
-<div class="tema-body">
-<span class="h">11:47</span>
-<a href="https://valor.globo.com/financas/noticia/2026/02/12/bolsas-de-ny-tem-leve-alta-com-cenario-corporativo-e-dados-no-radar.ghtml" target="_blank">Bolsas de NY caem com aversão a risco; taxas de Treasuries vão às míni...</a>
-<span class="h">05:01</span>
-<a href="https://valor.globo.com/brasil/noticia/2026/02/12/inflacao-emagrece-e-beira-meta-no-1o-semestre.ghtml" target="_blank">Inflação ‘emagrece’ e beira meta no 1º semestre</a>
-<span class="h">05:01</span>
-<a href="https://valor.globo.com/brasil/noticia/2026/02/12/alimentos-puxam-2a-maior-deflacao-da-industria.ghtml" target="_blank">Alimentos puxam 2ª maior deflação da indústria</a>
-</div></div>
-<div class="tema-card">
-<div class="tema-header" style="background:#2980b9;">
-<span>Governo/Congresso</span><span>13</span>
-</div>
-<div class="tema-body">
-<span class="h">13:34</span>
-<a href="https://valor.globo.com/politica/noticia/2026/02/12/ala-no-stf-admite-crise-e-diz-que-permanncia-de-toffoli-no-caso-master-incgnita.ghtml" target="_blank">Ala no STF admite crise e diz que permanência de Toffoli no caso Maste...</a>
-<span class="h">13:20</span>
-<a href="https://valor.globo.com/politica/noticia/2026/02/12/entenda-como-funciona-processo-que-pode-tirar-toffoli-do-caso-master.ghtml" target="_blank">Suspeição: o que é e como funciona o processo que pode tirar Toffoli d...</a>
-<span class="h">13:07</span>
-<a href="https://valor.globo.com/brasil/noticia/2026/02/12/uso-seguro-da-inteligencia-artificial-estara-na-pauta-da-visita-de-lula-a-india.ghtml" target="_blank">Uso seguro da inteligência artificial estará na pauta da visita de Lul...</a>
-</div></div>
-<div class="tema-card">
-<div class="tema-header" style="background:#8e44ad;">
-<span>Eleições</span><span>5</span>
-</div>
-<div class="tema-body">
-<span class="h">13:05</span>
-<a href="https://valor.globo.com/brasil/noticia/2026/02/12/problemas-do-brasil-vao-muito-alem-dos-desperdicios-de-lula-diz-the-economist.ghtml" target="_blank">Problemas do Brasil vão muito além dos &#x27;desperdícios&#x27; de Lula, diz The...</a>
-<span class="h">13:00</span>
-<a href="https://valor.globo.com/legislacao/noticia/2026/02/12/tst-acordo-com-quitacao-geral-impede-gestante-de-pedir-indenizacao-em-nova-acao.ghtml" target="_blank">TST: Acordo com quitação geral impede gestante de pedir indenização em...</a>
-<span class="h">05:00</span>
-<a href="https://valor.globo.com/impresso/noticia/2026/02/12/na-quaest-lula-lidera-mas-flavio-se-aproxima.ghtml" target="_blank">Na Quaest, Lula lidera, mas Flávio se aproxima</a>
-</div></div>
-<div class="tema-card">
-<div class="tema-header" style="background:#27ae60;">
-<span>Mercado</span><span>10</span>
-</div>
-<div class="tema-body">
-<span class="h">13:39</span>
-<a href="https://valor.globo.com/financas/ao-vivo/2023/06/16/dolar-avanca-e-ibovespa-recua-em-dia-de-correcao-siga-os-mercados.ghtml" target="_blank">Dólar e Ibovespa caem em meio a dados fracos de serviços no Brasil; BB...</a>
-<span class="h">11:50</span>
-<a href="https://valor.globo.com/financas/criptomoedas/noticia/2026/02/12/banco-reduz-preco-alvo-do-bitcoin-em-33percent-e-alerta-que-criptomoeda-pode-cair-a-us-50-mil.ghtml" target="_blank">Banco reduz preço-alvo do bitcoin em 33% e alerta que criptomoeda pode...</a>
-<span class="h">11:17</span>
-<a href="https://valor.globo.com/financas/criptomoedas/noticia/2026/02/12/com-proposta-de-iof-governo-fecha-o-cerco-a-dolarizacao-via-cripto.ghtml" target="_blank">Com proposta de IOF, governo fecha o cerco à dolarização via cripto</a>
-</div></div>
-<div class="tema-card">
-<div class="tema-header" style="background:#1abc9c;">
-<span>Atividade</span><span>4</span>
-</div>
-<div class="tema-body">
-<span class="h">13:48</span>
-<a href="https://valor.globo.com/brasil/noticia/2026/02/12/queda-dos-servicos-em-dezembro-e-ajuste-apos-sequencia-de-resultados-positivos-diz-fgv-ibre.ghtml" target="_blank">Queda dos serviços em dezembro é ajuste após sequência de resultados p...</a>
-<span class="h">12:59</span>
-<a href="https://valor.globo.com/brasil/noticia/2026/02/12/servicos-de-informacao-e-comunicacao-mantem-forca-em-2025-mostra-ibge.ghtml" target="_blank">Serviços de informação e comunicação mantêm força em 2025, mostra IBGE</a>
-<span class="h">09:16</span>
-<a href="https://valor.globo.com/brasil/noticia/2026/02/12/volume-de-servicos-prestados-no-brasil-cai-04percent-em-dezembro-mas-fecha-2025-com-alta-de-28percent.ghtml" target="_blank">Volume de serviços prestados no Brasil cai 0,4% em dezembro, mas fecha...</a>
-</div></div>
-</div>
-<h2>Últimas Notícias</h2>
-<table>
+<div class="table-wrapper">
+<table id="newsTable">
 <thead><tr>
-<th>Título</th><th>Resumo</th><th>Categoria</th><th>Link</th><th>Data/Hora</th>
+<th class="sortable" data-sort="titulo">Título</th>
+<th class="sortable" data-sort="resumo">Resumo</th>
+<th class="sortable" data-sort="categoria">Categoria</th>
+<th class="sortable" data-sort="fonte">Fonte</th>
+<th>Link</th>
+<th class="sortable" data-sort="datahora">Data/Hora</th>
 </tr></thead>
-<tbody>
-<tr>
-<td>Queda dos serviços em dezembro é ajuste após sequência de resultados positivos, diz FGV Ibre</td>
+<tbody id="tableBody">
+<tr data-titulo="queda dos serviços em dezembro é ajuste após sequência de resultados positivos, diz fgv ibre" data-resumo="para o economista stéfano pacini, 2025 foi um ano bastante positivo para o setor de serviços em comparação com outros segmentos, mostrando-se mais resiliente à política monetária" data-categoria="Atividade" data-fonte="valor econômico" data-datahora="12/02/2026 13:48">
+<td class="titulo-cell">Queda dos serviços em dezembro é ajuste após sequência de resultados positivos, diz FGV Ibre</td>
 <td class="resumo-cell">Para o economista Stéfano Pacini, 2025 foi um ano bastante positivo para o setor de serviços em comparação com outros segmentos, mostrando-se mais resiliente à política monetária</td>
 <td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
-<td><a href="https://valor.globo.com/brasil/noticia/2026/02/12/queda-dos-servicos-em-dezembro-e-ajuste-apos-sequencia-de-resultados-positivos-diz-fgv-ibre.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 13:48</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/brasil/noticia/2026/02/12/queda-dos-servicos-em-dezembro-e-ajuste-apos-sequencia-de-resultados-positivos-diz-fgv-ibre.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 13:48</td>
 </tr>
-<tr>
-<td>Dólar e Ibovespa caem em meio a dados fracos de serviços no Brasil; BB dispara após balanço</td>
+<tr data-titulo="dólar e ibovespa caem em meio a dados fracos de serviços no brasil; bb dispara após balanço" data-resumo="além dos investimentos estrangeiros, os agentes permanecem atentos aos balanços" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="12/02/2026 13:39">
+<td class="titulo-cell">Dólar e Ibovespa caem em meio a dados fracos de serviços no Brasil; BB dispara após balanço</td>
 <td class="resumo-cell">Além dos investimentos estrangeiros, os agentes permanecem atentos aos balanços</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/financas/ao-vivo/2023/06/16/dolar-avanca-e-ibovespa-recua-em-dia-de-correcao-siga-os-mercados.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 13:39</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/ao-vivo/2023/06/16/dolar-avanca-e-ibovespa-recua-em-dia-de-correcao-siga-os-mercados.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 13:39</td>
 </tr>
-<tr>
-<td>Ala no STF admite crise e diz que permanência de Toffoli no caso Master precisa de definição rápida</td>
+<tr data-titulo="ala no stf admite crise e diz que permanência de toffoli no caso master precisa de definição rápida" data-resumo="integrantes da corte defendem rapidez para evitar desgastes e o impulsionamento de discursos favoráveis a impeachment" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 13:34">
+<td class="titulo-cell">Ala no STF admite crise e diz que permanência de Toffoli no caso Master precisa de definição rápida</td>
 <td class="resumo-cell">Integrantes da Corte defendem rapidez para evitar desgastes e o impulsionamento de discursos favoráveis a impeachment</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/politica/noticia/2026/02/12/ala-no-stf-admite-crise-e-diz-que-permanncia-de-toffoli-no-caso-master-incgnita.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 13:34</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/12/ala-no-stf-admite-crise-e-diz-que-permanncia-de-toffoli-no-caso-master-incgnita.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 13:34</td>
 </tr>
-<tr>
-<td>Suspeição: o que é e como funciona o processo que pode tirar Toffoli do caso Master</td>
+<tr data-titulo="suspeição: o que é e como funciona o processo que pode tirar toffoli do caso master" data-resumo="ferramenta jurídica de suspeição é usada para questionar imparcialidade de um magistrado e pode ser aplicada contra relator do caso master" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 13:20">
+<td class="titulo-cell">Suspeição: o que é e como funciona o processo que pode tirar Toffoli do caso Master</td>
 <td class="resumo-cell">Ferramenta jurídica de suspeição é usada para questionar imparcialidade de um magistrado e pode ser aplicada contra relator do caso Master</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/politica/noticia/2026/02/12/entenda-como-funciona-processo-que-pode-tirar-toffoli-do-caso-master.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 13:20</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/12/entenda-como-funciona-processo-que-pode-tirar-toffoli-do-caso-master.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 13:20</td>
 </tr>
-<tr>
-<td>Uso seguro da inteligência artificial estará na pauta da visita de Lula à Índia</td>
+<tr data-titulo="uso seguro da inteligência artificial estará na pauta da visita de lula à índia" data-resumo="o presidente da república vai participar da cúpula de inteligência artificial, nos dias 19 e 20, e se reunirá com o primeiro-ministro indiano" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 13:07">
+<td class="titulo-cell">Uso seguro da inteligência artificial estará na pauta da visita de Lula à Índia</td>
 <td class="resumo-cell">O presidente da República vai participar da Cúpula de Inteligência Artificial, nos dias 19 e 20, e se reunirá com o primeiro-ministro indiano</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/brasil/noticia/2026/02/12/uso-seguro-da-inteligencia-artificial-estara-na-pauta-da-visita-de-lula-a-india.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 13:07</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/brasil/noticia/2026/02/12/uso-seguro-da-inteligencia-artificial-estara-na-pauta-da-visita-de-lula-a-india.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 13:07</td>
 </tr>
-<tr>
-<td>Problemas do Brasil vão muito além dos &#x27;desperdícios&#x27; de Lula, diz The Economist</td>
+<tr data-titulo="problemas do brasil vão muito além dos &amp;#x27;desperdícios&amp;#x27; de lula, diz the economist" data-resumo="para revista, parlamentares deveriam ter coragem para enfrentar privilégios tributários e aposentadorias elevadas" data-categoria="Eleições" data-fonte="valor econômico" data-datahora="12/02/2026 13:05">
+<td class="titulo-cell">Problemas do Brasil vão muito além dos &#x27;desperdícios&#x27; de Lula, diz The Economist</td>
 <td class="resumo-cell">Para revista, parlamentares deveriam ter coragem para enfrentar privilégios tributários e aposentadorias elevadas</td>
 <td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
-<td><a href="https://valor.globo.com/brasil/noticia/2026/02/12/problemas-do-brasil-vao-muito-alem-dos-desperdicios-de-lula-diz-the-economist.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 13:05</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/brasil/noticia/2026/02/12/problemas-do-brasil-vao-muito-alem-dos-desperdicios-de-lula-diz-the-economist.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 13:05</td>
 </tr>
-<tr>
-<td>TST: Acordo com quitação geral impede gestante de pedir indenização em nova ação</td>
+<tr data-titulo="tst: acordo com quitação geral impede gestante de pedir indenização em nova ação" data-resumo="relator aponto no voto que a trabalhadora já sabia da gravidez quando houve a homologação do acordo" data-categoria="Eleições" data-fonte="valor econômico" data-datahora="12/02/2026 13:00">
+<td class="titulo-cell">TST: Acordo com quitação geral impede gestante de pedir indenização em nova ação</td>
 <td class="resumo-cell">Relator aponto no voto que a trabalhadora já sabia da gravidez quando houve a homologação do acordo</td>
 <td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
-<td><a href="https://valor.globo.com/legislacao/noticia/2026/02/12/tst-acordo-com-quitacao-geral-impede-gestante-de-pedir-indenizacao-em-nova-acao.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 13:00</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/legislacao/noticia/2026/02/12/tst-acordo-com-quitacao-geral-impede-gestante-de-pedir-indenizacao-em-nova-acao.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 13:00</td>
 </tr>
-<tr>
-<td>Serviços de informação e comunicação mantêm força em 2025, mostra IBGE</td>
+<tr data-titulo="serviços de informação e comunicação mantêm força em 2025, mostra ibge" data-resumo="segmento se encontra no maior patamar da série histórica da pesquisa e está 35,2% acima de fevereiro de 2020" data-categoria="Atividade" data-fonte="valor econômico" data-datahora="12/02/2026 12:59">
+<td class="titulo-cell">Serviços de informação e comunicação mantêm força em 2025, mostra IBGE</td>
 <td class="resumo-cell">Segmento se encontra no maior patamar da série histórica da pesquisa e está 35,2% acima de fevereiro de 2020</td>
 <td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
-<td><a href="https://valor.globo.com/brasil/noticia/2026/02/12/servicos-de-informacao-e-comunicacao-mantem-forca-em-2025-mostra-ibge.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 12:59</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/brasil/noticia/2026/02/12/servicos-de-informacao-e-comunicacao-mantem-forca-em-2025-mostra-ibge.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 12:59</td>
 </tr>
-<tr>
-<td>Alíquota extraordinária do FGC deve aumentar despesa financeira do BB em R$ 500 milhões por ano</td>
+<tr data-titulo="alíquota extraordinária do fgc deve aumentar despesa financeira do bb em r$ 500 milhões por ano" data-resumo="vice-presidente financeiro do banco público diz que contribuição tem como base um percentual do volume de depósitos cobertos do banco" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 12:24">
+<td class="titulo-cell">Alíquota extraordinária do FGC deve aumentar despesa financeira do BB em R$ 500 milhões por ano</td>
 <td class="resumo-cell">Vice-presidente financeiro do banco público diz que contribuição tem como base um percentual do volume de depósitos cobertos do banco</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/12/aliquota-extraordinaria-do-fgc-deve-aumentar-despesa-financeira-do-bb-entre-r-450-milhoes-e-r-500-milhoes-por-ano.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 12:24</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/12/aliquota-extraordinaria-do-fgc-deve-aumentar-despesa-financeira-do-bb-entre-r-450-milhoes-e-r-500-milhoes-por-ano.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 12:24</td>
 </tr>
-<tr>
-<td>Banco reduz preço-alvo do bitcoin em 33% e alerta que criptomoeda pode cair a US$ 50 mil</td>
+<tr data-titulo="banco reduz preço-alvo do bitcoin em 33% e alerta que criptomoeda pode cair a us$ 50 mil" data-resumo="instituição financeira também previu que o ethereum recuará até os us$ 1.400" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="12/02/2026 11:50">
+<td class="titulo-cell">Banco reduz preço-alvo do bitcoin em 33% e alerta que criptomoeda pode cair a US$ 50 mil</td>
 <td class="resumo-cell">Instituição financeira também previu que o Ethereum recuará até os US$ 1.400</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/financas/criptomoedas/noticia/2026/02/12/banco-reduz-preco-alvo-do-bitcoin-em-33percent-e-alerta-que-criptomoeda-pode-cair-a-us-50-mil.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 11:50</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/criptomoedas/noticia/2026/02/12/banco-reduz-preco-alvo-do-bitcoin-em-33percent-e-alerta-que-criptomoeda-pode-cair-a-us-50-mil.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 11:50</td>
 </tr>
-<tr>
-<td>Bolsas de NY caem com aversão a risco; taxas de Treasuries vão às mínimas</td>
+<tr data-titulo="bolsas de ny caem com aversão a risco; taxas de treasuries vão às mínimas" data-resumo="investidores avaliam queda nos pedidos de seguro-desemprego, após criação de empregos forte da véspera, e esperam dados de inflação de amanhã, com discursos de autoridades do fed no radar" data-categoria="Inflação" data-fonte="valor econômico" data-datahora="12/02/2026 11:47">
+<td class="titulo-cell">Bolsas de NY caem com aversão a risco; taxas de Treasuries vão às mínimas</td>
 <td class="resumo-cell">Investidores avaliam queda nos pedidos de seguro-desemprego, após criação de empregos forte da véspera, e esperam dados de inflação de amanhã, com discursos de autoridades do Fed no radar</td>
 <td><span class="badge" style="background:#d35400;">Inflação</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/12/bolsas-de-ny-tem-leve-alta-com-cenario-corporativo-e-dados-no-radar.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 11:47</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/12/bolsas-de-ny-tem-leve-alta-com-cenario-corporativo-e-dados-no-radar.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 11:47</td>
 </tr>
-<tr>
-<td>Quem indicou o ministro Dias Toffoli ao STF?</td>
+<tr data-titulo="quem indicou o ministro dias toffoli ao stf?" data-resumo="ministro foi o mais jovem a ocupar o cargo de presidente da corte, aos 50 anos" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 11:31">
+<td class="titulo-cell">Quem indicou o ministro Dias Toffoli ao STF?</td>
 <td class="resumo-cell">Ministro foi o mais jovem a ocupar o cargo de presidente da Corte, aos 50 anos</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/politica/noticia/2026/02/12/quem-indicou-o-ministro-dias-toffoli-ao-stf.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 11:31</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/12/quem-indicou-o-ministro-dias-toffoli-ao-stf.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 11:31</td>
 </tr>
-<tr>
-<td>Com proposta de IOF, governo fecha o cerco à dolarização via cripto</td>
+<tr data-titulo="com proposta de iof, governo fecha o cerco à dolarização via cripto" data-resumo="minuta da receita federal propõe cobrança de 3,5% na compra de criptos atreladas ao dólar e em remessas ao exterior; medida será submetida a consulta pública" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="12/02/2026 11:17">
+<td class="titulo-cell">Com proposta de IOF, governo fecha o cerco à dolarização via cripto</td>
 <td class="resumo-cell">Minuta da Receita Federal propõe cobrança de 3,5% na compra de criptos atreladas ao dólar e em remessas ao exterior; medida será submetida a consulta pública</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/financas/criptomoedas/noticia/2026/02/12/com-proposta-de-iof-governo-fecha-o-cerco-a-dolarizacao-via-cripto.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 11:17</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/criptomoedas/noticia/2026/02/12/com-proposta-de-iof-governo-fecha-o-cerco-a-dolarizacao-via-cripto.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 11:17</td>
 </tr>
-<tr>
-<td>Dólar testa patamar de R$ 5,15 e real é destaque com fluxo</td>
+<tr data-titulo="dólar testa patamar de r$ 5,15 e real é destaque com fluxo" data-resumo="operadores dizem não ver motivos para esse movimento, a não ser a reprecificação global do dólar nos mercados de câmbio e também o rearranjo de fluxos" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="12/02/2026 10:04">
+<td class="titulo-cell">Dólar testa patamar de R$ 5,15 e real é destaque com fluxo</td>
 <td class="resumo-cell">Operadores dizem não ver motivos para esse movimento, a não ser a reprecificação global do dólar nos mercados de câmbio e também o rearranjo de fluxos</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/12/dolar-a-vista-recua-e-vai-para-r-517-em-movimento-alinhado-com-exterior.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 10:04</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/12/dolar-a-vista-recua-e-vai-para-r-517-em-movimento-alinhado-com-exterior.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 10:04</td>
 </tr>
-<tr>
-<td>Juros futuros rondam a estabilidade com viés de queda em dia de leilão de prefixados</td>
+<tr data-titulo="juros futuros rondam a estabilidade com viés de queda em dia de leilão de prefixados" data-resumo="agentes financeiros avaliam os dados de volume de serviços no brasil, que vieram um pouco mais fracos que o esperado" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="12/02/2026 09:59">
+<td class="titulo-cell">Juros futuros rondam a estabilidade com viés de queda em dia de leilão de prefixados</td>
 <td class="resumo-cell">Agentes financeiros avaliam os dados de volume de serviços no Brasil, que vieram um pouco mais fracos que o esperado</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/12/juros-futuros-rondam-a-estabilidade-com-vies-de-queda-em-dia-de-leilao-de-prefixados.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 09:59</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/12/juros-futuros-rondam-a-estabilidade-com-vies-de-queda-em-dia-de-leilao-de-prefixados.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 09:59</td>
 </tr>
-<tr>
-<td>Toffoli admite ser sócio da Maridt, empresa que fez negócios com cunhado de Vorcaro; leia a nota</td>
+<tr data-titulo="toffoli admite ser sócio da maridt, empresa que fez negócios com cunhado de vorcaro; leia a nota" data-resumo="ministro nega, no entanto, amizade com banqueiro e que tenha recebido diretamente dinheiro dele e de fabiano zettel" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 09:33">
+<td class="titulo-cell">Toffoli admite ser sócio da Maridt, empresa que fez negócios com cunhado de Vorcaro; leia a nota</td>
 <td class="resumo-cell">Ministro nega, no entanto, amizade com banqueiro e que tenha recebido diretamente dinheiro dele e de Fabiano Zettel</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/politica/noticia/2026/02/12/toffoli-confirma-que-e-socio-da-maridt-empresa-que-vendeu-resort-a-fundo-de-vorcaro.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 09:33</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/12/toffoli-confirma-que-e-socio-da-maridt-empresa-que-vendeu-resort-a-fundo-de-vorcaro.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 09:33</td>
 </tr>
-<tr>
-<td>Volume de serviços prestados no Brasil cai 0,4% em dezembro, mas fecha 2025 com alta de 2,8%</td>
+<tr data-titulo="volume de serviços prestados no brasil cai 0,4% em dezembro, mas fecha 2025 com alta de 2,8%" data-resumo="segundo o ibge, o resultado representou o o quinto ano seguido de alta nos serviços no país, após a queda de 7,8% em 2020" data-categoria="Atividade" data-fonte="valor econômico" data-datahora="12/02/2026 09:16">
+<td class="titulo-cell">Volume de serviços prestados no Brasil cai 0,4% em dezembro, mas fecha 2025 com alta de 2,8%</td>
 <td class="resumo-cell">Segundo o IBGE, o resultado representou o o quinto ano seguido de alta nos serviços no país, após a queda de 7,8% em 2020</td>
 <td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
-<td><a href="https://valor.globo.com/brasil/noticia/2026/02/12/volume-de-servicos-prestados-no-brasil-cai-04percent-em-dezembro-mas-fecha-2025-com-alta-de-28percent.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 09:16</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/brasil/noticia/2026/02/12/volume-de-servicos-prestados-no-brasil-cai-04percent-em-dezembro-mas-fecha-2025-com-alta-de-28percent.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 09:16</td>
 </tr>
-<tr>
-<td>PGR pede acesso a relatório da PF com menção a Toffoli em celular de Vorcaro</td>
+<tr data-titulo="pgr pede acesso a relatório da pf com menção a toffoli em celular de vorcaro" data-resumo="documento com cerca de 200 páginas menciona telefonemas, convite para festa e pagamentos relacionados ao resort tayayá; ministro teria admitido ser sócio de empresa" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 09:15">
+<td class="titulo-cell">PGR pede acesso a relatório da PF com menção a Toffoli em celular de Vorcaro</td>
 <td class="resumo-cell">Documento com cerca de 200 páginas menciona telefonemas, convite para festa e pagamentos relacionados ao resort Tayayá; ministro teria admitido ser sócio de empresa</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/politica/noticia/2026/02/12/pgr-solicita-relatrio-da-pf-com-meno-a-toffoli-em-celular-de-vorcaro.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 09:15</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/12/pgr-solicita-relatrio-da-pf-com-meno-a-toffoli-em-celular-de-vorcaro.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 09:15</td>
 </tr>
-<tr>
-<td>Manhã no mercado: ‘Payroll’ reprecifica juros nos EUA e investidores acompanham serviços no Brasil</td>
+<tr data-titulo="manhã no mercado: ‘payroll’ reprecifica juros nos eua e investidores acompanham serviços no brasil" data-resumo="investidores seguem atentos a dados econômicos americanos" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="12/02/2026 08:27">
+<td class="titulo-cell">Manhã no mercado: ‘Payroll’ reprecifica juros nos EUA e investidores acompanham serviços no Brasil</td>
 <td class="resumo-cell">Investidores seguem atentos a dados econômicos americanos</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/12/manha-no-mercado-payroll-reprecifica-juros-nos-eua-e-investidores-acompanham-servicos-no-brasil.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 08:27</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/12/manha-no-mercado-payroll-reprecifica-juros-nos-eua-e-investidores-acompanham-servicos-no-brasil.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 08:27</td>
 </tr>
-<tr>
-<td>BC avança no enquadramento prudencial de criptoativos</td>
+<tr data-titulo="bc avança no enquadramento prudencial de criptoativos" data-resumo="a consulta pública 126/2025 buscou reunir contribuições para a proposta de resoluções para o tratamento de exposições a ativos virtuais e tokens por instituições financeiras e demais autorizadas pelo banco central" data-categoria="Banco Central" data-fonte="valor econômico" data-datahora="12/02/2026 05:03">
+<td class="titulo-cell">BC avança no enquadramento prudencial de criptoativos</td>
 <td class="resumo-cell">A Consulta Pública 126/2025 buscou reunir contribuições para a proposta de resoluções para o tratamento de exposições a ativos virtuais e tokens por instituições financeiras e demais autorizadas pelo Banco Central</td>
 <td><span class="badge" style="background:#16a085;">Banco Central</span></td>
-<td><a href="https://valor.globo.com/legislacao/coluna/bc-avanca-no-enquadramento-prudencial-de-criptoativos.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:03</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/legislacao/coluna/bc-avanca-no-enquadramento-prudencial-de-criptoativos.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:03</td>
 </tr>
-<tr>
-<td>Migração de investidor para modelo de taxa fixa deve ser feita com cautela</td>
+<tr data-titulo="migração de investidor para modelo de taxa fixa deve ser feita com cautela" data-resumo="modelo de remuneração em que cliente paga pelos serviços de distribuição não significa fim de conflitos potenciais com assessores e plataformas" data-categoria="Atividade" data-fonte="valor econômico" data-datahora="12/02/2026 05:02">
+<td class="titulo-cell">Migração de investidor para modelo de taxa fixa deve ser feita com cautela</td>
 <td class="resumo-cell">Modelo de remuneração em que cliente paga pelos serviços de distribuição não significa fim de conflitos potenciais com assessores e plataformas</td>
 <td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/12/migracao-de-investidor-para-modelo-de-taxa-fixa-deve-ser-feita-com-cautela.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:02</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/12/migracao-de-investidor-para-modelo-de-taxa-fixa-deve-ser-feita-com-cautela.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:02</td>
 </tr>
-<tr>
-<td>Ibovespa fecha perto de 190 mil pontos com avalanche estrangeira</td>
+<tr data-titulo="ibovespa fecha perto de 190 mil pontos com avalanche estrangeira" data-resumo="índice subiu 2% com busca por ativos reais e maior apetite por ações líquidas, como vale e petrobras, que romperam suas máximas ajustadas" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="12/02/2026 05:02">
+<td class="titulo-cell">Ibovespa fecha perto de 190 mil pontos com avalanche estrangeira</td>
 <td class="resumo-cell">Índice subiu 2% com busca por ativos reais e maior apetite por ações líquidas, como Vale e Petrobras, que romperam suas máximas ajustadas</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/12/ibovespa-fecha-perto-de-190-mil-pontos-com-avalanche-estrangeira.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:02</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/12/ibovespa-fecha-perto-de-190-mil-pontos-com-avalanche-estrangeira.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:02</td>
 </tr>
-<tr>
-<td>Dólar renova menor nível em quase 21 meses</td>
+<tr data-titulo="dólar renova menor nível em quase 21 meses" data-resumo="moeda americana recua mesmo depois de dados fortes de emprego em janeiro nos eua" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="12/02/2026 05:02">
+<td class="titulo-cell">Dólar renova menor nível em quase 21 meses</td>
 <td class="resumo-cell">Moeda americana recua mesmo depois de dados fortes de emprego em janeiro nos EUA</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/12/dolar-renova-menor-nivel-em-quase-21-meses.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:02</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/12/dolar-renova-menor-nivel-em-quase-21-meses.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:02</td>
 </tr>
-<tr>
-<td>Justiça Federal de São Paulo livra varejista do adicional de 10% sobre o lucro presumido</td>
+<tr data-titulo="justiça federal de são paulo livra varejista do adicional de 10% sobre o lucro presumido" data-resumo="liminar livra lojas do percentual que incidiria sobre as alíquotas do irpj e da csll" data-categoria="Fiscal" data-fonte="valor econômico" data-datahora="12/02/2026 05:02">
+<td class="titulo-cell">Justiça Federal de São Paulo livra varejista do adicional de 10% sobre o lucro presumido</td>
 <td class="resumo-cell">Liminar livra lojas do percentual que incidiria sobre as alíquotas do IRPJ e da CSLL</td>
 <td><span class="badge" style="background:#c0392b;">Fiscal</span></td>
-<td><a href="https://valor.globo.com/legislacao/noticia/2026/02/12/justica-federal-de-sao-paulo-livra-varejista-do-adicional-de-10-sobre-o-lucro-presumido.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:02</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/legislacao/noticia/2026/02/12/justica-federal-de-sao-paulo-livra-varejista-do-adicional-de-10-sobre-o-lucro-presumido.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:02</td>
 </tr>
-<tr>
-<td>Ações do Congresso e do Judiciário comprometem equilíbrio fiscal</td>
+<tr data-titulo="ações do congresso e do judiciário comprometem equilíbrio fiscal" data-resumo="atuação muitas vezes vai na direção contrária à do executivo, com medidas que elevam gastos públicos ou dificultam controle da expansão de despesas" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 05:01">
+<td class="titulo-cell">Ações do Congresso e do Judiciário comprometem equilíbrio fiscal</td>
 <td class="resumo-cell">Atuação muitas vezes vai na direção contrária à do Executivo, com medidas que elevam gastos públicos ou dificultam controle da expansão de despesas</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/brasil/noticia/2026/02/12/acoes-do-congresso-e-do-judiciario-comprometem-equilibrio-fiscal.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:01</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/brasil/noticia/2026/02/12/acoes-do-congresso-e-do-judiciario-comprometem-equilibrio-fiscal.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:01</td>
 </tr>
-<tr>
-<td>TJ-SP recorre da decisão de Dino contra ‘penduricalhos’</td>
+<tr data-titulo="tj-sp recorre da decisão de dino contra ‘penduricalhos’" data-resumo="tribunal pede suspensão da medida ou ‘prazo razoável’ para o congresso aprovar lei, caso seja mantida" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 05:01">
+<td class="titulo-cell">TJ-SP recorre da decisão de Dino contra ‘penduricalhos’</td>
 <td class="resumo-cell">Tribunal pede suspensão da medida ou ‘prazo razoável’ para o Congresso aprovar lei, caso seja mantida</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/brasil/noticia/2026/02/12/tj-sp-recorre-da-decisao-de-dino-contra-penduricalhos.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:01</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/brasil/noticia/2026/02/12/tj-sp-recorre-da-decisao-de-dino-contra-penduricalhos.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:01</td>
 </tr>
-<tr>
-<td>Inflação ‘emagrece’ e beira meta no 1º semestre</td>
+<tr data-titulo="inflação ‘emagrece’ e beira meta no 1º semestre" data-resumo="‘efeito bônus de itaipu’ responde por parte da queda, mas aceleração deve voltar na 2ª metade do ano" data-categoria="Inflação" data-fonte="valor econômico" data-datahora="12/02/2026 05:01">
+<td class="titulo-cell">Inflação ‘emagrece’ e beira meta no 1º semestre</td>
 <td class="resumo-cell">‘Efeito bônus de Itaipu’ responde por parte da queda, mas aceleração deve voltar na 2ª metade do ano</td>
 <td><span class="badge" style="background:#d35400;">Inflação</span></td>
-<td><a href="https://valor.globo.com/brasil/noticia/2026/02/12/inflacao-emagrece-e-beira-meta-no-1o-semestre.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:01</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/brasil/noticia/2026/02/12/inflacao-emagrece-e-beira-meta-no-1o-semestre.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:01</td>
 </tr>
-<tr>
-<td>Alimentos puxam 2ª maior deflação da indústria</td>
+<tr data-titulo="alimentos puxam 2ª maior deflação da indústria" data-resumo="índice de preços ao produtor teve recuo de 4,53% no ano passado, segundo ibge" data-categoria="Inflação" data-fonte="valor econômico" data-datahora="12/02/2026 05:01">
+<td class="titulo-cell">Alimentos puxam 2ª maior deflação da indústria</td>
 <td class="resumo-cell">Índice de Preços ao Produtor teve recuo de 4,53% no ano passado, segundo IBGE</td>
 <td><span class="badge" style="background:#d35400;">Inflação</span></td>
-<td><a href="https://valor.globo.com/brasil/noticia/2026/02/12/alimentos-puxam-2a-maior-deflacao-da-industria.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:01</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/brasil/noticia/2026/02/12/alimentos-puxam-2a-maior-deflacao-da-industria.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:01</td>
 </tr>
-<tr>
-<td>Ibovespa sobe 17,7% no ano com capital externo</td>
+<tr data-titulo="ibovespa sobe 17,7% no ano com capital externo" data-resumo="início do processo de afrouxamento monetário no brasil está entre os chamarizes que poderão atrair ainda mais fluxo de capital para o país" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="12/02/2026 05:00">
+<td class="titulo-cell">Ibovespa sobe 17,7% no ano com capital externo</td>
 <td class="resumo-cell">Início do processo de afrouxamento monetário no Brasil está entre os chamarizes que poderão atrair ainda mais fluxo de capital para o país</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/impresso/noticia/2026/02/12/ibovespa-sobe-177-no-ano-com-capital-externo.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:00</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/impresso/noticia/2026/02/12/ibovespa-sobe-177-no-ano-com-capital-externo.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:00</td>
 </tr>
-<tr>
-<td>PF encontra citações a Toffoli em celular de Vorcaro</td>
+<tr data-titulo="pf encontra citações a toffoli em celular de vorcaro" data-resumo="atuação do magistrado já vinha causando desconforto em diversas autoridades que atuam direta ou indiretamente no caso" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 05:00">
+<td class="titulo-cell">PF encontra citações a Toffoli em celular de Vorcaro</td>
 <td class="resumo-cell">Atuação do magistrado já vinha causando desconforto em diversas autoridades que atuam direta ou indiretamente no caso</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/impresso/noticia/2026/02/12/pf-encontra-citacoes-a-toffoli-em-celular-de-vorcaro.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:00</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/impresso/noticia/2026/02/12/pf-encontra-citacoes-a-toffoli-em-celular-de-vorcaro.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:00</td>
 </tr>
-<tr>
-<td>Ministro do TCU veda acesso do BC a processo sobre o Master</td>
+<tr data-titulo="ministro do tcu veda acesso do bc a processo sobre o master" data-resumo="acesso foi retirado às vésperas de auditores da corte apresentarem o relatório final da inspeção realizada no supervisor bancário" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="12/02/2026 05:00">
+<td class="titulo-cell">Ministro do TCU veda acesso do BC a processo sobre o Master</td>
 <td class="resumo-cell">Acesso foi retirado às vésperas de auditores da Corte apresentarem o relatório final da inspeção realizada no supervisor bancário</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/impresso/noticia/2026/02/12/ministro-do-tcu-veda-acesso-do-bc-a-processo-sobre-o-master.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:00</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/impresso/noticia/2026/02/12/ministro-do-tcu-veda-acesso-do-bc-a-processo-sobre-o-master.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:00</td>
 </tr>
-<tr>
-<td>Na Quaest, Lula lidera, mas Flávio se aproxima</td>
+<tr data-titulo="na quaest, lula lidera, mas flávio se aproxima" data-resumo="petista lidera em todos os cenários de primeiro turno; no segundo, venceria por 43% a 38%, com senador consolidado em 2º" data-categoria="Eleições" data-fonte="valor econômico" data-datahora="12/02/2026 05:00">
+<td class="titulo-cell">Na Quaest, Lula lidera, mas Flávio se aproxima</td>
 <td class="resumo-cell">Petista lidera em todos os cenários de primeiro turno; no segundo, venceria por 43% a 38%, com senador consolidado em 2º</td>
 <td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
-<td><a href="https://valor.globo.com/impresso/noticia/2026/02/12/na-quaest-lula-lidera-mas-flavio-se-aproxima.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:00</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/impresso/noticia/2026/02/12/na-quaest-lula-lidera-mas-flavio-se-aproxima.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:00</td>
 </tr>
-<tr>
-<td>Crédito rural recua 13% em cenário de endividamento crescente dos produtores</td>
+<tr data-titulo="crédito rural recua 13% em cenário de endividamento crescente dos produtores" data-resumo="nos sete primeiros meses do plano safra 2025/26, desembolsos somaram r$ 207,3 bi, r$ 30 bi a menos que no mesmo período do ciclo anterior" data-categoria="Fiscal" data-fonte="valor econômico" data-datahora="12/02/2026 05:00">
+<td class="titulo-cell">Crédito rural recua 13% em cenário de endividamento crescente dos produtores</td>
 <td class="resumo-cell">Nos sete primeiros meses do Plano Safra 2025/26, desembolsos somaram R$ 207,3 bi, R$ 30 bi a menos que no mesmo período do ciclo anterior</td>
 <td><span class="badge" style="background:#c0392b;">Fiscal</span></td>
-<td><a href="https://valor.globo.com/impresso/noticia/2026/02/12/credito-rural-recua-13-em-cenario-de-endividamento-crescente-dos-produtores.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">12/02/2026 05:00</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/impresso/noticia/2026/02/12/credito-rural-recua-13-em-cenario-de-endividamento-crescente-dos-produtores.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">12/02/2026 05:00</td>
 </tr>
-<tr>
-<td>Em encontro com PSB, Lula evita se comprometer com manutenção de Alckmin como vice</td>
+<tr data-titulo="em encontro com psb, lula evita se comprometer com manutenção de alckmin como vice" data-resumo="lideranças do partido foram surpreendidas com aproximação do presidente com o mdb" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="11/02/2026 20:11">
+<td class="titulo-cell">Em encontro com PSB, Lula evita se comprometer com manutenção de Alckmin como vice</td>
 <td class="resumo-cell">Lideranças do partido foram surpreendidas com aproximação do presidente com o MDB</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/politica/noticia/2026/02/11/em-encontro-com-psb-lula-evita-se-comprometer-com-manutencao-de-alckmin-como-vice.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">11/02/2026 20:11</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/11/em-encontro-com-psb-lula-evita-se-comprometer-com-manutencao-de-alckmin-como-vice.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">11/02/2026 20:11</td>
 </tr>
-<tr>
-<td>Entidades do setor financeiro criticam TCU por restringir acesso do BC ao processo do Master</td>
+<tr data-titulo="entidades do setor financeiro criticam tcu por restringir acesso do bc ao processo do master" data-resumo="segundo as entidades, a restrição imposta ao banco central carece de “justificativa técnica clara e transparente”, especialmente por envolver o exercício do contraditório e da ampla defesa" data-categoria="Banco Central" data-fonte="valor econômico" data-datahora="11/02/2026 19:40">
+<td class="titulo-cell">Entidades do setor financeiro criticam TCU por restringir acesso do BC ao processo do Master</td>
 <td class="resumo-cell">Segundo as entidades, a restrição imposta ao Banco Central carece de “justificativa técnica clara e transparente”, especialmente por envolver o exercício do contraditório e da ampla defesa</td>
 <td><span class="badge" style="background:#16a085;">Banco Central</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/11/entidades-do-setor-financeiro-criticam-tcu-por-restringir-acesso-do-bc-ao-processo-do-master.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">11/02/2026 19:40</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/11/entidades-do-setor-financeiro-criticam-tcu-por-restringir-acesso-do-bc-ao-processo-do-master.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">11/02/2026 19:40</td>
 </tr>
-<tr>
-<td>Comissão do Senado quer detalhar atuação da CVM no caso do Master</td>
+<tr data-titulo="comissão do senado quer detalhar atuação da cvm no caso do master" data-resumo="após reunião com o diretor-geral da polícia federal, andrei rodrigues, o senador renan calheiros (mdb-al), que lidera o grupo, disse que as informações sobre a investigação serão compartilhadas" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="11/02/2026 18:55">
+<td class="titulo-cell">Comissão do Senado quer detalhar atuação da CVM no caso do Master</td>
 <td class="resumo-cell">Após reunião com o diretor-geral da Polícia Federal, Andrei Rodrigues, o senador Renan Calheiros (MDB-AL), que lidera o grupo, disse que as informações sobre a investigação serão compartilhadas</td>
 <td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/11/comisso-do-senado-quer-detalhar-atuao-da-cvm-no-caso-do-master.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">11/02/2026 18:55</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/11/comisso-do-senado-quer-detalhar-atuao-da-cvm-no-caso-do-master.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">11/02/2026 18:55</td>
 </tr>
-<tr>
-<td>Ministra do TSE indicada por Lula vai relatar ação contra desfile na Sapucaí em homenagem ao presidente</td>
+<tr data-titulo="ministra do tse indicada por lula vai relatar ação contra desfile na sapucaí em homenagem ao presidente" data-resumo="estela aranha foi sorteada para analisar representação feita pelo partido novo" data-categoria="Eleições" data-fonte="valor econômico" data-datahora="11/02/2026 18:49">
+<td class="titulo-cell">Ministra do TSE indicada por Lula vai relatar ação contra desfile na Sapucaí em homenagem ao presidente</td>
 <td class="resumo-cell">Estela Aranha foi sorteada para analisar representação feita pelo partido Novo</td>
 <td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
-<td><a href="https://valor.globo.com/politica/noticia/2026/02/11/ministra-do-tse-indicada-por-lula-vai-relatar-acao-contra-desfile-na-sapucai-em-homenagem-ao-presidente.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">11/02/2026 18:49</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/11/ministra-do-tse-indicada-por-lula-vai-relatar-acao-contra-desfile-na-sapucai-em-homenagem-ao-presidente.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">11/02/2026 18:49</td>
 </tr>
-<tr>
-<td>Ibovespa encosta nos 190 mil pontos com fluxo externo; Vale sobe 3,5% na véspera do balanço</td>
+<tr data-titulo="ibovespa encosta nos 190 mil pontos com fluxo externo; vale sobe 3,5% na véspera do balanço" data-resumo="balanços acima das expectativas do mercado também garantiram um impulso extra ao índice. com destaque para os números de suzano e tim" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="11/02/2026 18:34">
+<td class="titulo-cell">Ibovespa encosta nos 190 mil pontos com fluxo externo; Vale sobe 3,5% na véspera do balanço</td>
 <td class="resumo-cell">Balanços acima das expectativas do mercado também garantiram um impulso extra ao índice. com destaque para os números de Suzano e TIM</td>
 <td><span class="badge" style="background:#27ae60;">Mercado</span></td>
-<td><a href="https://valor.globo.com/financas/noticia/2026/02/11/ibovespa-encosta-nos-190-mil-pontos-com-fluxo-externo-vale-sobe-35percent-na-vespera-do-balanco.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">11/02/2026 18:34</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/11/ibovespa-encosta-nos-190-mil-pontos-com-fluxo-externo-vale-sobe-35percent-na-vespera-do-balanco.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">11/02/2026 18:34</td>
 </tr>
-<tr>
-<td>Flávio vê avanço nas pesquisas eleitorais e conta com resultado para atrair apoio de partidos</td>
+<tr data-titulo="flávio vê avanço nas pesquisas eleitorais e conta com resultado para atrair apoio de partidos" data-resumo="pré-candidato minimiza diálogo de siglas de direita e centro com lula" data-categoria="Eleições" data-fonte="valor econômico" data-datahora="11/02/2026 18:34">
+<td class="titulo-cell">Flávio vê avanço nas pesquisas eleitorais e conta com resultado para atrair apoio de partidos</td>
 <td class="resumo-cell">Pré-candidato minimiza diálogo de siglas de direita e centro com Lula</td>
 <td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
-<td><a href="https://valor.globo.com/politica/noticia/2026/02/11/flvio-v-avano-nas-pesquisas-eleitorais-e-conta-com-resultado-para-atrair-apoio-de-partidos.ghtml" target="_blank">Abrir</a></td>
-<td class="dh">11/02/2026 18:34</td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/11/flvio-v-avano-nas-pesquisas-eleitorais-e-conta-com-resultado-para-atrair-apoio-de-partidos.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">11/02/2026 18:34</td>
 </tr>
 </tbody></table>
+</div>
+<script>
+
+    let allRows = Array.from(document.querySelectorAll('#tableBody tr'));
+    let currentSort = { col: 'datahora', dir: 'desc' };
+    let currentPage = 1;
+    const rowsPerPage = 25;
+
+    function updateTable() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const categoria = document.getElementById('filterCategoria').value.toLowerCase();
+        const tbody = document.getElementById('tableBody');
+        const countSpan = document.getElementById('resultCount');
+        
+        let filtered = allRows.filter(row => {
+            const titulo = row.dataset.titulo || '';
+            const resumo = row.dataset.resumo || '';
+            const cat = row.dataset.categoria || '';
+            const matchSearch = !search || titulo.includes(search) || resumo.includes(search);
+            const matchCat = !categoria || cat.toLowerCase() === categoria;
+            return matchSearch && matchCat;
+        });
+        
+        // Ordenação
+        filtered.sort((a, b) => {
+            const aVal = a.dataset[currentSort.col] || '';
+            const bVal = b.dataset[currentSort.col] || '';
+            if (currentSort.col === 'datahora') {
+                // Parse data/hora para ordenação
+                const aDate = parseDateTime(aVal);
+                const bDate = parseDateTime(bVal);
+                return currentSort.dir === 'asc' ? aDate - bDate : bDate - aDate;
+            }
+            const cmp = aVal.localeCompare(bVal);
+            return currentSort.dir === 'asc' ? cmp : -cmp;
+        });
+        
+        // Paginação
+        const totalPages = Math.ceil(filtered.length / rowsPerPage);
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const pageRows = filtered.slice(start, end);
+        
+        tbody.innerHTML = '';
+        pageRows.forEach(row => tbody.appendChild(row.cloneNode(true)));
+        
+        countSpan.textContent = `Mostrando ${start + 1}-${Math.min(end, filtered.length)} de ${filtered.length} notícias`;
+        
+        updatePagination(totalPages);
+        updateSortIndicators();
+    }
+    
+    function parseDateTime(str) {
+        // "12/02/2026 13:48" -> timestamp
+        const parts = str.trim().split(' ');
+        if (parts.length !== 2) return 0;
+        const [data, hora] = parts;
+        const [d, m, y] = data.split('/');
+        const [h, min] = hora.split(':');
+        return new Date(y, m-1, d, h, min).getTime();
+    }
+    
+    function updateSortIndicators() {
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.classList.remove('sort-asc', 'sort-desc');
+            if (th.dataset.sort === currentSort.col) {
+                th.classList.add(currentSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
+            }
+        });
+    }
+    
+    function updatePagination(totalPages) {
+        const pagDiv = document.querySelector('.pagination');
+        if (!pagDiv) {
+            const wrapper = document.querySelector('.table-wrapper');
+            const pag = document.createElement('div');
+            pag.className = 'pagination';
+            wrapper.appendChild(pag);
+        }
+        const pag = document.querySelector('.pagination');
+        pag.innerHTML = '';
+        
+        if (totalPages <= 1) return;
+        
+        const prev = document.createElement('button');
+        prev.textContent = '« Anterior';
+        prev.disabled = currentPage === 1;
+        prev.onclick = () => { currentPage--; updateTable(); };
+        pag.appendChild(prev);
+        
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = i === currentPage ? 'active' : '';
+                btn.onclick = () => { currentPage = i; updateTable(); };
+                pag.appendChild(btn);
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                const span = document.createElement('span');
+                span.textContent = '...';
+                span.style.padding = '8px';
+                pag.appendChild(span);
+            }
+        }
+        
+        const next = document.createElement('button');
+        next.textContent = 'Próxima »';
+        next.disabled = currentPage === totalPages;
+        next.onclick = () => { currentPage++; updateTable(); };
+        pag.appendChild(next);
+    }
+    
+    // Event listeners
+    document.getElementById('searchInput').addEventListener('input', () => {
+        currentPage = 1;
+        updateTable();
+    });
+    
+    document.getElementById('filterCategoria').addEventListener('change', () => {
+        currentPage = 1;
+        updateTable();
+    });
+    
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const col = th.dataset.sort;
+            if (currentSort.col === col) {
+                currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.col = col;
+                currentSort.dir = 'asc';
+            }
+            currentPage = 1;
+            updateTable();
+        });
+    });
+    
+    // Inicializar
+    updateTable();
+    
+</script>
 </div></body></html>
