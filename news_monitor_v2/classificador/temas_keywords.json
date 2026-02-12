@@ -1,0 +1,55 @@
+{
+  "Governo/Congresso": {
+    "keywords": [
+      "planalto", "câmara", "senado", "congresso", "arthur lira", "rodrigo pacheco",
+      "ministério", "ministro", "reforma administrativa", "MP", "PEC", "PL", "votação",
+      "plenário", "presidente", "deputado", "senador", "governo federal", "palácio"
+    ],
+    "ativo": true
+  },
+  "Fiscal": {
+    "keywords": [
+      "teto de gastos", "arcabouço fiscal", "superávit", "déficit", "tesouro nacional",
+      "dívida pública", "meta fiscal", "contingenciamento", "LOA", "LDO", "PPA",
+      "ajuste fiscal", "orçamento", "despesa pública", "receita tributária"
+    ],
+    "ativo": true
+  },
+  "Eleições": {
+    "keywords": [
+      "eleições", "eleitoral", "candidato", "campanha", "TSE", "pesquisa eleitoral",
+      "datafolha", "debate", "coligação", "prefeito", "governador", "2026", "voto"
+    ],
+    "ativo": true
+  },
+  "Inflação": {
+    "keywords": [
+      "IPCA", "IGP-M", "INPC", "deflação", "inflação", "focus", "metas de inflação",
+      "índices de preços", "pressão inflacionária", "desinflação", "núcleo da inflação",
+      "preços", "inflacionário"
+    ],
+    "ativo": true
+  },
+  "Banco Central": {
+    "keywords": [
+      "copom", "selic", "taxa de juros", "política monetária", "roberto campos neto",
+      "gabriel galípolo", "BC", "bacen", "diretorias do BC", "autonomia do BC",
+      "reservas internacionais", "comitê de política monetária"
+    ],
+    "ativo": true
+  },
+  "Mercado": {
+    "keywords": [
+      "ibovespa", "B3", "dólar", "câmbio", "bolsa de valores", "ações", "juros futuros",
+      "DI", "renda fixa", "renda variável", "volatilidade", "mercado financeiro",
+      "investidores", "pregão", "fechamento"
+    ],
+    "ativo": true
+  },
+  "Editorial": {
+    "keywords": [
+      "editorial", "opinião", "análise", "coluna", "artigo de opinião", "comentário"
+    ],
+    "ativo": true
+  }
+}
