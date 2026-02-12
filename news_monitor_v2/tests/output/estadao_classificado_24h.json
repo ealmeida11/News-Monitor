@@ -1,0 +1,527 @@
+{
+  "data_coleta": "2026-02-12T14:48:47.465416",
+  "periodo_horas": 24,
+  "total_coletado": 41,
+  "por_tema": {
+    "Governo/Congresso": [
+      {
+        "titulo": "CPI do Crime Organizado quer votar convite para Toffoli prestar depoimento",
+        "resumo": null,
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "14:03",
+        "link": "https://www.estadao.com.br/politica/coluna-do-estadao/cpi-do-crime-organizado-quer-votar-convite-para-toffoli-prestar-depoimento/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Parlamentares do Novo pedem impeachment de Toffoli e suspeição do ministro na relatoria do Master",
+        "resumo": null,
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "13:50",
+        "link": "https://www.estadao.com.br/politica/parlamentares-do-novo-pedem-impeachment-de-toffoli-e-suspeicao-do-ministro-na-relatoria-do-master/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
+      {
+        "titulo": "Cão Orelha faz crescer defesa para reduzir maioridade penal na Câmara e pode mudar PEC da Segurança",
+        "resumo": null,
+        "categoria": "Brasil",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "13:48",
+        "link": "https://www.estadao.com.br/brasil/cao-orelha-faz-crescer-defesa-para-reduzir-maioridade-penal-na-camara-e-pode-mudar-pec-da-seguranca/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
+      {
+        "titulo": "Conselho do Corinthians ironiza MP-SP e mantém suspensão de processos internos a ex-presidentes",
+        "resumo": null,
+        "categoria": "Esportes",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "13:46",
+        "link": "https://www.estadao.com.br/esportes/futebol/conselho-do-corinthians-ironiza-mp-sp-e-mantem-suspensao-de-processos-internos-a-ex-presidentes/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "O que se sabe e o que falta Toffoli responder sobre ligação com Master e Vorcaro",
+        "resumo": null,
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "13:24",
+        "link": "https://www.estadao.com.br/politica/o-que-se-sabe-e-o-que-falta-toffoli-responder-sobre-ligacao-com-master-e-vorcaro-npr/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Nikolas Ferreira não recebe auxílio-moradia nem ‘auxílio-paletó’",
+        "resumo": null,
+        "categoria": "Fato ou Fake",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "13:17",
+        "link": "https://www.estadao.com.br/estadao-verifica/nikolas-ferreira-auxilio-moradia-auxilio-paleto/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
+      {
+        "titulo": "Toffoli manda PF enviar ao STF conteúdo de celulares do caso Master, após ser mencionado em diálogos",
+        "resumo": null,
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "12:54",
+        "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/toffoli-manda-pf-enviar-ao-stf-conteudo-de-celulares-do-caso-master-apos-ser-mencionado-em-dialogos/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 2,
+        "scores_todos": {
+          "Governo/Congresso": 2
+        }
+      },
+      {
+        "titulo": "Folga de carnaval para deputados e senadores dura duas semanas",
+        "resumo": null,
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "12:00",
+        "link": "https://www.estadao.com.br/politica/coluna-do-estadao/folga-de-carnaval-para-deputados-e-senadores-dura-duas-semanas/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      }
+    ],
+    "Eleições": [
+      {
+        "titulo": "TSE rejeita pedido para barrar desfile que homenageará Lula no carnaval",
+        "resumo": null,
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "13:29",
+        "link": "https://www.estadao.com.br/politica/tse-rejeita-pedido-para-barrar-desfile-que-homenageara-lula-no-carnaval-nprp/",
+        "tema_classificado": "Eleições",
+        "score": 2,
+        "scores_todos": {
+          "Eleições": 2
+        }
+      }
+    ],
+    "Atividade": [
+      {
+        "titulo": "Governo de SP marca para maio leilão de serviços de remoção e guarda de veículos",
+        "resumo": null,
+        "categoria": "Política",
+        "fonte": "Estadão",
+        "data": "12/02/2026",
+        "hora": "12:00",
+        "link": "https://www.estadao.com.br/politica/coluna-do-estadao/governo-de-sp-marca-para-maio-leilao-de-servicos-de-remocao-e-guarda-de-veiculos/",
+        "tema_classificado": "Atividade",
+        "score": 1,
+        "scores_todos": {
+          "Atividade": 1
+        }
+      }
+    ]
+  },
+  "nao_classificadas": [
+    {
+      "titulo": "Calote da Braskem tem impacto de R$ 3,6 bi no BB e eleva inadimplência do banco",
+      "resumo": null,
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "14:37",
+      "link": "https://www.estadao.com.br/economia/negocios/calote-da-braskem-tem-impacto-de-r-36-bi-no-bb-e-eleva-inadimplencia-do-banco/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "A história real de John F. Kennedy Jr. e Carolyn Bessette, retratada na série ‘História de Amor’",
+      "resumo": null,
+      "categoria": "Cultura",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "14:34",
+      "link": "https://www.estadao.com.br/cultura/series/a-historia-real-de-john-f-kennedy-jr-e-carolyn-bessette-retratada-na-serie-historia-de-amor-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Corinthians tenta rescindir com Martínez após jogador se reapresentar com lesão no joelho",
+      "resumo": null,
+      "categoria": "Esportes",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "14:25",
+      "link": "https://www.estadao.com.br/esportes/futebol/corinthians-tenta-rescindir-com-martinez-apos-jogador-se-reapresentar-com-lesao-no-joelho/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Hilary Duff prepara retorno aos palcos internacionais após duas décadas",
+      "resumo": null,
+      "categoria": "Cultura",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "14:16",
+      "link": "https://www.estadao.com.br/cultura/musica/hilary-duff-retorna-aos-palcos-e-anuncia-primeira-turne-internacional-em-duas-decadas-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Teoria de que vírus da covid-19 teria sido criado propositalmente não tem apoio científico",
+      "resumo": null,
+      "categoria": "Fato ou Fake",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "14:11",
+      "link": "https://www.estadao.com.br/estadao-verifica/teoria-de-que-virus-da-covid-19-teria-sido-criado-propositalmente-nao-tem-apoio-cientifico/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Identidade visual do tênis ‘BadBo 1.0′, criado por Bad Bunny, torna item peça de colecionador",
+      "resumo": null,
+      "categoria": "Cultura",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "14:00",
+      "link": "https://www.estadao.com.br/cultura/alice-ferraz/identidade-visual-do-tenis-badbo-10-criado-por-bad-bunny-torna-item-peca-de-colecionador/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Leclerc domina os treinos da pré-temporada de F1 e faz melhor tempo no Bahrein; Bortoleto é 6º",
+      "resumo": null,
+      "categoria": "Esportes",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "13:49",
+      "link": "https://www.estadao.com.br/esportes/velocidade/leclerc-domina-os-treinos-da-pre-temporada-de-f-1-e-faz-melhor-tempo-no-bahrein-bortoleto-e-6/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Corregedoria da Polícia Civil de SP faz operação contra policiais suspeitos de corrupção",
+      "resumo": null,
+      "categoria": "Brasil",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "13:45",
+      "link": "https://www.estadao.com.br/brasil/corregedoria-da-policia-civil-de-sp-faz-operacao-contra-policiais-suspeitos-de-cobrarem-propina-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Globo e ESPN: como estão as negociações dos direitos de TV da Série B",
+      "resumo": null,
+      "categoria": "Esportes",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "13:41",
+      "link": "https://www.estadao.com.br/esportes/marcel-rizzo/globo-e-espn-como-estao-as-negociacoes-dos-direitos-de-tv-da-serie-b/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Juiz manda pôr tornozeleira em investigadora da Polícia Civil por tráfico de influência e propinas",
+      "resumo": null,
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "13:31",
+      "link": "https://www.estadao.com.br/politica/blog-do-fausto-macedo/juiz-manda-por-tornozeleira-em-investigadora-da-policia-civil-por-trafico-de-influencia-e-propinas/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Receita de bolo de liquidificador com ingrediente amado pelas mulheres. Entenda benefícios",
+      "resumo": null,
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "13:23",
+      "link": "https://www.estadao.com.br/paladar/comida/amora-beneficios-para-a-mulher-receitas-e-um-bolo-delicioso-para-o-publico-feminino/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Organizada de rival do Santos cobra jogadores: ‘Se for pra tirar o Neymar da Copa, tira’",
+      "resumo": null,
+      "categoria": "Esportes",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "13:20",
+      "link": "https://www.estadao.com.br/esportes/futebol/organizada-de-rival-do-santos-cobra-jogadores-se-for-pra-tirar-o-neymar-da-copa-tira-npres/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Filha de Kin Jong-un deve ser designada como futura líder da Coreia do Norte, diz agência de Seul",
+      "resumo": null,
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "13:14",
+      "link": "https://www.estadao.com.br/internacional/filha-de-kin-jong-un-designada-futura-lider-coreia-do-norte-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Shineray é acusada de produzir e vender motos irregulares no Brasil; fabricante nega",
+      "resumo": null,
+      "categoria": "Automóveis",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "13:08",
+      "link": "https://www.estadao.com.br/jornal-do-carro/shineray-e-acusada-de-produzir-e-vender-motos-irregulares-no-brasil-fabricante-nega/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Vírus Nipah chegou ao Brasil? O carnaval é motivo de preocupação? Entenda",
+      "resumo": null,
+      "categoria": "Saúde",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:54",
+      "link": "https://www.estadao.com.br/saude/virus-nipah-chegou-ao-brasil-o-carnaval-e-motivo-de-preocupacao-entenda-nprm/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Belo revela bastidores da cena do beijo com Viviane Araújo em ‘Três Graças’: ‘Química verdadeira’",
+      "resumo": null,
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:50",
+      "link": "https://www.estadao.com.br/emais/tv/belo-revela-bastidores-da-cena-do-beijo-com-viviane-araujo-em-tres-gracas-quimica-verdadeira-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Exploração de urânio ganha impulso no País enquanto retomada da obra de Angra 3 demora",
+      "resumo": null,
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:46",
+      "link": "https://www.estadao.com.br/economia/exploracao-de-uranio-ganha-impulso-no-pais-enquanto-retomada-da-obra-de-angra-3-demora/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Eletronuclear pode parar em março por indefinição sobre Angra 3",
+      "resumo": null,
+      "categoria": "Economia",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:46",
+      "link": "https://www.estadao.com.br/economia/eletronuclear-pode-parar-em-marco-por-indefinicao-sobre-angra-3/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "‘O Agente Secreto’ estampa capa da ‘Variety’ lançada durante o Festival de Berlim; veja",
+      "resumo": null,
+      "categoria": "Cultura",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:38",
+      "link": "https://www.estadao.com.br/cultura/cinema/o-agente-secreto-estampa-capa-da-variety-no-festival-de-berlim-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Por que você deve tomar esse suco de beterraba, o ouro roxo, nos dias intensos? Entenda",
+      "resumo": null,
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:28",
+      "link": "https://www.estadao.com.br/paladar/comida/suco-de-beterraba-ouro-roxo-veja-preparo-beneficios-e-receitas-diferentes/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Governo Trump anuncia fim do reforço de agentes do ICE em Minnesota",
+      "resumo": null,
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:27",
+      "link": "https://www.estadao.com.br/internacional/governo-trump-anuncia-fim-do-reforco-de-agentes-do-ice-em-minnesota-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "‘Escolas deveriam ser seguras’: canadenses acendem velas em memória das vítimas do ataque",
+      "resumo": null,
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:23",
+      "link": "https://www.estadao.com.br/internacional/escolas-deveriam-ser-seguras-canadenses-acendem-velas-em-memoria-das-vitimas-do-ataque-npr/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Katie Holmes homenageia James Van Der Beek com carta escrita à mão: ‘Profunda gratidão’",
+      "resumo": null,
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:12",
+      "link": "https://www.estadao.com.br/emais/gente/katie-holmes-homenageia-james-van-der-beek-com-carta-escrita-a-mao-profunda-gratidao-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BBB 26: Após cobrança de Gil do Vigor, Jonas cumpre promessa e toma banho nu no quarto do líder",
+      "resumo": null,
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:06",
+      "link": "https://www.estadao.com.br/emais/tv/bbb-26-apos-cobranca-de-gil-do-vigor-jonas-cumpre-promessa-e-toma-banho-nu-no-quarto-do-lider-nprec/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Trump está mais preocupado com recursos do Brasil que no resultado da eleição, diz Ian Bremmer",
+      "resumo": null,
+      "categoria": "Internacional",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:00",
+      "link": "https://www.estadao.com.br/internacional/trump-esta-mais-preocupado-com-recursos-do-brasil-que-no-resultado-da-eleicao-diz-ian-bremmer/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "A revolução do sachê: como a Fugini antecipou novas formas de consumir",
+      "resumo": null,
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:00",
+      "link": "https://www.estadao.com.br/paladar/a-revolucao-do-sache-como-a-fugini-antecipou-novas-formas-de-consumir/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "‘O Morro dos Ventos Uivantes’, documentário sobre George Orwell e mais estreias da semana no cinema",
+      "resumo": null,
+      "categoria": "Cultura",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:00",
+      "link": "https://www.estadao.com.br/cultura/cinema/o-morro-dos-ventos-uivantes-documentario-sobre-george-orwell-e-mais-estreias-da-semana-no-cinema/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Penduricalho da Alesp impactado por decisão de Dino custa R$ 47,3 milhões por ano",
+      "resumo": null,
+      "categoria": "Política",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:00",
+      "link": "https://www.estadao.com.br/politica/penduricalho-da-alesp-impactado-por-decisao-de-dino-custa-r-473-milhoes-por-ano/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Som a Pino Entrevista - Thiago França",
+      "resumo": null,
+      "categoria": "Não especificada",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:00",
+      "link": "https://www.estadao.com.br/eldorado/programas/som-a-pino/som-a-pino-entrevista-thiago-franca-3/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Fim de semana em SP tem shows de Sidney Magal e João Gordo, além de exposição de galos na Paulista",
+      "resumo": null,
+      "categoria": "Cultura",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:00",
+      "link": "https://www.estadao.com.br/cultura/fim-de-semana-em-sp-tem-shows-de-sidney-magal-e-joao-gordo-alem-de-exposicao-de-galos-na-paulista/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "‘Rivalidade Ardente’, ‘Vizinhos’, nova série de Ryan Murphy e mais estreias no streaming",
+      "resumo": null,
+      "categoria": "Cultura",
+      "fonte": "Estadão",
+      "data": "12/02/2026",
+      "hora": "12:00",
+      "link": "https://www.estadao.com.br/cultura/series/rivalidade-ardente-vizinhos-nova-serie-de-ryan-murphy-e-mais-estreias-no-streaming/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    }
+  ]
+}

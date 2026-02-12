@@ -1,53 +1,92 @@
-# Testes de Scrapers - Monitor de Notícias V2
+# Tests - Scripts Principais
 
-## Objetivo
+## ⭐ Scripts Essenciais
 
-Validar que cada scraper está coletando **todas** as notícias possíveis do site, não apenas de algumas seções. Os testes rodam o scraper atual do projeto principal de forma isolada e geram relatórios para análise.
-
-## Pré-requisitos
-
-- Python com dependências do projeto principal instaladas (`r:\Economics\Ealmeida\Brasil\News\requirements.txt`)
-- Chrome instalado (para Selenium)
-- Executar a partir da pasta **Brasil/News** ou garantir que o script encontra o projeto principal
-
-## Como rodar
-
-### Testar uma fonte por vez
+### `test_valor_classificar_todas.py`
+**Coleta e classifica notícias do Valor Econômico**
 
 ```bash
-# Da pasta news_monitor_v2/tests/
-python run_test_scraper.py valor
-python run_test_scraper.py estadao
-python run_test_scraper.py folha
-python run_test_scraper.py oglobo
+python test_valor_classificar_todas.py
 ```
 
-Ou da raiz do repositório:
+**O que faz:**
+- Coleta notícias das últimas 24h do Valor
+- Classifica cada uma por tema (Fiscal, BC, Mercado, etc.)
+- Exclui tema "Mundo" e categoria "Mundo" do site
+- Salva em `output/valor_classificado_24h.json`
+
+---
+
+### `gerar_painel_html.py`
+**Gera painel HTML interativo**
 
 ```bash
-cd news_monitor_v2/tests
-python run_test_scraper.py valor
+python gerar_painel_html.py
 ```
 
-### Analisar cobertura
+**O que faz:**
+- Lê `output/valor_classificado_24h.json`
+- Gera `output/painel_dashboard.html` com tabela interativa
+- Funcionalidades: busca, filtro, ordenação, paginação
 
-Após rodar testes, ver resumo comparativo:
+**Abrir:** `output/painel_dashboard.html` no navegador
+
+---
+
+## 🔧 Scripts de Apoio
+
+### `reclassificar_json.py`
+Reclassifica notícias de um JSON existente (sem coletar de novo).  
+Útil quando você ajustou keywords e quer reclassificar os mesmos dados.
 
 ```bash
-python analise_cobertura.py
-python analise_cobertura.py --ultimos 3
+python reclassificar_json.py
 ```
 
-## Saídas
+---
 
-- `tests/output/test_*_YYYYMMDD_HHMMSS.json` — notícias coletadas
-- `tests/output/relatorio_*_YYYYMMDD_HHMMSS.json` — relatório (total, por categoria, por hora, amostra de títulos)
+### `gerar_html_revisao.py`
+Gera HTML interativo para revisar classificação manualmente.
 
-## Checklist de validação (manual)
+```bash
+python gerar_html_revisao.py
+# Abrir output/revisao_classificacao.html
+# Marcar correções e salvar feedback
+```
 
-Para cada fonte, após rodar o teste:
+---
 
-1. Abra o site da fonte no navegador e conte quantas notícias aparecem nas últimas 24h.
-2. Compare com o total do relatório.
-3. Verifique se as categorias no relatório cobrem as seções que você vê no site.
-4. Anote gaps (notícias visíveis no site que não aparecem no JSON) no arquivo de documentação do plano.
+### `processar_feedback.py`
+Processa feedback de revisão e sugere ajustes nas keywords.
+
+```bash
+python processar_feedback.py
+# Veja sugestões em output/sugestoes_keywords.txt
+```
+
+---
+
+## 📁 Estrutura de Saídas
+
+```
+tests/output/
+├── valor_classificado_24h.json      # ⭐ Dados coletados e classificados
+├── painel_dashboard.html             # ⭐ Painel final (abrir no navegador)
+├── valor_classificado_24h.html      # Relatório simples (opcional)
+├── revisao_classificacao.html       # HTML para revisar (gerado sob demanda)
+├── feedback_classificacao.json      # Feedback de revisão (gerado manualmente)
+└── sugestoes_keywords.txt           # Sugestões de keywords (gerado por processar_feedback.py)
+```
+
+---
+
+## 📚 Documentação
+
+- `GUIA_RAPIDO.md` - Guia rápido de uso diário
+- `GUIA_TREINAMENTO.md` - Processo completo de revisão e ajuste
+- `../docs/PROXIMOS_PASSOS.md` - Como adicionar novos jornais
+- `../README.md` - Visão geral do projeto
+
+---
+
+**Última atualização:** 12/02/2026
