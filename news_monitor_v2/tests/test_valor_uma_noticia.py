@@ -87,9 +87,9 @@ def main():
                 data = data_match.group(1)
                 hora = data_match.group(2)
 
-        # Resumo (feed-post-body-resumo)
+        # Resumo (feed-post-body-resumo) – quando não tiver, não mostrar nada
         resumo_element = artigo.find("p", class_="feed-post-body-resumo")
-        resumo = resumo_element.text.strip() if resumo_element else None
+        resumo = (resumo_element.text.strip() if resumo_element else None) or None  # None ou vazio → None
 
         # Objeto no formato que usamos hoje + resumo
         noticia = {
@@ -102,8 +102,8 @@ def main():
             "link": link,
         }
 
-        # Remover chaves com valor None para ficar claro o que veio vazio
-        noticia_limpa = {k: v for k, v in noticia.items() if v is not None}
+        # Remover chaves vazias/None – resumo só aparece quando houver texto
+        noticia_limpa = {k: v for k, v in noticia.items() if v is not None and v != ""}
 
         print("  O QUE CONSEGUIMOS PEGAR NO FORMATO ATUAL:")
         print("-" * 60)
