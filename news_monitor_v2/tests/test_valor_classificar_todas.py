@@ -176,6 +176,11 @@ def main():
                     categoria_element = artigo.find("span", class_="feed-post-metadata-section")
                     categoria = categoria_element.text.strip() if categoria_element else "Não especificada"
 
+                    # Filtrar categorias que não queremos coletar
+                    categorias_excluidas_valor = {"ESG", "Carreira", "Empresas", "Eu &"}
+                    if categoria in categorias_excluidas_valor:
+                        continue
+
                     data_element = artigo.find("span", class_="feed-post-datetime")
                     if not data_element:
                         continue
@@ -235,17 +240,26 @@ def main():
         nao_classificadas = []
 
         for noticia in noticias_coletadas:
-            texto = f"{noticia['titulo']} {noticia.get('resumo', '')}".strip()
-            resultado = classificar(noticia['titulo'], resumo=noticia.get('resumo', ''))
-            tema = resultado['tema']
-            noticia['tema_classificado'] = tema
-            noticia['score'] = resultado['score']
-            noticia['scores_todos'] = resultado['scores']
-
-            if tema == NAO_CLASSIFICADO:
-                nao_classificadas.append(noticia)
-            else:
+            # Se categoria do site for "Mundo", classificar automaticamente como Mundo
+            categoria_site = noticia.get('categoria', '')
+            if categoria_site == 'Mundo':
+                tema = 'Mundo'
+                noticia['tema_classificado'] = tema
+                noticia['score'] = 1
+                noticia['scores_todos'] = {'Mundo': 1}
                 noticias_por_tema[tema].append(noticia)
+            else:
+                # Classificar normalmente com léxico
+                resultado = classificar(noticia['titulo'], resumo=noticia.get('resumo', ''))
+                tema = resultado['tema']
+                noticia['tema_classificado'] = tema
+                noticia['score'] = resultado['score']
+                noticia['scores_todos'] = resultado['scores']
+
+                if tema == NAO_CLASSIFICADO:
+                    nao_classificadas.append(noticia)
+                else:
+                    noticias_por_tema[tema].append(noticia)
 
         # Mostrar resultados
         print()

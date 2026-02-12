@@ -1,0 +1,185 @@
+{
+  "data_coleta": "2026-02-12T12:47:08.314392",
+  "periodo_horas": 18,
+  "total_coletado": 13,
+  "por_tema": {
+    "Governo/Congresso": [
+      {
+        "titulo": "Alíquota extraordinária do FGC deve aumentar despesa financeira do BB em R$ 500 milhões por ano",
+        "resumo": "Vice-presidente financeiro do banco público diz que contribuição tem como base um percentual do volume de depósitos cobertos do banco",
+        "categoria": "Finanças",
+        "fonte": "Valor Econômico",
+        "data": "12/02/2026",
+        "hora": "12:24",
+        "link": "https://valor.globo.com/financas/noticia/2026/02/12/aliquota-extraordinaria-do-fgc-deve-aumentar-despesa-financeira-do-bb-entre-r-450-milhoes-e-r-500-milhoes-por-ano.ghtml",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      }
+    ],
+    "Mundo": [
+      {
+        "titulo": "Governo Trump anuncia fim de operação contra imigração em Minnesota",
+        "resumo": "Em janeiro, agentes do ICE mataram dois cidadãos americanos, Renee Good e Alex Pretti, o que gerou protestos em todo o país e fez Trump recuar",
+        "categoria": "Mundo",
+        "fonte": "Valor Econômico",
+        "data": "12/02/2026",
+        "hora": "12:02",
+        "link": "https://valor.globo.com/mundo/noticia/2026/02/12/governo-trump-anuncia-fim-de-operao-contra-imigrao-em-minnesota.ghtml",
+        "tema_classificado": "Mundo",
+        "score": 1,
+        "scores_todos": {
+          "Mundo": 1
+        }
+      },
+      {
+        "titulo": "Pedidos iniciais de seguro-desemprego nos EUA somam 227 mil na semana encerrada em 7 de fevereiro",
+        "resumo": "Média móvel de quatro semanas das novas solicitações subiu em 7 mil pedidos sobre o número revisado da semana passada, para 219.250 pedidos",
+        "categoria": "Mundo",
+        "fonte": "Valor Econômico",
+        "data": "12/02/2026",
+        "hora": "10:51",
+        "link": "https://valor.globo.com/mundo/noticia/2026/02/12/pedidos-iniciais-de-seguro-desemprego-nos-eua-somam-227-mil-na-semana-encerrada-em-7-de-fevereiro.ghtml",
+        "tema_classificado": "Mundo",
+        "score": 1,
+        "scores_todos": {
+          "Mundo": 1
+        }
+      },
+      {
+        "titulo": "Líderes da UE defendem reformas para competir com indústrias de EUA e China",
+        "resumo": "Encontro informal pode sinalizar se países da região podem superar interesses próprios e chegar a um plano de ação conjunto",
+        "categoria": "Mundo",
+        "fonte": "Valor Econômico",
+        "data": "12/02/2026",
+        "hora": "10:45",
+        "link": "https://valor.globo.com/mundo/noticia/2026/02/12/lderes-da-ue-defendem-reformas-para-competir-com-indstrias-de-eua-e-china.ghtml",
+        "tema_classificado": "Mundo",
+        "score": 1,
+        "scores_todos": {
+          "Mundo": 1
+        }
+      },
+      {
+        "titulo": "Dois navios da Marinha dos EUA colidem em águas próximas à América do Sul",
+        "resumo": "Dois tripulantes sofreram ferimentos leves e estão em condição estável",
+        "categoria": "Mundo",
+        "fonte": "Valor Econômico",
+        "data": "12/02/2026",
+        "hora": "10:19",
+        "link": "https://valor.globo.com/mundo/noticia/2026/02/12/dois-navios-da-marinha-dos-eua-colidem-em-guas-prximas-amrica-do-sul-diz-wsj.ghtml",
+        "tema_classificado": "Mundo",
+        "score": 1,
+        "scores_todos": {
+          "Mundo": 1
+        }
+      }
+    ],
+    "Mercado": [
+      {
+        "titulo": "Dólar e Ibovespa caem em meio a dados fracos de serviços no Brasil; BB dispara após balanço",
+        "resumo": "Além dos investimentos estrangeiros, os agentes permanecem atentos aos balanços",
+        "categoria": "Finanças",
+        "fonte": "Valor Econômico",
+        "data": "12/02/2026",
+        "hora": "11:58",
+        "link": "https://valor.globo.com/financas/ao-vivo/2023/06/16/dolar-avanca-e-ibovespa-recua-em-dia-de-correcao-siga-os-mercados.ghtml",
+        "tema_classificado": "Mercado",
+        "score": 2,
+        "scores_todos": {
+          "Mercado": 2
+        }
+      },
+      {
+        "titulo": "Ações do BB disparam após lucro do banco no 4º trimestre surpreender",
+        "resumo": "Apesar disso, profissionais afirmam que os números não são suficientes para dizer que a instituição financeira “virou a página” da crise na carteira do agronegócio",
+        "categoria": "Finanças",
+        "fonte": "Valor Econômico",
+        "data": "12/02/2026",
+        "hora": "10:45",
+        "link": "https://valor.globo.com/financas/noticia/2026/02/12/acoes-do-bb-disparam-apos-lucro-do-banco-no-4o-trimestre-surpreender.ghtml",
+        "tema_classificado": "Mercado",
+        "score": 1,
+        "scores_todos": {
+          "Mercado": 1
+        }
+      }
+    ]
+  },
+  "nao_classificadas": [
+    {
+      "titulo": "O que é suspeição? Entenda quando um juiz pode ter a imparcialidade colocada em xeque",
+      "resumo": "Declaração de suspeição indica que um juiz tem algum tipo de relação com as partes do processo e pode não ser imparcial para julgar o caso",
+      "categoria": "Política",
+      "fonte": "Valor Econômico",
+      "data": "12/02/2026",
+      "hora": "12:33",
+      "link": "https://valor.globo.com/politica/noticia/2026/02/12/o-que-e-suspeicao-entenda-quando-um-juiz-pode-ter-a-imparcialidade-colocada-em-xeque.ghtml",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "PF deflagra operação contra quadrilha que roubou mais de R$ 2 milhões de agências da Caixa",
+      "resumo": "Segundo a corporação, as investigações \"apontam que o grupo, com atuação estruturada e armada, foi responsável por diversos roubos e furtos qualificados\"",
+      "categoria": "Finanças",
+      "fonte": "Valor Econômico",
+      "data": "12/02/2026",
+      "hora": "12:15",
+      "link": "https://valor.globo.com/financas/noticia/2026/02/12/pf-deflagra-operacao-contra-quadrilha-que-roubou-mais-de-r-2-milhoes-de-agencias-da-caixa.ghtml",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Serviços acumulam alta de 31% em cinco anos seguidos, após queda de 7,8% em 2020, diz IBGE",
+      "resumo": "No período acumulado, as maiores influências para o crescimento dos serviços são aquelas ligadas a informação, comunicação e transportes, informou o instituto",
+      "categoria": "Brasil",
+      "fonte": "Valor Econômico",
+      "data": "12/02/2026",
+      "hora": "10:43",
+      "link": "https://valor.globo.com/brasil/noticia/2026/02/12/servicos-acumulam-alta-de-31percent-em-cinco-anos-seguidos-apos-queda-de-78percent-em-2020-diz-ibge.ghtml",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Bitcoin sobe depois de respeitar suporte dos US$ 65 mil no dia anterior",
+      "resumo": "Analistas começam a acreditar que as criptomoedas atingiram seu fundo no ciclo de baixa, mas não há sinal ainda de um retorno à tendência de alta",
+      "categoria": "Criptomoedas",
+      "fonte": "Valor Econômico",
+      "data": "12/02/2026",
+      "hora": "10:40",
+      "link": "https://valor.globo.com/financas/criptomoedas/noticia/2026/02/12/bitcoin-sobe-depois-de-respeitar-suporte-dos-us-65-mil-no-dia-anterior.ghtml",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "JHSF escolhe Galeria como nova agência de publicidade",
+      "resumo": "Galeria assume estratégia, criação e mídia do grupo no Brasil e no exterior, depois da incorporação da DM9 à Lola/TBWA, movimento que levou anunciantes a revisar contratos",
+      "categoria": "Marketing",
+      "fonte": "Valor Econômico",
+      "data": "12/02/2026",
+      "hora": "10:30",
+      "link": "https://valor.globo.com/empresas/marketing/noticia/2026/02/12/jhsf-escolhe-galeria-como-nova-agencia-de-publicidade.ghtml",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "BTG Pactual fecha acordo para compra de até 48% da fintech meutudo",
+      "resumo": "Termos financeiros da transação envolvendo a plataforma de crédito não foram divulgados",
+      "categoria": "Finanças",
+      "fonte": "Valor Econômico",
+      "data": "12/02/2026",
+      "hora": "10:21",
+      "link": "https://valor.globo.com/financas/noticia/2026/02/12/btg-pactual-fecha-acordo-para-compra-de-48-pontos-percentuais-da-fintech-meutudo.ghtml",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    }
+  ]
+}
