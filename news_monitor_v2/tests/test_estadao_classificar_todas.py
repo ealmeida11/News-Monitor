@@ -52,17 +52,38 @@ def noticia_dentro_24h(data, hora):
         return False
 
 
-def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
+def _parse_data_hora_estadao(data_hora_texto):
+    """
+    Extrai (data, hora) do texto de data do Estadão.
+    Aceita: "12/02/2026, 14h30" ou "12/02/2026 | 14h30" ou "12/02/2026, 14h5" (minuto com 1 dígito).
+    Retorna (data, hora) no formato DD/MM/YYYY e HH:MM, ou (None, None) se não reconhecer.
+    """
+    # Com vírgula ou pipe; hora com 1 ou 2 dígitos, minuto com 1 ou 2 dígitos
+    m = re.search(r"(\d{2}/\d{2}/\d{4})\s*[,|]\s*(\d{1,2})h(\d{1,2})\b", data_hora_texto.strip())
+    if not m:
+        return None, None
+    data = m.group(1)
+    h, minu = int(m.group(2)), int(m.group(3))
+    hora = f"{h:02d}:{minu:02d}"
+    return data, hora
+
+
+def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html, limite_24h=None, intervalo_noticias=None):
     """Gera HTML do relatório (por tema + não classificadas) para análise."""
     from html import escape
     linhas = []
-    linhas.append("<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8'><title>Estadão - Classificação (24h)</title>")
+    linhas.append("<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8'><title>Estadão - Classificação (24h)</title><style>")
     linhas.append("body{font-family:Segoe UI,sans-serif;margin:20px;background:#f5f5f5;} .container{max-width:900px;margin:0 auto;background:#fff;padding:24px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);}")
-    linhas.append("h1{color:#c0392b;} h2{margin-top:28px;color:#2c3e50;} .meta{color:#666;font-size:0.9em;margin-bottom:20px;}")
+    linhas.append("h1{color:#c0392b;} h2{margin-top:28px;color:#2c3e50;} .meta{color:#666;font-size:0.9em;margin-bottom:20px;} .meta.janela{background:#e8f4f8;padding:8px 12px;border-radius:6px;margin-bottom:12px;}")
     linhas.append(".noticia{margin:12px 0;padding:12px;background:#f9f9f9;border-left:4px solid #3498db;border-radius:4px;} .noticia.nao{border-left-color:#95a5a6;}")
     linhas.append(".noticia a{color:#2980b9;text-decoration:none;} .resumo{color:#555;font-size:0.95em;margin:6px 0;} .info{font-size:0.85em;color:#7f8c8d;}")
     linhas.append("</style></head><body><div class='container'>")
     linhas.append("<h1>Estadão – Classificação por tema (últimas 24h)</h1>")
+    linhas.append("<p class='meta'><strong>Estadão:</strong> sem resumo no site; classificação apenas pelo título. Categorias excluídas da coleta: Esportes, Cultura, Automóveis.</p>")
+    if limite_24h is not None and intervalo_noticias is not None:
+        de_dt, ate_dt = intervalo_noticias
+        linhas.append(f"<p class='meta janela'><strong>Janela de 24h:</strong> incluídas notícias entre {escape(limite_24h.strftime('%d/%m/%Y %H:%M'))} e agora. "
+                      f"<strong>Intervalo das notícias neste relatório:</strong> de {escape(de_dt.strftime('%d/%m/%Y %H:%M'))} até {escape(ate_dt.strftime('%d/%m/%Y %H:%M'))}.</p>")
     temas_visiveis = {t: lst for t, lst in noticias_por_tema.items() if t != "Mundo"}
     total_class = sum(len(lst) for lst in temas_visiveis.values())
     linhas.append(f"<p class='meta'>Total coletado: {total_coletado} | Classificadas: {total_class} | Não classificadas: {len(nao_classificadas)}</p>")
@@ -110,11 +131,14 @@ def main():
 
     URL_BASE = "https://www.estadao.com.br/ultimas/"
 
+    agora = datetime.now()
+    limite_24h = agora - timedelta(hours=24)
     print("=" * 70)
     print("  COLETA E CLASSIFICACAO - ESTADAO (ultimas 24 horas)")
     print("=" * 70)
     print(f"  URL: {URL_BASE}")
-    print(f"  Periodo: ultimas 24 horas (desde {datetime.now() - timedelta(hours=24):%d/%m/%Y %H:%M})")
+    print(f"  Agora (referencia):  {agora:%d/%m/%Y %H:%M}")
+    print(f"  Inclusao: noticias entre {limite_24h:%d/%m/%Y %H:%M} e {agora:%d/%m/%Y %H:%M}")
     print()
 
     chrome_options = ChromeOptions()
@@ -163,9 +187,10 @@ def main():
                     link = artigo.get("href") or "#"
                     categoria = _extrair_categoria_estadao(link)
 
-                    # Excluir categoria "Internacional" (equivalente a Mundo) se quiser; por ora mantemos para análise
-                    # categorias_excluidas_estadao = {"Esportes", "Automóveis", "Cultura"}
-                    # if categoria in categorias_excluidas_estadao: continue
+                    # Excluir categorias que geram classificação indevida (ex.: Esportes -> Governo/Congresso por "MP-SP")
+                    categorias_excluidas_estadao = {"Esportes", "Automóveis", "Cultura"}
+                    if categoria in categorias_excluidas_estadao:
+                        continue
 
                     parent_div = artigo.find_parent("div")
                     data_element = parent_div.find("span", class_="date") if parent_div else None
@@ -173,23 +198,18 @@ def main():
                         continue
 
                     data_hora_texto = data_element.get_text(strip=True)
-                    # Formato: "12/02/2026, 14h30" ou "12/02/2026, 9h05"
-                    data_match = re.search(r"(\d{2}/\d{2}/\d{4}),\s*(\d{1,2})h(\d{2})", data_hora_texto)
-                    if not data_match:
+                    data, hora = _parse_data_hora_estadao(data_hora_texto)
+                    if not data or not hora:
                         continue
-
-                    data = data_match.group(1)
-                    h, m = data_match.group(2), data_match.group(3)
-                    hora = f"{int(h):02d}:{m}"
 
                     if not noticia_dentro_24h(data, hora):
                         antigas_nesta_rodada += 1
                         continue
 
-                    # Estadão não expõe resumo na lista; deixamos None
+                    # Estadão não tem resumo na lista; usamos apenas título na classificação
                     noticia = {
                         "titulo": titulo,
-                        "resumo": None,
+                        "resumo": "",
                         "categoria": categoria,
                         "fonte": "Estadão",
                         "data": data,
@@ -243,6 +263,17 @@ def main():
 
         print()
         print(f"  Total coletado: {len(noticias_coletadas)} noticias")
+        # Mostrar intervalo real das notícias coletadas (para confirmar que são das últimas 24h)
+        if noticias_coletadas:
+            datas_ord = sorted(
+                (datetime.strptime(f"{n['data']} {n['hora']}", "%d/%m/%Y %H:%M") for n in noticias_coletadas),
+                reverse=True,
+            )
+            mais_recente = datas_ord[0]
+            mais_antiga = datas_ord[-1]
+            print(f"  Intervalo das noticias: de {mais_antiga:%d/%m/%Y %H:%M} ate {mais_recente:%d/%m/%Y %H:%M}")
+            if mais_antiga < limite_24h:
+                print("  AVISO: alguma noticia coletada esta fora da janela de 24h (verifique parsing da data).")
         print()
         print("  Classificando noticias...")
 
@@ -250,7 +281,8 @@ def main():
         nao_classificadas = []
 
         for noticia in noticias_coletadas:
-            resultado = classificar(noticia["titulo"], resumo=noticia.get("resumo") or "")
+            # Estadão: sem resumo; classificação só pelo título
+            resultado = classificar(noticia["titulo"], resumo="")
             tema = resultado["tema"]
             if tema == "Mundo":
                 continue
@@ -317,7 +349,13 @@ def main():
         }
         with open(arq_json, "w", encoding="utf-8") as f:
             json.dump(resultado_completo, f, ensure_ascii=False, indent=2)
-        _gerar_html(noticias_por_tema, nao_classificadas, len(noticias_coletadas), arq_html)
+        intervalo_noticias = None
+        if noticias_coletadas:
+            datas_ord = sorted(
+                datetime.strptime(f"{n['data']} {n['hora']}", "%d/%m/%Y %H:%M") for n in noticias_coletadas
+            )
+            intervalo_noticias = (datas_ord[0], datas_ord[-1])  # (mais_antiga, mais_recente)
+        _gerar_html(noticias_por_tema, nao_classificadas, len(noticias_coletadas), arq_html, limite_24h=limite_24h, intervalo_noticias=intervalo_noticias)
 
         print(f"  JSON: {arq_json}")
         print(f"  HTML: {arq_html}")
