@@ -1,0 +1,21 @@
+# Monitor de Notícias V2 - Dependências
+# Fase inicial: testes e validação (reutiliza scraper do projeto principal)
+
+# Scrapers (já usados no projeto principal)
+selenium>=4.15.2
+webdriver-manager>=4.0.1
+beautifulsoup4>=4.12.2
+requests>=2.31.0
+lxml>=4.9.3
+
+# Processamento
+pandas>=2.1.1
+
+# Utils
+python-dotenv>=1.0.0
+
+# Futuro: classificador e dashboard
+# spacy>=3.7.2
+# streamlit>=1.29.0
+# APScheduler>=3.10.4
+# loguru>=0.7.2
