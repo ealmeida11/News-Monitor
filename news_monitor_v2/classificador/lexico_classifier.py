@@ -174,6 +174,15 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
     if melhor_tema == "Eleições" and melhor_score < 2:
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
+    # STF: não classificar como STF quando "corte" e "gastos" aparecem (ex.: "corte de gastos"); usar segundo tema
+    if melhor_tema == "STF" and "corte" in texto_lower and "gastos" in texto_lower:
+        scores_sem_stf = {k: v for k, v in scores.items() if k != "STF"}
+        if scores_sem_stf:
+            melhor_tema = max(scores_sem_stf, key=scores_sem_stf.get)
+            melhor_score = scores_sem_stf[melhor_tema]
+        if not scores_sem_stf or melhor_score < SCORE_MINIMO:
+            return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+
     # Editorial: não classificar por enquanto; depois virão páginas específicas de cada editorial para coleta dedicada (Valor, Estadão, Folha)
     if melhor_tema == "Editorial":
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}

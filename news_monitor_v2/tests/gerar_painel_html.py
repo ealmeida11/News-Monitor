@@ -20,6 +20,7 @@ ARQUIVOS_JSON = [
     OUTPUT_DIR / "valor_classificado_24h.json",
     OUTPUT_DIR / "estadao_classificado_24h.json",
     OUTPUT_DIR / "folha_classificado_24h.json",
+    OUTPUT_DIR / "oglobo_classificado_24h.json",
 ]
 ARQUIVO_PAINEL = OUTPUT_DIR / "painel_dashboard.html"
 
@@ -32,6 +33,8 @@ CORES_TEMAS = {
     "Mercado": "#27ae60",
     "Editorial": "#7f8c8d",
     "Atividade": "#1abc9c",
+    "STF": "#2c3e50",
+    "Caso Master": "#6c3483",
 }
 
 
@@ -70,8 +73,8 @@ def gerar_painel():
             print(f"Aviso: não foi possível carregar {arq.name}: {e}")
 
     if not por_tema_merged:
-        print("Nenhum dado encontrado em valor/estadao/folha_classificado_24h.json")
-        print("Rode: python test_valor_classificar_todas.py e/ou test_estadao_classificar_todas.py e/ou test_folha_classificar_todas.py")
+        print("Nenhum dado encontrado em valor/estadao/folha/oglobo_classificado_24h.json")
+        print("Rode: python test_valor_classificar_todas.py, test_estadao_classificar_todas.py, test_folha_classificar_todas.py, test_oglobo_classificar_todas.py")
         return
 
     todas = []

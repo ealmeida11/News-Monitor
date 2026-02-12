@@ -18,16 +18,17 @@ ARQUIVOS_JSON = [
     OUTPUT_DIR / "valor_classificado_24h.json",
     OUTPUT_DIR / "estadao_classificado_24h.json",
     OUTPUT_DIR / "folha_classificado_24h.json",
+    OUTPUT_DIR / "oglobo_classificado_24h.json",
 ]
 
 ORDEM_TEMAS = [
     "Fiscal", "Banco Central", "Inflação", "Governo/Congresso",
-    "Eleições", "Mercado", "Atividade", "Editorial",
+    "Eleições", "Mercado", "Atividade", "STF", "Caso Master", "Editorial",
 ]
 ICONES = {
     "Fiscal": "🏛️", "Banco Central": "💰", "Inflação": "📈",
     "Governo/Congresso": "🏛️", "Eleições": "🗳️", "Mercado": "📊",
-    "Atividade": "📉", "Editorial": "📰",
+    "Atividade": "📉", "STF": "⚖️", "Caso Master": "🏦", "Editorial": "📰",
 }
 MAX_POR_TEMA = 3
 
@@ -81,7 +82,7 @@ st.set_page_config(layout="wide", page_title="Monitor Macro Brasil", page_icon="
 st_autorefresh(interval=120_000, key="refresh")
 
 st.title("📡 Monitor Macro Brasil")
-st.caption("Últimas 24h | Fontes: Valor Econômico, Estadão, Folha de S.Paulo")
+st.caption("Últimas 24h | Fontes: Valor Econômico, Estadão, Folha de S.Paulo, O Globo")
 
 todas, por_tema, data_coleta = _carregar_dados()
 if data_coleta:
@@ -92,7 +93,7 @@ if data_coleta:
         pass
 
 if not todas:
-    st.warning("Nenhum dado encontrado. Rode os testes: test_valor_classificar_todas.py, test_estadao_classificar_todas.py, test_folha_classificar_todas.py")
+    st.warning("Nenhum dado encontrado. Rode os testes: test_valor_classificar_todas.py, test_estadao_classificar_todas.py, test_folha_classificar_todas.py, test_oglobo_classificar_todas.py")
     st.stop()
 
 # ---------- SEÇÃO 1: DESTAQUES POR TEMA (TOPO) ----------
@@ -142,14 +143,34 @@ for col, tema in [(t4, "Governo/Congresso"), (t5, "Eleições"), (t6, "Mercado")
                     st.markdown(f"- [{n.get('hora','')}] [{n.get('titulo','')[:60]}...]({n.get('link','#')})")
 
 st.markdown("---")
-# Linha 3: Atividade, Editorial
-t7, t8, _ = st.columns(3)
-for col, tema in [(t7, "Atividade"), (t8, "Editorial")]:
+# Linha 3: Atividade, STF, Caso Master
+t7, t8, t9 = st.columns(3)
+for col, tema in [(t7, "Atividade"), (t8, "STF"), (t9, "Caso Master")]:
     with col:
         if tema not in por_tema:
             st.markdown(f"{ICONES.get(tema,'')} **{tema}**")
             st.caption("Sem notícias nas últimas 24h")
             continue
+        lista = sorted(por_tema[tema], key=_chave, reverse=True)[:MAX_POR_TEMA]
+        st.markdown(f"{ICONES.get(tema,'')} **{tema}** ({len(por_tema[tema])})")
+        for n in lista:
+            h = n.get("hora", "")
+            t = (n.get("titulo") or "")[:65] + ("..." if len(n.get("titulo") or "") > 65 else "")
+            st.markdown(f"- [{h}] [{t}]({n.get('link','#')})")
+        if len(por_tema[tema]) > MAX_POR_TEMA:
+            with st.expander("Ver mais"):
+                for n in sorted(por_tema[tema], key=_chave, reverse=True)[MAX_POR_TEMA:]:
+                    st.markdown(f"- [{n.get('hora','')}] [{n.get('titulo','')[:60]}...]({n.get('link','#')})")
+
+st.markdown("---")
+# Linha 4: Editorial
+t10, _, __ = st.columns(3)
+with t10:
+    tema = "Editorial"
+    if tema not in por_tema:
+        st.markdown(f"{ICONES.get(tema,'')} **{tema}**")
+        st.caption("Sem notícias nas últimas 24h")
+    else:
         lista = sorted(por_tema[tema], key=_chave, reverse=True)[:MAX_POR_TEMA]
         st.markdown(f"{ICONES.get(tema,'')} **{tema}** ({len(por_tema[tema])})")
         for n in lista:
@@ -170,7 +191,7 @@ st.caption("Ordenado do mais novo para o mais antigo")
 CORES_TEMA = {
     "Fiscal": "#c0392b", "Banco Central": "#16a085", "Inflação": "#d35400",
     "Governo/Congresso": "#2980b9", "Eleições": "#8e44ad", "Mercado": "#27ae60",
-    "Atividade": "#1abc9c", "Editorial": "#7f8c8d",
+    "Atividade": "#1abc9c", "STF": "#2c3e50", "Caso Master": "#6c3483", "Editorial": "#7f8c8d",
 }
 
 # Cabeçalho: Título | Resumo | Categoria | Link | Data/Hora
