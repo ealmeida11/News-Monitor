@@ -44,4 +44,9 @@ Thumbs.db
 
 # Temporary files
 *.tmp
-*.temp 
+*.temp
+
+# Monitor V2 - banco local (nao versionar)
+news_monitor_v2/noticias_v2.db
+news_monitor_v2/noticias_v2.db-wal
+news_monitor_v2/noticias_v2.db-shm

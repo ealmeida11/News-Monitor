@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Caminho do projeto principal (Brasil/News) para usar scrapers atuais
 PROJECT_ROOT = BASE_DIR.parent
 
-# Banco de dados
+# Banco de dados (evita duplicatas por link; usado por run_coleta.py)
 DB_PATH = os.environ.get("DB_PATH", str(BASE_DIR / "noticias_v2.db"))
 
 # Scraper original (para testes)
@@ -21,8 +21,8 @@ DB_ORIGINAL_PATH = PROJECT_ROOT / "noticias.db"
 LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
-# Fontes atuais para validação
-FONTES_ATUAIS = ["Valor Econômico", "Estadão", "Folha de S.Paulo", "O Globo"]
+# Fontes atuais para validação e coleta
+FONTES_ATUAIS = ["Valor Econômico", "Estadão", "Folha de S.Paulo", "O Globo", "CNN Brasil"]
 
 # Temas para classificação (futuro)
 TEMAS = [
