@@ -73,30 +73,23 @@ def main():
     nao_classificadas = []
 
     for noticia in noticias:
-        categoria_site = noticia.get("categoria", "")
-        if categoria_site == "Mundo":
-            tema = "Mundo"
-            noticia["tema_classificado"] = tema
-            noticia["score"] = 1
-            noticia["scores_todos"] = {"Mundo": 1}
-            noticias_por_tema[tema].append(noticia)
+        resultado = classificar(noticia["titulo"], resumo=noticia.get("resumo") or "")
+        tema = resultado["tema"]
+        noticia["tema_classificado"] = tema
+        noticia["score"] = resultado["score"]
+        noticia["scores_todos"] = resultado["scores"]
+        # Ignorar Mundo e não classificadas (não aparecem mais)
+        if tema == NAO_CLASSIFICADO or tema == "Mundo":
+            nao_classificadas.append(noticia)
         else:
-            resultado = classificar(noticia["titulo"], resumo=noticia.get("resumo") or "")
-            tema = resultado["tema"]
-            noticia["tema_classificado"] = tema
-            noticia["score"] = resultado["score"]
-            noticia["scores_todos"] = resultado["scores"]
-            if tema == NAO_CLASSIFICADO:
-                nao_classificadas.append(noticia)
-            else:
-                noticias_por_tema[tema].append(noticia)
+            noticias_por_tema[tema].append(noticia)
 
-    # Resumo
+    # Resumo (sem Mundo)
+    temas_visiveis = {t: lista for t, lista in noticias_por_tema.items() if t != "Mundo"}
     print("  RESULTADO")
     print("-" * 70)
-    for tema in sorted(noticias_por_tema.keys()):
-        print(f"  {tema}: {len(noticias_por_tema[tema])}")
-    print(f"  Não classificadas: {len(nao_classificadas)}")
+    for tema in sorted(temas_visiveis.keys()):
+        print(f"  {tema}: {len(temas_visiveis[tema])}")
     print()
 
     # Salvar (formato igual ao test_valor_classificar_todas)
@@ -105,16 +98,18 @@ def main():
 
     arq_json = OUTPUT_DIR / "valor_classificado_24h.json"
     arq_html = OUTPUT_DIR / "valor_classificado_24h.html"
+    # Filtrar Mundo do resultado
+    temas_visiveis = {t: lista for t, lista in noticias_por_tema.items() if t != "Mundo"}
     resultado_completo = {
         "data_coleta": datetime.now().isoformat(),
         "periodo_horas": 24,
         "total_coletado": len(noticias),
-        "por_tema": dict(noticias_por_tema),
+        "por_tema": dict(temas_visiveis),
         "nao_classificadas": nao_classificadas,
     }
     with open(arq_json, "w", encoding="utf-8") as f:
         json.dump(resultado_completo, f, ensure_ascii=False, indent=2)
-    _gerar_html(noticias_por_tema, nao_classificadas, len(noticias), arq_html)
+    _gerar_html(temas_visiveis, [], len(noticias), arq_html)
 
     print(f"  JSON: {arq_json}")
     print(f"  HTML: {arq_html}")

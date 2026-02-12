@@ -20,6 +20,10 @@ def gerar_html(arq_json, arq_html):
     total_coletado = data.get("total_coletado", 0)
     data_coleta = data.get("data_coleta", "")[:19].replace("T", " ")
 
+    # Filtrar Mundo e não classificadas
+    temas_visiveis = {t: lista for t, lista in noticias_por_tema.items() if t != "Mundo"}
+    total_classificadas = sum(len(lista) for lista in temas_visiveis.values())
+
     linhas = []
     linhas.append("<!DOCTYPE html>")
     linhas.append("<html lang=\"pt-BR\">")
@@ -31,7 +35,6 @@ def gerar_html(arq_json, arq_html):
     linhas.append("h2{margin-top:28px;color:#2c3e50;}")
     linhas.append(".meta{color:#666;font-size:0.9em;margin-bottom:20px;}")
     linhas.append(".noticia{margin:12px 0;padding:12px;background:#f9f9f9;border-left:4px solid #3498db;border-radius:4px;}")
-    linhas.append(".noticia.nao{border-left-color:#95a5a6;}")
     linhas.append(".noticia a{color:#2980b9;text-decoration:none;}")
     linhas.append(".noticia a:hover{text-decoration:underline;}")
     linhas.append(".resumo{color:#555;font-size:0.95em;margin:6px 0;}")
@@ -41,11 +44,10 @@ def gerar_html(arq_json, arq_html):
     linhas.append("<h1>Valor Econômico – Classificação por tema</h1>")
     periodo = data.get("periodo_horas", 24)
     linhas.append(f"<p class=\"meta\">Coleta: {escape(data_coleta)} | Últimas {periodo}h | Total: {total_coletado} | "
-                  f"Classificadas: {total_coletado - len(nao_classificadas)} | "
-                  f"Não classificadas: {len(nao_classificadas)}</p>")
+                  f"Classificadas: {total_classificadas}</p>")
 
-    for tema in sorted(noticias_por_tema.keys()):
-        lista = noticias_por_tema[tema]
+    for tema in sorted(temas_visiveis.keys()):
+        lista = temas_visiveis[tema]
         linhas.append(f"<h2>{escape(tema)} ({len(lista)})</h2>")
         for n in lista:
             titulo = escape(n.get("titulo", ""))
@@ -58,19 +60,6 @@ def gerar_html(arq_json, arq_html):
                 linhas.append(f"<p class=\"resumo\">{resumo}</p>")
             linhas.append(f"<p class=\"info\">{escape(info)}</p>")
             linhas.append("</div>")
-
-    linhas.append(f"<h2>Não classificadas ({len(nao_classificadas)})</h2>")
-    for n in nao_classificadas:
-        titulo = escape(n.get("titulo", ""))
-        link = escape(n.get("link", "#"))
-        resumo = escape((n.get("resumo") or "")[:300])
-        info = f"{n.get('categoria', '')} | {n.get('hora', '')}"
-        linhas.append("<div class=\"noticia nao\">")
-        linhas.append(f"<a href=\"{link}\" target=\"_blank\">{titulo}</a>")
-        if resumo:
-            linhas.append(f"<p class=\"resumo\">{resumo}</p>")
-        linhas.append(f"<p class=\"info\">{escape(info)}</p>")
-        linhas.append("</div>")
 
     linhas.append("</div></body></html>")
     with open(arq_html, "w", encoding="utf-8") as f:

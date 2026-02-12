@@ -24,7 +24,7 @@ from classificador.lexico_classifier import classificar, NAO_CLASSIFICADO
 
 
 def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
-    """Gera um HTML simples com o relatório por tema e não classificadas."""
+    """Gera um HTML simples com o relatório por tema (sem Mundo e sem não classificadas)."""
     from html import escape
     linhas = []
     linhas.append('<!DOCTYPE html>')
@@ -37,7 +37,6 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
     linhas.append('h2{margin-top:28px;color:#2c3e50;}')
     linhas.append('.meta{color:#666;font-size:0.9em;margin-bottom:20px;}')
     linhas.append('.noticia{margin:12px 0;padding:12px;background:#f9f9f9;border-left:4px solid #3498db;border-radius:4px;}')
-    linhas.append('.noticia.nao{border-left-color:#95a5a6;}')
     linhas.append('.noticia a{color:#2980b9;text-decoration:none;}')
     linhas.append('.noticia a:hover{text-decoration:underline;}')
     linhas.append('.resumo{color:#555;font-size:0.95em;margin:6px 0;}')
@@ -45,12 +44,16 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
     linhas.append('</style>')
     linhas.append('</head><body><div class="container">')
     linhas.append('<h1>Valor Econômico – Classificação por tema</h1>')
+    
+    # Filtrar Mundo e contar apenas temas visíveis
+    temas_visiveis = {t: lista for t, lista in noticias_por_tema.items() if t != "Mundo"}
+    total_classificadas = sum(len(lista) for lista in temas_visiveis.values())
+    
     linhas.append(f'<p class="meta">Últimas 24 horas | Total coletado: {total_coletado} | '
-                  f'Classificadas: {total_coletado - len(nao_classificadas)} | '
-                  f'Não classificadas: {len(nao_classificadas)}</p>')
+                  f'Classificadas: {total_classificadas}</p>')
 
-    for tema in sorted(noticias_por_tema.keys()):
-        lista = noticias_por_tema[tema]
+    for tema in sorted(temas_visiveis.keys()):
+        lista = temas_visiveis[tema]
         linhas.append(f'<h2>{escape(tema)} ({len(lista)})</h2>')
         for n in lista:
             titulo = escape(n.get("titulo", ""))
@@ -63,19 +66,6 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
                 linhas.append(f'<p class="resumo">{resumo}</p>')
             linhas.append(f'<p class="info">{escape(info)}</p>')
             linhas.append('</div>')
-
-    linhas.append(f'<h2>Não classificadas ({len(nao_classificadas)})</h2>')
-    for n in nao_classificadas:
-        titulo = escape(n.get("titulo", ""))
-        link = escape(n.get("link", "#"))
-        resumo = escape((n.get("resumo") or "")[:300])
-        info = f"{n.get('categoria', '')} | {n.get('hora', '')}"
-        linhas.append('<div class="noticia nao">')
-        linhas.append(f'<a href="{link}" target="_blank">{titulo}</a>')
-        if resumo:
-            linhas.append(f'<p class="resumo">{resumo}</p>')
-        linhas.append(f'<p class="info">{escape(info)}</p>')
-        linhas.append('</div>')
 
     linhas.append('</div></body></html>')
     with open(arq_html, "w", encoding="utf-8") as f:
@@ -176,7 +166,7 @@ def main():
                     categoria = categoria_element.text.strip() if categoria_element else "Não especificada"
 
                     # Filtrar categorias que não queremos coletar
-                    categorias_excluidas_valor = {"ESG", "Carreira", "Empresas", "Eu &"}
+                    categorias_excluidas_valor = {"ESG", "Carreira", "Empresas", "Eu &", "Marketing"}
                     if categoria in categorias_excluidas_valor:
                         continue
 
@@ -241,26 +231,18 @@ def main():
         nao_classificadas = []
 
         for noticia in noticias_coletadas:
-            # Se categoria do site for "Mundo", classificar automaticamente como Mundo
-            categoria_site = noticia.get('categoria', '')
-            if categoria_site == 'Mundo':
-                tema = 'Mundo'
-                noticia['tema_classificado'] = tema
-                noticia['score'] = 1
-                noticia['scores_todos'] = {'Mundo': 1}
-                noticias_por_tema[tema].append(noticia)
-            else:
-                # Classificar normalmente com léxico
-                resultado = classificar(noticia['titulo'], resumo=noticia.get('resumo', ''))
-                tema = resultado['tema']
-                noticia['tema_classificado'] = tema
-                noticia['score'] = resultado['score']
-                noticia['scores_todos'] = resultado['scores']
+            # Classificar com léxico (Mundo desativado, não aparece mais)
+            resultado = classificar(noticia['titulo'], resumo=noticia.get('resumo', ''))
+            tema = resultado['tema']
+            noticia['tema_classificado'] = tema
+            noticia['score'] = resultado['score']
+            noticia['scores_todos'] = resultado['scores']
 
-                if tema == NAO_CLASSIFICADO:
-                    nao_classificadas.append(noticia)
-                else:
-                    noticias_por_tema[tema].append(noticia)
+            # Ignorar Mundo e não classificadas (não aparecem mais)
+            if tema == NAO_CLASSIFICADO or tema == "Mundo":
+                nao_classificadas.append(noticia)
+            else:
+                noticias_por_tema[tema].append(noticia)
 
         # Mostrar resultados
         print()
@@ -269,9 +251,10 @@ def main():
         print("=" * 70)
         print()
 
-        # Por tema
-        for tema in sorted(noticias_por_tema.keys()):
-            lista = noticias_por_tema[tema]
+        # Por tema (sem Mundo)
+        temas_visiveis = {t: lista for t, lista in noticias_por_tema.items() if t != "Mundo"}
+        for tema in sorted(temas_visiveis.keys()):
+            lista = temas_visiveis[tema]
             print(f"  [{len(lista)}] {tema}")
             print("-" * 70)
             for n in lista:
@@ -280,19 +263,6 @@ def main():
                     print(f"      Resumo: {n['resumo'][:70]}...")
                 print(f"      Score: {n['score']} | Categoria site: {n['categoria']} | {n['hora']}")
             print()
-
-        # Não classificadas
-        print(f"  [{len(nao_classificadas)}] NÃO CLASSIFICADAS")
-        print("-" * 70)
-        if nao_classificadas:
-            for n in nao_classificadas:
-                print(f"    - {n['titulo'][:75]}...")
-                if n.get('resumo'):
-                    print(f"      Resumo: {n['resumo'][:70]}...")
-                print(f"      Categoria site: {n['categoria']} | {n['hora']}")
-        else:
-            print("    (nenhuma)")
-        print()
 
         # Resumo estatístico
         print("=" * 70)
@@ -303,8 +273,9 @@ def main():
         print(f"  Não classificadas: {len(nao_classificadas)}")
         print()
         print("  Por tema:")
-        for tema in sorted(noticias_por_tema.keys()):
-            print(f"    {tema}: {len(noticias_por_tema[tema])}")
+        temas_visiveis = {t: lista for t, lista in noticias_por_tema.items() if t != "Mundo"}
+        for tema in sorted(temas_visiveis.keys()):
+            print(f"    {tema}: {len(temas_visiveis[tema])}")
 
         # Salvar JSON completo (sempre com o mesmo nome)
         out_dir = Path(__file__).resolve().parent / "output"

@@ -146,8 +146,21 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
     if not scores:
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": {}}
 
-    melhor_tema = max(scores, key=scores.get)
-    melhor_score = scores[melhor_tema]
+    # Se houver empate, priorizar Mercado quando houver "fluxo cambial"
+    texto_lower = texto_completo.lower()
+    tem_fluxo_cambial = "fluxo cambial" in texto_lower
+    
+    if tem_fluxo_cambial and "Mercado" in scores and "Banco Central" in scores:
+        if scores["Mercado"] == scores["Banco Central"]:
+            # Priorizar Mercado quando houver fluxo cambial
+            melhor_tema = "Mercado"
+            melhor_score = scores["Mercado"]
+        else:
+            melhor_tema = max(scores, key=scores.get)
+            melhor_score = scores[melhor_tema]
+    else:
+        melhor_tema = max(scores, key=scores.get)
+        melhor_score = scores[melhor_tema]
 
     if melhor_score < SCORE_MINIMO:
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
