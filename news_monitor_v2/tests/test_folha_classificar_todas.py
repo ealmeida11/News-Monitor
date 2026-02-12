@@ -159,7 +159,7 @@ def main():
     driver = None
     noticias_coletadas = []
     titulos_unicos = set()
-    categorias_excluidas_folha = {"Mundo", "Esporte", "Cultura", "Entretenimento", "Educação"}
+    categorias_excluidas_folha = {"Mundo", "Esporte", "Cultura", "Entretenimento", "Educação", "Colunas", "Colunistas"}
 
     try:
         service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)

@@ -174,6 +174,10 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
     if melhor_tema == "Eleições" and melhor_score < 2:
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
+    # Editorial: não classificar por enquanto; depois virão páginas específicas de cada editorial para coleta dedicada (Valor, Estadão, Folha)
+    if melhor_tema == "Editorial":
+        return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+
     # Não classificar notícias sobre política de outros países (ex.: "Argentina: Senado aprova reforma...")
     titulo_lower = (titulo or "").strip().lower()
     prefixos_pais = ("argentina:", "chile:", "uruguai:", "paraguai:", "colômbia:", "colombia:", "peru:", "méxico:", "mexico:", "venezuela:", "bolívia:", "bolivia:", "equador:", "estados unidos:", "eua:", "reino unido:", "frança:", "franca:", "alemanha:", "espanha:", "itália:", "italia:")

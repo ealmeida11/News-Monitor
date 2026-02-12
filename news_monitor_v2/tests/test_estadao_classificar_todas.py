@@ -32,7 +32,7 @@ def _extrair_categoria_estadao(link):
         "/cultura/": "Cultura", "/internacional/": "Internacional", "/sustentabilidade/": "Sustentabilidade",
         "/educacao/": "Educação", "/saude/": "Saúde", "/brasil/": "Brasil", "/tecnologia/": "Tecnologia",
         "/jornal-do-carro/": "Automóveis", "/sao-paulo/": "São Paulo", "/estadao-verifica/": "Fato ou Fake",
-        "/opiniao/": "Opinião",
+        "/opiniao/": "Opinião", "/colunas/": "Colunas", "/colunistas/": "Colunistas",
     }
     link_lower = (link or "").lower()
     for url_path, cat_name in url_categories.items():
@@ -227,7 +227,7 @@ def main():
                     categoria = _extrair_categoria_estadao(link)
 
                     # Excluir categorias que geram classificação indevida (ex.: Esportes -> Governo/Congresso por "MP-SP")
-                    categorias_excluidas_estadao = {"Esportes", "Automóveis", "Cultura", "Internacional", "Educação", "São Paulo"}
+                    categorias_excluidas_estadao = {"Esportes", "Automóveis", "Cultura", "Internacional", "Educação", "São Paulo", "Colunas", "Colunistas"}
                     if categoria in categorias_excluidas_estadao:
                         continue
 

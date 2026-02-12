@@ -166,7 +166,7 @@ def main():
                     categoria = categoria_element.text.strip() if categoria_element else "Não especificada"
 
                     # Filtrar categorias que não queremos coletar
-                    categorias_excluidas_valor = {"ESG", "Carreira", "Empresas", "Eu &", "Marketing"}
+                    categorias_excluidas_valor = {"ESG", "Carreira", "Empresas", "Eu &", "Marketing", "Colunas", "Colunistas"}
                     if categoria in categorias_excluidas_valor:
                         continue
 
