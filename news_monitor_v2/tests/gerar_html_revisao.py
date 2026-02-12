@@ -183,7 +183,8 @@ def gerar_html_revisao():
             }
 
             // Criar e baixar JSON
-            const blob = new Blob([JSON.stringify(feedback, null, 2)], {type: 'application/json'});
+            const jsonStr = JSON.stringify(feedback, null, 2);
+            const blob = new Blob([jsonStr], {type: 'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -191,7 +192,14 @@ def gerar_html_revisao():
             a.click();
             URL.revokeObjectURL(url);
 
-            alert('Feedback salvo! Arquivo "feedback_classificacao.json" foi baixado.');
+            // Mostrar também na tela para copiar/colar
+            const resultadoDiv = document.createElement('div');
+            resultadoDiv.id = 'resultado-feedback';
+            resultadoDiv.style.cssText = 'position:fixed;top:20px;right:20px;background:#fff;border:2px solid #27ae60;padding:20px;border-radius:8px;max-width:500px;max-height:80vh;overflow:auto;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:1000;';
+            resultadoDiv.innerHTML = '<h3 style="margin-top:0;">✅ Feedback Gerado!</h3><p>Arquivo baixado. Copie o JSON abaixo e cole em <code>tests/output/feedback_classificacao.json</code>:</p><textarea readonly style="width:100%;height:300px;font-family:monospace;font-size:11px;">' + jsonStr + '</textarea><br><button onclick="document.getElementById(\'resultado-feedback\').remove()" style="margin-top:10px;padding:8px 16px;background:#e74c3c;color:white;border:none;border-radius:4px;cursor:pointer;">Fechar</button>';
+            document.body.appendChild(resultadoDiv);
+
+            alert('Feedback salvo! Arquivo baixado e JSON mostrado na tela (canto superior direito).');
         });
     </script>
     ''')
