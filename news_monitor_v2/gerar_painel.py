@@ -2,12 +2,10 @@
 """
 Gera painel HTML com tabela aprimorada de últimas notícias.
 Funcionalidades: busca, filtro por categoria, ordenação, paginação.
-Exclui tema Mundo e notícias cuja categoria do site é Mundo.
+Exclui tema Mundo.
 
-Uso:
-    python gerar_painel_html.py
-
-Gera tests/output/painel_dashboard.html — abra no navegador (sem servidor).
+Uso direto: python gerar_painel.py (lê JSONs de output/).
+Ou: gerar_painel_de_lista(todas, ...) para dados do banco.
 """
 
 import json
@@ -15,6 +13,7 @@ from pathlib import Path
 from datetime import datetime
 from html import escape
 
+# output/ fica em news_monitor_v2/output/
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
 ARQUIVOS_JSON = [
     OUTPUT_DIR / "valor_classificado_24h.json",
@@ -279,7 +278,7 @@ def gerar_painel():
 
     if not por_tema_merged:
         print("Nenhum dado encontrado em valor/estadao/folha/oglobo/cnn_classificado_24h.json")
-        print("Rode: python test_valor_classificar_todas.py, test_estadao_classificar_todas.py, test_folha_classificar_todas.py, test_oglobo_classificar_todas.py, test_cnn_classificar_todas.py")
+        print("Rode: python run_coleta.py (ou execute os coletores em coletores/)")
         return
 
     todas = []

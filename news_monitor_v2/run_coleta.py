@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
+r"""
 Script principal: coleta das 5 fontes, grava no banco (sem duplicatas por link),
 gera painel HTML e index para GitHub Pages.
 
 Uso (a partir da raiz do projeto News):
-  set PYTHONPATH=r:\Economics\Ealmeida\Brasil\News
+  set PYTHONPATH=<raiz_do_projeto>
   python news_monitor_v2/run_coleta.py
 
 Ou na pasta news_monitor_v2:
@@ -32,15 +32,15 @@ os.environ.setdefault("WDM_LOG_LEVEL", "0")
 from database import db
 from config import settings
 
-# Scripts de coleta (cada um gera um JSON em tests/output/)
-TESTES = [
-    ("Valor Econômico", "tests/test_valor_classificar_todas.py"),
-    ("Estadão", "tests/test_estadao_classificar_todas.py"),
-    ("Folha", "tests/test_folha_classificar_todas.py"),
-    ("O Globo", "tests/test_oglobo_classificar_todas.py"),
-    ("CNN Brasil", "tests/test_cnn_classificar_todas.py"),
+# Scripts de coleta (cada um gera um JSON em output/)
+COLETORES = [
+    ("Valor Econômico", "coletores/valor.py"),
+    ("Estadão", "coletores/estadao.py"),
+    ("Folha", "coletores/folha.py"),
+    ("O Globo", "coletores/oglobo.py"),
+    ("CNN Brasil", "coletores/cnn.py"),
 ]
-OUTPUT_DIR = BASE_DIR / "tests" / "output"
+OUTPUT_DIR = BASE_DIR / "output"
 ARQUIVOS_JSON = [
     OUTPUT_DIR / "valor_classificado_24h.json",
     OUTPUT_DIR / "estadao_classificado_24h.json",
@@ -78,7 +78,7 @@ def _rodar_coleta_fonte(nome, script_rel):
 
 
 def _extrair_noticias_do_json(arq):
-    """Lê o JSON gerado por um test_* e retorna lista de notícias (cada uma com tema = tema_classificado)."""
+    """Lê o JSON gerado por um coletor e retorna lista de notícias (cada uma com tema = tema_classificado)."""
     if not arq.exists():
         return []
     try:
@@ -121,7 +121,7 @@ def main():
 
     # 1) Rodar coleta de cada fonte
     print("  [1/3] Coletando fontes...")
-    for nome, script in TESTES:
+    for nome, script in COLETORES:
         print(f"    - {nome}...", end=" ", flush=True)
         _rodar_coleta_fonte(nome, script)
         print("OK")
@@ -148,10 +148,10 @@ def main():
     data_formatada = datetime.now().strftime("%d/%m/%Y %H:%M")
 
     if noticias_24h:
-        from tests import gerar_painel_html
+        from gerar_painel import gerar_painel_de_lista
         painel_path = OUTPUT_DIR / "painel_dashboard.html"
         index_path = PROJECT_ROOT / "index.html"
-        gerar_painel_html.gerar_painel_de_lista(
+        gerar_painel_de_lista(
             noticias_24h,
             data_formatada=data_formatada,
             periodo_horas=24,

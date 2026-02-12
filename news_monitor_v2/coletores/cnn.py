@@ -285,7 +285,7 @@ def main():
         print(f"  [{len(nao_classificadas)}] NAO CLASSIFICADAS")
         print()
 
-        out_dir = Path(__file__).resolve().parent / "output"
+        out_dir = Path(__file__).resolve().parent.parent / "output"
         out_dir.mkdir(exist_ok=True)
         arq_json = out_dir / "cnn_classificado_24h.json"
         arq_html = out_dir / "cnn_classificado_24h.html"

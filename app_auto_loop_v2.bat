@@ -47,7 +47,7 @@ if exist "%SOURCE_DIR%news_monitor_v2\noticias_v2.db" (
 echo.
 
 echo [3/4] Enviando para GitHub...
-git add index.html news_monitor_v2/tests/output/painel_dashboard.html 2>nul
+git add index.html news_monitor_v2/output/painel_dashboard.html 2>nul
 git status -s
 git commit -m "Monitor V2: atualizacao automatica %DATE% %TIME%" 2>nul
 git push origin main 2>nul

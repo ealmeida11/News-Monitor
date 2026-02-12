@@ -17,18 +17,19 @@ news_monitor_v2/
 ├── 📁 dashboard/                  # Painel Streamlit (opcional)
 │   └── app.py                        # App Streamlit (não usado atualmente)
 │
-├── 📁 tests/                       # ⭐ Scripts principais
-│   ├── test_valor_classificar_todas.py  # ⭐ COLETA VALOR
-│   ├── gerar_painel_html.py            # ⭐ GERA PAINEL HTML
-│   ├── reclassificar_json.py           # Reclassifica sem coletar
-│   ├── gerar_html_revisao.py           # HTML para revisar classificação
-│   ├── processar_feedback.py           # Processa feedback e sugere keywords
-│   ├── output/                          # Saídas
-│   │   ├── valor_classificado_24h.json # ⭐ Dados coletados
-│   │   └── painel_dashboard.html        # ⭐ Painel final
-│   ├── GUIA_RAPIDO.md                  # Guia rápido de uso
-│   ├── GUIA_TREINAMENTO.md             # Processo de revisão completo
-│   └── README.md                       # Documentação dos scripts
+├── 📁 coletores/                  # ⭐ Coleta por fonte
+│   ├── valor.py
+│   ├── estadao.py
+│   ├── folha.py
+│   ├── oglobo.py
+│   └── cnn.py
+│
+├── 📁 output/                     # Saídas (JSON + painel)
+│   ├── *_classificado_24h.json
+│   └── painel_dashboard.html
+│
+├── gerar_painel.py                # Gera painel HTML
+├── run_coleta.py                  # ⭐ Orquestra: coletores + DB + painel
 │
 ├── 📁 docs/                        # Documentação
 │   ├── MAPEAMENTO_SITES.md            # Como cada site funciona
@@ -48,41 +49,25 @@ news_monitor_v2/
 
 ## 🎯 Arquivos Principais (O que usar no dia a dia)
 
-### Para Coletar Notícias
-- `tests/test_valor_classificar_todas.py` → Coleta e classifica Valor
+### Para Coletar e Ver Resultados
+- `run_coleta.py` → Roda os 5 coletores, grava no DB e gera o painel
+- `output/painel_dashboard.html` → Abrir no navegador
 
-### Para Ver Resultados
-- `tests/output/painel_dashboard.html` → Abrir no navegador
+### Para Rodar um Coletor Só
+- `coletores/valor.py`, `coletores/estadao.py`, etc.
 
 ### Para Ajustar Classificação
 - `classificador/temas_keywords.json` → Editar palavras-chave
-
-### Para Revisar Classificação
-- `tests/gerar_html_revisao.py` → Gera HTML de revisão
-- `tests/processar_feedback.py` → Processa feedback
 
 ---
 
 ## 📝 Fluxo de Trabalho Atual
 
 ```
-1. Coletar
-   python tests/test_valor_classificar_todas.py
-   ↓
-   output/valor_classificado_24h.json
-
-2. Gerar Painel
-   python tests/gerar_painel_html.py
-   ↓
-   output/painel_dashboard.html (abrir no navegador)
-
-3. Se encontrar erros de classificação:
-   python tests/gerar_html_revisao.py
-   → Revisar em output/revisao_classificacao.html
-   → Salvar feedback
-   python tests/processar_feedback.py
-   → Editar classificador/temas_keywords.json
-   python tests/reclassificar_json.py
+python run_coleta.py
+   → Coletores (valor, estadao, folha, oglobo, cnn)
+   → Inserção no banco (sem duplicatas)
+   → output/painel_dashboard.html + index.html (GitHub Pages)
 ```
 
 ---

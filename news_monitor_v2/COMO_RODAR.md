@@ -2,9 +2,9 @@
 
 ## Script principal: `run_coleta.py`
 
-- Coleta as **5 fontes** (Valor, Estadão, Folha, O Globo, CNN Brasil) com os scripts em `tests/test_*_classificar_todas.py`.
+- Coleta as **5 fontes** (Valor, Estadão, Folha, O Globo, CNN Brasil) com os scripts em `coletores/` (valor.py, estadao.py, etc.).
 - Grava apenas **notícias novas** no banco `noticias_v2.db` (deduplicação por **link** nos últimos 7 dias).
-- Gera **painel_dashboard.html** em `tests/output/` e **index.html** na raiz do projeto (para GitHub Pages).
+- Gera **painel_dashboard.html** em `output/` e **index.html** na raiz do projeto (para GitHub Pages).
 
 ### Uma execução (manual)
 
@@ -39,5 +39,5 @@ O banco `noticias_v2.db` fica apenas local (não é enviado ao GitHub).
 ## Estrutura
 
 - **database/db.py** – SQLite: `init_db`, `get_links_existentes`, `insert_noticia`, `get_noticias_ultimas_24h`.
-- **run_coleta.py** – Orquestra: chama os 5 testes, lê os JSONs, insere no DB, gera painel e index.
-- **tests/gerar_painel_html.py** – `gerar_painel_de_lista()` gera o HTML a partir de uma lista (ex.: do DB).
+- **run_coleta.py** – Orquestra: chama os 5 coletores, lê os JSONs, insere no DB, gera painel e index.
+- **gerar_painel.py** – `gerar_painel_de_lista()` gera o HTML a partir de uma lista (ex.: do DB).

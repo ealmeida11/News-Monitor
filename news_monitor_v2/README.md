@@ -25,15 +25,19 @@ news_monitor_v2/
 ├── dashboard/               # Painel de visualização
 │   └── app.py                  # Streamlit (opcional)
 │
-├── tests/                   # Scripts principais de coleta e geração
-│   ├── test_valor_classificar_todas.py  # ⭐ COLETA VALOR + CLASSIFICAÇÃO
-│   ├── gerar_painel_html.py             # ⭐ GERA PAINEL HTML FINAL
-│   ├── reclassificar_json.py            # Reclassifica JSON existente (sem coletar)
-│   ├── gerar_html_revisao.py            # Gera HTML para revisar classificação
-│   ├── processar_feedback.py            # Processa feedback e sugere keywords
-│   └── output/                          # Saídas (JSON, HTML)
-│       ├── valor_classificado_24h.json # Dados coletados e classificados
-│       └── painel_dashboard.html        # Painel final (ABRIR NO NAVEGADOR)
+├── coletores/               # Coleta por fonte (Valor, Estadão, Folha, O Globo, CNN)
+│   ├── valor.py
+│   ├── estadao.py
+│   ├── folha.py
+│   ├── oglobo.py
+│   └── cnn.py
+│
+├── output/                  # Saídas (JSON por fonte + painel)
+│   ├── *_classificado_24h.json
+│   └── painel_dashboard.html   # Painel final (ABRIR NO NAVEGADOR)
+│
+├── gerar_painel.py          # Gera painel HTML a partir de lista de notícias
+├── run_coleta.py            # ⭐ Script principal: coleta 5 fontes + DB + painel
 │
 ├── docs/                    # Documentação
 │   └── MAPEAMENTO_SITES.md      # Como cada site funciona hoje
@@ -45,61 +49,37 @@ news_monitor_v2/
 
 ## 🚀 Como Usar (Valor Econômico)
 
-### 1. Coletar e Classificar Notícias
+### 1. Coletar, classificar e gerar painel (recomendado)
+
+Na raiz do projeto ou em `news_monitor_v2`:
 
 ```bash
-cd news_monitor_v2/tests
-python test_valor_classificar_todas.py
+python news_monitor_v2/run_coleta.py
 ```
 
 **O que faz:**
-- Coleta notícias das últimas 24h do Valor
-- Classifica cada uma por tema (Fiscal, BC, Mercado, etc.)
-- Exclui automaticamente tema "Mundo" e notícias cuja categoria do site é "Mundo"
-- Salva em `output/valor_classificado_24h.json`
+- Roda os 5 coletores (Valor, Estadão, Folha, O Globo, CNN)
+- Grava notícias novas no banco (sem duplicatas por link)
+- Gera `output/painel_dashboard.html` e copia para `index.html` (GitHub Pages)
 
-**Saída:** Console mostra resumo + arquivos JSON e HTML simples
-
----
-
-### 2. Gerar Painel HTML
-
-```bash
-python gerar_painel_html.py
-```
-
-**O que faz:**
-- Lê `valor_classificado_24h.json`
-- Gera `output/painel_dashboard.html` com tabela interativa
-
-**Funcionalidades do painel:**
-- 🔍 Busca por título/resumo
-- 🏷️ Filtro por categoria/tema
-- ↕️ Ordenação clicável nas colunas
-- 📄 Paginação (25 por página)
-- 📊 Categorias coloridas
-
-**Abrir:** `tests/output/painel_dashboard.html` no navegador
+**Abrir:** `news_monitor_v2/output/painel_dashboard.html` ou `index.html` na raiz
 
 ---
 
-### 3. Revisar e Ajustar Classificação
-
-Se encontrar classificações erradas:
+### 2. Rodar um coletor só (ex.: Valor)
 
 ```bash
-# 1. Gerar HTML de revisão
-python gerar_html_revisao.py
-
-# 2. Abrir output/revisao_classificacao.html no navegador
-# 3. Marcar correções e salvar feedback
-# 4. Processar feedback
-python processar_feedback.py
-
-# 5. Editar classificador/temas_keywords.json com as sugestões
-# 6. Reclassificar sem coletar de novo
-python reclassificar_json.py
+cd news_monitor_v2
+python coletores/valor.py
 ```
+
+Salva em `output/valor_classificado_24h.json` (e HTML simples).
+
+---
+
+### 3. Ajustar classificação
+
+Edite **classificador/temas_keywords.json** e rode de novo `run_coleta.py` ou o coletor desejado.
 
 ---
 
@@ -124,8 +104,8 @@ Atualmente classificamos em **7 temas** (Mundo desativado):
 
 ### Checklist para cada novo jornal:
 
-1. **Criar script de teste** (ex: `test_estadao_classificar_todas.py`)
-   - Copiar estrutura de `test_valor_classificar_todas.py`
+1. **Adicionar novo coletor** em `coletores/`
+   - Copiar estrutura de `coletores/valor.py`
    - Ajustar URL e seletores CSS/HTML
    - Testar coleta de título, link, categoria, data/hora, **resumo**
 
@@ -156,7 +136,7 @@ Atualmente classificamos em **7 temas** (Mundo desativado):
 
 ### Filtros de Tempo
 
-- Coleta: últimas **24 horas** (configurável em `test_valor_classificar_todas.py`)
+- Coleta: últimas **24 horas** (configurável em cada script em `coletores/`)
 - Critério de parada: ≥5 notícias antigas na mesma página
 
 ---
@@ -165,7 +145,7 @@ Atualmente classificamos em **7 temas** (Mundo desativado):
 
 - `docs/MAPEAMENTO_SITES.md` - Como cada site funciona hoje
 - `classificador/README.md` - Como adicionar/modificar temas
-- `tests/GUIA_TREINAMENTO.md` - Processo de revisão e ajuste de keywords
+- `classificador/temas_keywords.json` - Palavras-chave por tema (editar para ajustar)
 
 ---
 

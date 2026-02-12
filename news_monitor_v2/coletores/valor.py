@@ -283,7 +283,7 @@ def main():
             print(f"    {tema}: {len(temas_visiveis[tema])}")
 
         # Salvar JSON completo (sempre com o mesmo nome)
-        out_dir = Path(__file__).resolve().parent / "output"
+        out_dir = Path(__file__).resolve().parent.parent / "output"
         out_dir.mkdir(exist_ok=True)
         
         # Limpar arquivos antigos com timestamp
