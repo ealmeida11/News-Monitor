@@ -52,20 +52,48 @@ def noticia_dentro_24h(data, hora):
         return False
 
 
-def _parse_data_hora_estadao(data_hora_texto):
+def _parse_data_hora_estadao(data_hora_texto, referencia=None):
     """
     Extrai (data, hora) do texto de data do Estadão.
-    Aceita: "12/02/2026, 14h30" ou "12/02/2026 | 14h30" ou "12/02/2026, 14h5" (minuto com 1 dígito).
+    Formato do site: português, hora 0-24 (24h = meia-noite do dia seguinte).
+    Aceita: "12/02/2026, 14h30" ou "12/02/2026 | 14h30" ou "14h5"; "Hoje, 10h41"; "Ontem, 18h00".
     Retorna (data, hora) no formato DD/MM/YYYY e HH:MM, ou (None, None) se não reconhecer.
     """
-    # Com vírgula ou pipe; hora com 1 ou 2 dígitos, minuto com 1 ou 2 dígitos
+    ref = referencia or datetime.now()
+    # Data explícita: DD/MM/YYYY , ou |  HhMM (hora 0-24)
     m = re.search(r"(\d{2}/\d{2}/\d{4})\s*[,|]\s*(\d{1,2})h(\d{1,2})\b", data_hora_texto.strip())
-    if not m:
-        return None, None
-    data = m.group(1)
-    h, minu = int(m.group(2)), int(m.group(3))
-    hora = f"{h:02d}:{minu:02d}"
-    return data, hora
+    if m:
+        data = m.group(1)
+        h, minu = int(m.group(2)), int(m.group(3))
+        if h == 24:  # 24h em PT = meia-noite do dia seguinte
+            dt = datetime.strptime(data, "%d/%m/%Y") + timedelta(days=1)
+            data = dt.strftime("%d/%m/%Y")
+            h = 0
+        hora = f"{h:02d}:{minu:02d}"
+        return data, hora
+    # Hoje, 10h41 ou Hoje 10h41
+    m_hoje = re.search(r"hoje\s*[,|]?\s*(\d{1,2})h(\d{1,2})\b", data_hora_texto.strip(), re.I)
+    if m_hoje:
+        data = ref.strftime("%d/%m/%Y")
+        h, minu = int(m_hoje.group(1)), int(m_hoje.group(2))
+        if h == 24:
+            dt = ref + timedelta(days=1)
+            data = dt.strftime("%d/%m/%Y")
+            h = 0
+        hora = f"{h:02d}:{minu:02d}"
+        return data, hora
+    # Ontem, 18h00
+    m_ontem = re.search(r"ontem\s*[,|]?\s*(\d{1,2})h(\d{1,2})\b", data_hora_texto.strip(), re.I)
+    if m_ontem:
+        ontem = ref - timedelta(days=1)
+        data = ontem.strftime("%d/%m/%Y")
+        h, minu = int(m_ontem.group(1)), int(m_ontem.group(2))
+        if h == 24:
+            data = ref.strftime("%d/%m/%Y")
+            h = 0
+        hora = f"{h:02d}:{minu:02d}"
+        return data, hora
+    return None, None
 
 
 def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html, limite_24h=None, intervalo_noticias=None):
@@ -169,7 +197,7 @@ def main():
         clique = 0
         tentativas_sem_novas = 0
         antigas_consecutivas = 0
-        max_cliques = 15
+        max_cliques = 30  # Aumentado para pegar mais notícias das 24h
 
         while True:
             soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -198,7 +226,7 @@ def main():
                         continue
 
                     data_hora_texto = data_element.get_text(strip=True)
-                    data, hora = _parse_data_hora_estadao(data_hora_texto)
+                    data, hora = _parse_data_hora_estadao(data_hora_texto, referencia=agora)
                     if not data or not hora:
                         continue
 
@@ -243,22 +271,37 @@ def main():
                 print("  PARADA: limite de cliques em Carregar mais")
                 break
 
-            # Clicar em "Carregar mais"
+            # Clicar em "Carregar mais" (igual ao scraper_otimizado: scroll, remover banners, JS click)
             try:
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(1)
+                time.sleep(1.5)
                 driver.execute_script("""
                     var b = document.querySelectorAll('.banner__container, .banner, [id="banner"]');
                     for(var i=0;i<b.length;i++) b[i].remove();
                 """)
-                botao = WebDriverWait(driver, 5).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, "button.see-more[data-component-name='lista-ultimas']"))
-                )
-                botao.click()
-                time.sleep(2)
+                botao = None
+                for seletor in [
+                    "button.see-more[data-component-name='lista-ultimas']",
+                    "button.see-more",
+                    "button[data-component-name='lista-ultimas']",
+                ]:
+                    try:
+                        botao = WebDriverWait(driver, 8).until(
+                            EC.presence_of_element_located((By.CSS_SELECTOR, seletor))
+                        )
+                        break
+                    except Exception:
+                        continue
+                if not botao:
+                    print("  PARADA: botao Carregar mais nao encontrado")
+                    break
+                driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao)
+                time.sleep(0.5)
+                driver.execute_script("arguments[0].click();", botao)
+                time.sleep(2.5)
                 clique += 1
-            except Exception:
-                print("  PARADA: botao Carregar mais nao encontrado ou nao clicavel")
+            except Exception as e:
+                print("  PARADA: botao Carregar mais nao clicavel:", str(e)[:50])
                 break
 
         print()

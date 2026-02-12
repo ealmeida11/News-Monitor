@@ -165,6 +165,11 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
     if melhor_score < SCORE_MINIMO:
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
+    # Exclusão: leilão de serviços de remoção/guarda de veículos (governo) não é "Atividade" econômica
+    if melhor_tema == "Atividade":
+        if "leilão" in texto_lower and ("remoção" in texto_lower or "guarda" in texto_lower):
+            return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+
     return {"tema": melhor_tema, "score": melhor_score, "scores": scores}
 
 
