@@ -17,6 +17,7 @@ OUTPUT_DIR = BASE / "tests" / "output"
 ARQUIVOS_JSON = [
     OUTPUT_DIR / "valor_classificado_24h.json",
     OUTPUT_DIR / "estadao_classificado_24h.json",
+    OUTPUT_DIR / "folha_classificado_24h.json",
 ]
 
 ORDEM_TEMAS = [
@@ -80,7 +81,7 @@ st.set_page_config(layout="wide", page_title="Monitor Macro Brasil", page_icon="
 st_autorefresh(interval=120_000, key="refresh")
 
 st.title("📡 Monitor Macro Brasil")
-st.caption("Últimas 24h | Fontes: Valor Econômico, Estadão")
+st.caption("Últimas 24h | Fontes: Valor Econômico, Estadão, Folha de S.Paulo")
 
 todas, por_tema, data_coleta = _carregar_dados()
 if data_coleta:
@@ -91,7 +92,7 @@ if data_coleta:
         pass
 
 if not todas:
-    st.warning("Nenhum dado encontrado. Rode: `python tests/test_valor_classificar_todas.py` e/ou `python tests/test_estadao_classificar_todas.py`")
+    st.warning("Nenhum dado encontrado. Rode os testes: test_valor_classificar_todas.py, test_estadao_classificar_todas.py, test_folha_classificar_todas.py")
     st.stop()
 
 # ---------- SEÇÃO 1: DESTAQUES POR TEMA (TOPO) ----------
