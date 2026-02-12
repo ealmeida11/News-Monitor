@@ -151,7 +151,7 @@ def gerar_painel():
     periodo_horas = data.get("periodo_horas", 24)
     html.append('<div class="header">')
     html.append("<h1>📡 Newsflow Macro Brasil</h1>")
-    html.append(f'<div class="meta">Última atualização: {data_formatada} | Notícias das últimas {periodo_horas} horas</div>')
+    html.append(f'<div class="meta">Última atualização: {data_formatada} | Notícias das últimas {periodo_horas} horas | Fontes: Valor Econômico, Estadão, Folha, O Globo, CNN Brasil</div>')
     html.append("</div>")
     html.append('<div class="container">')
 
