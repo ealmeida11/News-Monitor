@@ -162,6 +162,12 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
         melhor_tema = max(scores, key=scores.get)
         melhor_score = scores[melhor_tema]
 
+    # Prioridade: Caso Master sobre Governo/Congresso quando a notícia é sobre Vorcaro/Master (ex.: depoimento ao Senado)
+    if melhor_tema == "Governo/Congresso" and "Caso Master" in scores and scores["Caso Master"] >= 1:
+        if "vorcaro" in texto_lower or "banco master" in texto_lower or "credcesta" in texto_lower or "daniel vorcaro" in texto_lower:
+            melhor_tema = "Caso Master"
+            melhor_score = scores["Caso Master"]
+
     if melhor_score < SCORE_MINIMO:
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
@@ -187,13 +193,40 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
     if melhor_tema == "Editorial":
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
-    # Não classificar notícias sobre política de outros países (ex.: "Argentina: Senado aprova reforma...")
+    # Governo/Congresso: não classificar quando "presidente" é de empresa (Ambev, Banrisul, etc.), não do governo
+    if melhor_tema == "Governo/Congresso" and "presidente" in texto_lower:
+        contexto_empresa = ("ambev" in texto_lower or "banrisul" in texto_lower or "expandindo margem" in texto_lower
+                           or "carteira pj" in texto_lower)
+        if contexto_empresa:
+            scores_sem_gov = {k: v for k, v in scores.items() if k != "Governo/Congresso"}
+            if scores_sem_gov:
+                melhor_tema = max(scores_sem_gov, key=scores_sem_gov.get)
+                melhor_score = scores_sem_gov[melhor_tema]
+            if not scores_sem_gov or melhor_score < SCORE_MINIMO:
+                return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+
+    # Mercado: não classificar quando "ações" significa medidas/ato (ex.: "ações do MPF", "insuficientes ações"), não ações de bolsa
+    if melhor_tema == "Mercado" and "ações" in texto_lower:
+        acoes_como_medidas = ("ações do " in texto_lower or " ações contra " in texto_lower
+                             or "insuficientes ações" in texto_lower or "ações insuficientes" in texto_lower)
+        if acoes_como_medidas:
+            scores_sem_merc = {k: v for k, v in scores.items() if k != "Mercado"}
+            if scores_sem_merc:
+                melhor_tema = max(scores_sem_merc, key=scores_sem_merc.get)
+                melhor_score = scores_sem_merc[melhor_tema]
+            if not scores_sem_merc or melhor_score < SCORE_MINIMO:
+                return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+
+    # Não classificar notícias sobre política/economia de outros países (só queremos Brasil)
     titulo_lower = (titulo or "").strip().lower()
     prefixos_pais = ("argentina:", "chile:", "uruguai:", "paraguai:", "colômbia:", "colombia:", "peru:", "méxico:", "mexico:", "venezuela:", "bolívia:", "bolivia:", "equador:", "estados unidos:", "eua:", "reino unido:", "frança:", "franca:", "alemanha:", "espanha:", "itália:", "italia:")
     if titulo_lower.startswith(prefixos_pais):
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
     # Milei + Senado/reforma no título = Argentina, não Brasil
     if "milei" in titulo_lower and ("senado" in titulo_lower or "reforma" in titulo_lower or "argentina" in titulo_lower):
+        return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+    # Economia/fiscal de outro país (ex.: "Economia do Reino Unido cresce...") = não classificar
+    if "reino unido" in texto_lower and ("economia" in texto_lower or "cresce" in texto_lower or "orçamento" in texto_lower or "orcamento" in texto_lower or "pib" in texto_lower or "4 tri" in texto_lower or "trimestre" in texto_lower):
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
     return {"tema": melhor_tema, "score": melhor_score, "scores": scores}

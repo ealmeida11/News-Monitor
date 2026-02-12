@@ -181,7 +181,11 @@ def main():
 
     agora = datetime.now()
     limite_24h = agora - timedelta(hours=24)
-    categorias_excluidas_cnn = {"Esportes", "BBB", "Entretenimento", "Carnaval", "Celebridades", "Música", "Cinema", "Televisão", "Streaming", "Shows", "Horóscopo", "Viagem & Gastronomia", "Viagem", "Gastronomia"}
+    categorias_excluidas_cnn = {
+        "Esportes", "BBB", "Entretenimento", "Carnaval", "Celebridades", "Música", "Cinema", "Televisão",
+        "Streaming", "Shows", "Horóscopo", "Viagem & Gastronomia", "Viagem", "Gastronomia",
+        "Olimpíadas", "Minas Gerais", "Internacional", "Ceará",
+    }
 
     print("=" * 70)
     print("  COLETA E CLASSIFICACAO - CNN BRASIL (ultimas 24 horas)")

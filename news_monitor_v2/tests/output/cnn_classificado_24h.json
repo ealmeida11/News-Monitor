@@ -1,7 +1,7 @@
 {
-  "data_coleta": "2026-02-12T17:19:39.898621",
+  "data_coleta": "2026-02-12T17:30:21.346064",
   "periodo_horas": 24,
-  "total_coletado": 27,
+  "total_coletado": 118,
   "por_tema": {
     "STF": [
       {
@@ -33,6 +33,20 @@
         }
       },
       {
+        "titulo": "Moraes abre divergência e vota contra aposentadoria especial a vigilantes",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "16:40",
+        "link": "https://www.cnnbrasil.com.br/politica/moraes-abre-divergencia-e-vota-contra-aposentadoria-especial-a-vigilantes/",
+        "tema_classificado": "STF",
+        "score": 1,
+        "scores_todos": {
+          "STF": 1
+        }
+      },
+      {
         "titulo": "PGR e ministros do STF defendem afastamento de Toffoli do caso Master",
         "resumo": "",
         "categoria": "Política",
@@ -44,6 +58,136 @@
         "score": 2,
         "scores_todos": {
           "STF": 2
+        }
+      },
+      {
+        "titulo": "Fachin convoca reunião para tratar do caso Master com todos os ministros",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "15:21",
+        "link": "https://www.cnnbrasil.com.br/politica/fachin-convoca-reuniao-para-tratar-do-caso-master-com-todos-os-ministros/",
+        "tema_classificado": "STF",
+        "score": 1,
+        "scores_todos": {
+          "STF": 1
+        }
+      },
+      {
+        "titulo": "Após sustentações, Fachin suspenderá sessão para “diálogo” entre ministros",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "14:53",
+        "link": "https://www.cnnbrasil.com.br/politica/apos-sustentacoes-fachin-suspendera-sessao-para-dialogo-entre-ministros/",
+        "tema_classificado": "STF",
+        "score": 1,
+        "scores_todos": {
+          "STF": 1
+        }
+      },
+      {
+        "titulo": "Começa primeira sessão do STF após revelações envolvendo Toffoli e Vorcaro",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "14:45",
+        "link": "https://www.cnnbrasil.com.br/politica/comeca-primeira-sessao-do-stf-apos-revelacoes-envolvendo-toffoli-e-vorcaro/",
+        "tema_classificado": "STF",
+        "score": 2,
+        "scores_todos": {
+          "STF": 2,
+          "Caso Master": 1
+        }
+      },
+      {
+        "titulo": "Master: Quem é Fabiano Zettel, cunhado de Vorcaro citado em nota de Toffoli",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "14:06",
+        "link": "https://www.cnnbrasil.com.br/politica/master-quem-e-fabiano-zettel-cunhado-de-vorcaro-citado-em-nota-de-toffoli/",
+        "tema_classificado": "STF",
+        "score": 1,
+        "scores_todos": {
+          "STF": 1,
+          "Caso Master": 1
+        }
+      },
+      {
+        "titulo": "Toffoli manda PF enviar ao STF provas do caso do Banco Master",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "13:49",
+        "link": "https://www.cnnbrasil.com.br/blogs/matheus-teixeira/politica/toffoli-manda-pf-enviar-ao-stf-provas-do-caso-do-banco-master/",
+        "tema_classificado": "STF",
+        "score": 2,
+        "scores_todos": {
+          "STF": 2,
+          "Caso Master": 1
+        }
+      },
+      {
+        "titulo": "Novo anuncia pedido de impeachment contra Toffoli por caso Master",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "13:43",
+        "link": "https://www.cnnbrasil.com.br/politica/novo-anuncia-pedido-de-impeachment-contra-toffoli-por-caso-master/",
+        "tema_classificado": "STF",
+        "score": 1,
+        "scores_todos": {
+          "STF": 1
+        }
+      },
+      {
+        "titulo": "Apesar de relato de Vorcaro, não há confirmação de transferência a Toffoli",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "12:46",
+        "link": "https://www.cnnbrasil.com.br/politica/apesar-de-relato-de-vorcaro-nao-ha-confirmacao-de-transferencia-a-toffoli/",
+        "tema_classificado": "STF",
+        "score": 1,
+        "scores_todos": {
+          "STF": 1,
+          "Caso Master": 1
+        }
+      },
+      {
+        "titulo": "PF enviou relatório a Fachin, mas não pediu suspeição de Toffoli",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "12:23",
+        "link": "https://www.cnnbrasil.com.br/politica/pf-enviou-relatorio-a-fachin-mas-nao-pediu-suspeicao-de-toffoli/",
+        "tema_classificado": "STF",
+        "score": 2,
+        "scores_todos": {
+          "STF": 2
+        }
+      },
+      {
+        "titulo": "Oposição protocola novo pedido à PGR para afastar Toffoli de caso Master",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "11:50",
+        "link": "https://www.cnnbrasil.com.br/blogs/jussara-soares/politica/oposicao-protocola-novo-pedido-a-pgr-para-afastar-toffoli-de-caso-master/",
+        "tema_classificado": "STF",
+        "score": 1,
+        "scores_todos": {
+          "STF": 1
         }
       }
     ],
@@ -65,70 +209,234 @@
     ],
     "Governo/Congresso": [
       {
-        "titulo": "Ambev deve seguir expandindo margem, diz presidente",
+        "titulo": "Bolsonaristas veem risco de Michele deixar o PL",
+        "resumo": "",
+        "categoria": "Eleições",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "16:02",
+        "link": "https://www.cnnbrasil.com.br/blogs/isabel-mega/eleicoes/bolsonaristas-veem-risco-de-michele-deixar-o-pl/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Presidente da Uefa critica jogos de ligas nacionais fora da Europa",
+        "resumo": "",
+        "categoria": "Futebol Internacional",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "12:33",
+        "link": "https://www.cnnbrasil.com.br/esportes/futebol/futebol-internacional/presidente-da-uefa-critica-jogos-de-ligas-nacionais-fora-da-europa/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "MP de SP localiza imóveis e R$ 500 mi em bens ilícitos ligados ao tráfico",
+        "resumo": "",
+        "categoria": "São Paulo",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "12:27",
+        "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/mp-de-sp-localiza-imoveis-e-r-500-mi-em-bens-ilicitos-ligados-ao-trafico/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Por unanimidade, TSE mantém mandato do senador Jorge Seif",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "11:30",
+        "link": "https://www.cnnbrasil.com.br/politica/por-unanimidade-tse-mantem-mandato-do-senador-jorge-seif/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1,
+          "Eleições": 1
+        }
+      }
+    ],
+    "Caso Master": [
+      {
+        "titulo": "Entenda a \"teia\" de fraudes envolvendo o Banco Master",
+        "resumo": "",
+        "categoria": "Macroeconomia",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "15:43",
+        "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/entenda-a-teia-de-fraudes-envolvendo-o-banco-master/",
+        "tema_classificado": "Caso Master",
+        "score": 1,
+        "scores_todos": {
+          "Caso Master": 1
+        }
+      },
+      {
+        "titulo": "Linha de narrativa de Vorcaro no Senado será de que não fez nada de errado",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "15:31",
+        "link": "https://www.cnnbrasil.com.br/politica/linha-de-narrativa-de-vorcaro-no-senado-sera-de-que-nao-fez-nada-de-errado/",
+        "tema_classificado": "Caso Master",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1,
+          "Caso Master": 1
+        }
+      },
+      {
+        "titulo": "Vorcaro terá transporte e custódia para depor ao Senado Federal",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "13:45",
+        "link": "https://www.cnnbrasil.com.br/blogs/gustavo-uribe/politica/vorcaro-tera-transporte-e-custodia-para-depor-ao-senado-federal/",
+        "tema_classificado": "Caso Master",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1,
+          "Caso Master": 1
+        }
+      }
+    ],
+    "Mercado": [
+      {
+        "titulo": "Bolsas da Europa fecham em queda com balanços e ações de NY",
         "resumo": "",
         "categoria": "Mercado",
         "fonte": "CNN Brasil",
         "data": "12/02/2026",
-        "hora": "16:57",
-        "link": "https://www.cnnbrasil.com.br/economia/mercado/ambev-deve-seguir-expandindo-margem-diz-presidente/",
-        "tema_classificado": "Governo/Congresso",
+        "hora": "14:40",
+        "link": "https://www.cnnbrasil.com.br/economia/mercado/bolsas-da-europa-fecham-majoritariamente-em-queda-com-balancos-e-piora-em-ny/",
+        "tema_classificado": "Mercado",
         "score": 1,
         "scores_todos": {
-          "Governo/Congresso": 1
+          "Mercado": 1
+        }
+      }
+    ],
+    "Eleições": [
+      {
+        "titulo": "Tarcísio diz que encontrará Flávio após Carnaval para \"pensar estratégia\"",
+        "resumo": "",
+        "categoria": "Eleições",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "13:38",
+        "link": "https://www.cnnbrasil.com.br/eleicoes/tarcisio-diz-que-encontrara-flavio-apos-carnaval-para-pensar-estrategia/",
+        "tema_classificado": "Eleições",
+        "score": 2,
+        "scores_todos": {
+          "Eleições": 2
         }
       },
       {
-        "titulo": "Chacina em padaria: novo suspeito é preso e MP pede soltura de adolescente",
+        "titulo": "Tarcísio diz que falou com ministros do STF sobre domiciliar a Bolsonaro",
         "resumo": "",
-        "categoria": "Minas Gerais",
+        "categoria": "Política",
         "fonte": "CNN Brasil",
         "data": "12/02/2026",
-        "hora": "16:53",
-        "link": "https://www.cnnbrasil.com.br/nacional/sudeste/mg/chacina-em-padaria-novo-suspeito-e-preso-e-mp-pede-soltura-de-adolescente/",
-        "tema_classificado": "Governo/Congresso",
-        "score": 1,
+        "hora": "13:33",
+        "link": "https://www.cnnbrasil.com.br/politica/tarcisio-diz-que-falou-com-ministros-do-stf-sobre-domiciliar-a-bolsonaro/",
+        "tema_classificado": "Eleições",
+        "score": 2,
         "scores_todos": {
-          "Governo/Congresso": 1
+          "Eleições": 2,
+          "STF": 1
         }
       },
       {
-        "titulo": "Ministro diz que exclusão de ucraniano é \"injusta\", mas descarta boicote",
+        "titulo": "Venceu o voto do povo, diz Seif após TSE arquivar ação e manter seu mandato",
         "resumo": "",
-        "categoria": "Olimpíadas",
+        "categoria": "Política",
         "fonte": "CNN Brasil",
         "data": "12/02/2026",
-        "hora": "16:35",
-        "link": "https://www.cnnbrasil.com.br/esportes/olimpiadas/ministro-diz-que-exclusao-de-ucraniano-e-injusta-mas-descarta-boicote/",
-        "tema_classificado": "Governo/Congresso",
-        "score": 1,
+        "hora": "12:19",
+        "link": "https://www.cnnbrasil.com.br/politica/venceu-o-voto-do-povo-diz-seif-apos-tse-arquivar-acao-e-manter-seu-mandato/",
+        "tema_classificado": "Eleições",
+        "score": 2,
         "scores_todos": {
-          "Governo/Congresso": 1
+          "Eleições": 2
+        }
+      },
+      {
+        "titulo": "TSE nega pedido de liminar para barrar samba-enredo em homenagem a Lula",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "12:12",
+        "link": "https://www.cnnbrasil.com.br/politica/tse-acao-novo-presidente-lula-carnaval-propaganda-antecipada/",
+        "tema_classificado": "Eleições",
+        "score": 2,
+        "scores_todos": {
+          "Eleições": 2
+        }
+      }
+    ],
+    "Atividade": [
+      {
+        "titulo": "Quatro das cinco atividades de serviços avançaram em 2025, aponta IBGE",
+        "resumo": "",
+        "categoria": "Macroeconomia",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "12:31",
+        "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/quatro-das-cinco-atividades-de-servicos-registraram-avancos-em-2025-aponta-ibge/",
+        "tema_classificado": "Atividade",
+        "score": 2,
+        "scores_todos": {
+          "Atividade": 2
         }
       }
     ]
   },
   "nao_classificadas": [
     {
-      "titulo": "STJD pune Abel Braga com 5 partidas e R$ 20 mil por declaração homofóbica",
+      "titulo": "\"Família é mais importante da vida\", disse secretário antes de matar filho",
       "resumo": "",
-      "categoria": "Internacional",
+      "categoria": "Goiás",
       "fonte": "CNN Brasil",
       "data": "12/02/2026",
-      "hora": "17:19",
-      "link": "https://www.cnnbrasil.com.br/esportes/futebol/internacional-futebol/stjd-pune-abel-braga-com-5-partidas-e-r-20-mil-por-declaracao-homofobica/",
+      "hora": "17:23",
+      "link": "https://www.cnnbrasil.com.br/nacional/centro-oeste/go/familia-e-mais-importante-da-vida-disse-secretario-antes-de-matar-filho/",
       "tema_classificado": "Não classificado",
       "score": 0,
       "scores_todos": {}
     },
     {
-      "titulo": "Zelensky condecora ucraniano desclassificado por homenagem nas Olimpíadas",
+      "titulo": "Brasil pode ser protagonista na produção de etanol de milho",
       "resumo": "",
-      "categoria": "Internacional",
+      "categoria": "Agro",
       "fonte": "CNN Brasil",
       "data": "12/02/2026",
-      "hora": "17:18",
-      "link": "https://www.cnnbrasil.com.br/internacional/zelensky-condecora-ucraniano-desclassificado-por-homenagem-nas-olimpiadas/",
+      "hora": "17:22",
+      "link": "https://www.cnnbrasil.com.br/agro/brasil-pode-ser-protagonista-na-producao-de-etanol-de-milho/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Powerbank pode explodir no avião? Saiba como viajar com eletrônicos",
+      "resumo": "",
+      "categoria": "Tecnologia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "17:20",
+      "link": "https://www.cnnbrasil.com.br/tecnologia/powerbank-pode-explodir-no-aviao-saiba-como-viajar-com-eletronicos/",
       "tema_classificado": "Não classificado",
       "score": 0,
       "scores_todos": {}
@@ -170,16 +478,18 @@
       "scores_todos": {}
     },
     {
-      "titulo": "Criança escreve carta de socorro após ser obrigada pela mãe a se prostituir",
+      "titulo": "Ambev deve seguir expandindo margem, diz presidente",
       "resumo": "",
-      "categoria": "Minas Gerais",
+      "categoria": "Mercado",
       "fonte": "CNN Brasil",
       "data": "12/02/2026",
-      "hora": "16:59",
-      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/mg/crianca-escreve-carta-de-socorro-apos-ser-obrigada-pela-mae-a-se-prostituir/",
+      "hora": "16:57",
+      "link": "https://www.cnnbrasil.com.br/economia/mercado/ambev-deve-seguir-expandindo-margem-diz-presidente/",
       "tema_classificado": "Não classificado",
       "score": 0,
-      "scores_todos": {}
+      "scores_todos": {
+        "Governo/Congresso": 1
+      }
     },
     {
       "titulo": "\"Pegue, Leve e Leia\": feiras de doação de livros para renovar a estante",
@@ -201,18 +511,6 @@
       "data": "12/02/2026",
       "hora": "16:56",
       "link": "https://www.cnnbrasil.com.br/nacional/brasil/numero-de-acidentes-em-rodovias-federais-do-brasil-diminuiu-5-em-2025/",
-      "tema_classificado": "Não classificado",
-      "score": 0,
-      "scores_todos": {}
-    },
-    {
-      "titulo": "Trump diz que relação entre EUA e Venezuela é “extraordinária”",
-      "resumo": "",
-      "categoria": "Internacional",
-      "fonte": "CNN Brasil",
-      "data": "12/02/2026",
-      "hora": "16:53",
-      "link": "https://www.cnnbrasil.com.br/internacional/trump-diz-que-relacao-entre-eua-e-venezuela-e-extraordinaria/",
       "tema_classificado": "Não classificado",
       "score": 0,
       "scores_todos": {}
@@ -254,6 +552,18 @@
       "scores_todos": {}
     },
     {
+      "titulo": "Roblox, Discord e YouTube: como funcionam as novas verificações de idade",
+      "resumo": "",
+      "categoria": "Tecnologia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:42",
+      "link": "https://www.cnnbrasil.com.br/tecnologia/roblox-discord-e-youtube-como-funcionam-as-novas-verificacoes-de-idade/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
       "titulo": "Com grupo da morte, chaves da Nations League 2026-27 são definidas",
       "resumo": "",
       "categoria": "Futebol Internacional",
@@ -278,18 +588,6 @@
       "scores_todos": {}
     },
     {
-      "titulo": "Trump revoga base legal de medidas que combatem mudanças climáticas nos EUA",
-      "resumo": "",
-      "categoria": "Internacional",
-      "fonte": "CNN Brasil",
-      "data": "12/02/2026",
-      "hora": "16:30",
-      "link": "https://www.cnnbrasil.com.br/internacional/trump-revoga-base-legal-de-medidas-que-combatem-mudancas-climaticas-nos-eua/",
-      "tema_classificado": "Não classificado",
-      "score": 0,
-      "scores_todos": {}
-    },
-    {
       "titulo": "Por que comer o \"caranguejo do diabo\" pode ser fatal? Entenda",
       "resumo": "",
       "categoria": "Saúde",
@@ -302,44 +600,6 @@
       "scores_todos": {}
     },
     {
-      "titulo": "Governo Trump confirma cúpula com direitistas latinos, mas não com Lula",
-      "resumo": "",
-      "categoria": "Internacional",
-      "fonte": "CNN Brasil",
-      "data": "12/02/2026",
-      "hora": "16:16",
-      "link": "https://www.cnnbrasil.com.br/blogs/lourival-santanna/internacional/governo-trump-confirma-cupula-com-direitistas-latinos-mas-nao-com-lula/",
-      "tema_classificado": "Não classificado",
-      "score": 0,
-      "scores_todos": {
-        "Eleições": 1
-      }
-    },
-    {
-      "titulo": "Jeffrey Epstein tem CPF ativo e discutiu sobre cidadania brasileira",
-      "resumo": "",
-      "categoria": "Internacional",
-      "fonte": "CNN Brasil",
-      "data": "12/02/2026",
-      "hora": "16:13",
-      "link": "https://www.cnnbrasil.com.br/internacional/jeffrey-epstein-tem-cpf-ativo-e-discutiu-sobre-cidadania-brasileira/",
-      "tema_classificado": "Não classificado",
-      "score": 0,
-      "scores_todos": {}
-    },
-    {
-      "titulo": "Canadá pede que seus cidadãos deixem Cuba e que evitem viagens à ilha",
-      "resumo": "",
-      "categoria": "Internacional",
-      "fonte": "CNN Brasil",
-      "data": "12/02/2026",
-      "hora": "16:06",
-      "link": "https://www.cnnbrasil.com.br/internacional/canada-pede-que-seus-cidadaos-deixem-cuba-e-que-evitem-viagens-a-ilha/",
-      "tema_classificado": "Não classificado",
-      "score": 0,
-      "scores_todos": {}
-    },
-    {
       "titulo": "\"Atinge em cheio a família\", diz Caiado sobre secretário que matou filho",
       "resumo": "",
       "categoria": "Goiás",
@@ -347,6 +607,903 @@
       "data": "12/02/2026",
       "hora": "16:05",
       "link": "https://www.cnnbrasil.com.br/nacional/centro-oeste/go/atinge-em-cheio-a-familia-diz-caiado-sobre-secretario-que-matou-filho/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Meta em 2026 é crescer na carteira PJ, diz presidente do Banrisul à CNN",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:58",
+      "link": "https://www.cnnbrasil.com.br/economia/negocios/meta-em-2026-e-crescer-na-carteira-pj-diz-presidente-do-banrisul/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {
+        "Governo/Congresso": 1
+      }
+    },
+    {
+      "titulo": "Secretário de Itumbiara atira contra filhos; um morre e outro é internado",
+      "resumo": "",
+      "categoria": "Goiás",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:57",
+      "link": "https://www.cnnbrasil.com.br/nacional/centro-oeste/go/secretario-de-itumbiara-atira-contra-filhos-um-morre-e-outro-e-internado/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Detalhe romântico em chinelo de Bruna Marquezine chama atenção de fãs",
+      "resumo": "",
+      "categoria": "Lifestyle",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:56",
+      "link": "https://www.cnnbrasil.com.br/lifestyle/detalhe-romantico-em-chinelo-de-bruna-marquezine-chama-atencao-de-fas/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Trump ordena que Pentágono compre eletricidade de usinas a carvão",
+      "resumo": "",
+      "categoria": "Macroeconomia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:53",
+      "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/trump-ordena-que-pentagono-compre-eletricidade-de-usinas-a-carvao/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Sócio de academia recusou contratar empresa para cuidar de piscina",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:42",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/socio-de-academia-recusou-contratar-empresa-para-cuidar-de-piscina/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "FecomercioSP: Fim da escala 6x1 deve elevar em 22% custo de trabalho",
+      "resumo": "",
+      "categoria": "Macroeconomia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:40",
+      "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/proposta-sobre-fim-da-escala-6x1-deve-elevar-em-22-custo-do-trabalho-diz-fecomerciosp/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "James Van Der Beek lutou contra câncer; veja sintomas que o ator teve",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:40",
+      "link": "https://www.cnnbrasil.com.br/saude/james-van-der-beek-lutou-contra-cancer-veja-sintomas-que-o-ator-teve/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Esquema bilionário: polícia apura se PCC atuava como suporte a grupo chinês",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:34",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/esquema-bilionario-policia-apura-se-pcc-atuava-como-suporte-a-grupo-chines/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Alvo de leilão, transporte de cargas na Hidrovia do Madeira cresce 20%",
+      "resumo": "",
+      "categoria": "Macroeconomia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:23",
+      "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/alvo-de-leilao-transporte-de-cargas-na-hidrovia-do-madeira-cresce-20/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "CNT lança guia com orientações de segurança para motoristas em rodovias",
+      "resumo": "",
+      "categoria": "Macroeconomia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:19",
+      "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/cnt-lanca-guia-com-orientacoes-de-seguranca-para-motoristas-em-rodovias/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Estamos em contexto positivo de mercado, diz CFO da Log após balanço",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "15:04",
+      "link": "https://www.cnnbrasil.com.br/economia/negocios/estamos-em-contexto-positivo-de-mercado-diz-cfo-da-log-apos-balanco/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Apple lança atualização com transferência para Android; veja as mudanças",
+      "resumo": "",
+      "categoria": "Tecnologia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:59",
+      "link": "https://www.cnnbrasil.com.br/tecnologia/apple-lanca-atualizacao-com-transferencia-para-android-veja-as-mudancas/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Vendas de moradias usadas nos EUA recuam 8,4% em janeiro",
+      "resumo": "",
+      "categoria": "Macroeconomia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:59",
+      "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/vendas-de-moradias-usadas-nos-eua-recuam-84-em-janeiro/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Lenovo alerta para pressão sobre vendas de PCs com escassez de chips",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:58",
+      "link": "https://www.cnnbrasil.com.br/economia/negocios/lenovo-alerta-para-pressao-sobre-vendas-de-pcs-com-escassez-de-chips/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Acidente com romeiros que deixou 16 mortos em AL: entenda investigações",
+      "resumo": "",
+      "categoria": "Alagoas",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:58",
+      "link": "https://www.cnnbrasil.com.br/nacional/nordeste/al/acidente-com-romeiros-que-deixou-16-mortos-em-al-entenda-investigacoes/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Análise: Entorno de Lula está dividido sobre desfile em sua homenagem",
+      "resumo": "",
+      "categoria": "Eleições",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:53",
+      "link": "https://www.cnnbrasil.com.br/eleicoes/analise-entorno-de-lula-esta-dividido-sobre-desfile-em-sua-homenagem/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {
+        "Eleições": 1,
+        "Editorial": 1
+      }
+    },
+    {
+      "titulo": "Nasa e SpaceX lançam foguete com astronautas para ISS; assista ao vivo",
+      "resumo": "",
+      "categoria": "Ciência",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:52",
+      "link": "https://www.cnnbrasil.com.br/ciencia/nasa-e-spacex-lancam-foguete-com-astronautas-para-iss-assista-ao-vivo/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "\"Bloquinho dos Aprovados\" celebra conquistas de alunos em vestibulares",
+      "resumo": "",
+      "categoria": "Educação",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:51",
+      "link": "https://www.cnnbrasil.com.br/educacao/bloquinho-dos-aprovados-celebra-conquistas-de-alunos-em-vestibulares/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Técnico Jorge Sampaoli deixa o comando do Atlético-MG",
+      "resumo": "",
+      "categoria": "Atlético Mineiro",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:47",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/atletico-mineiro/tecnico-jorge-sampaoli-deixa-o-comando-do-atletico-mg/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Brasileiro detido pelo ICE nos EUA retorna ao país",
+      "resumo": "",
+      "categoria": "Rio de Janeiro",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:47",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/rj/brasileiro-detido-pelo-ice-nos-eua-retorna-ao-pais/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Contarato quer quebra de sigilo sobre Master e pautará pedidos pós-Carnaval",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:36",
+      "link": "https://www.cnnbrasil.com.br/politica/contarato-quer-quebra-de-sigilo-sobre-master-e-pautara-pedidos-pos-carnaval/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "PF nega porte de arma para elite da Guarda Municipal do Rio de Janeiro",
+      "resumo": "",
+      "categoria": "Rio de Janeiro",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:30",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/rj/pf-nega-porte-de-arma-para-elite-da-guarda-municipal-do-rio-de-janeiro/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Atletas olímpicos equilibram nutrição e gastronomia italiana em 2026",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:30",
+      "link": "https://www.cnnbrasil.com.br/saude/atletas-olimpicos-de-inverno-equilibram-nutricao-e-gastronomia-italiana-em-2026/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Felício Ramuth pode mudar de partido para seguir com Tarcísio",
+      "resumo": "",
+      "categoria": "Eleições",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:25",
+      "link": "https://www.cnnbrasil.com.br/blogs/pedro-venceslau/eleicoes/felicio-ramuth-pode-mudar-de-partido-para-seguir-com-tarcisio/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {
+        "Eleições": 1
+      }
+    },
+    {
+      "titulo": "Lavagem de R$ 1 bi: entenda como agia o esquema entre grupo chinês e o PCC",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:24",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/lavagem-de-r-1-bi-entenda-como-agia-o-esquema-entre-grupo-chines-e-o-pcc/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Gigi Hadid abandona mini bob preto e retorna ao loiro longo para desfile",
+      "resumo": "",
+      "categoria": "Lifestyle",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:24",
+      "link": "https://www.cnnbrasil.com.br/lifestyle/gigi-hadid-abandona-mini-bob-preto-e-retorna-ao-loiro-longo-para-desfile/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Justiça condena posto do Recife por obrigar frentistas a usar legging",
+      "resumo": "",
+      "categoria": "Pernambuco",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:19",
+      "link": "https://www.cnnbrasil.com.br/nacional/nordeste/pe/justica-condena-posto-do-recife-por-obrigar-frentistas-a-usar-legging/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "São Paulo encaminha contratação de Cauly, jogador do Bahia",
+      "resumo": "",
+      "categoria": "São Paulo (Clube)",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:19",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/sao-paulo/sao-paulo-encaminha-contratacao-de-cauly-jogador-do-bahia/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Hyundai Creta 2027 vira flex e perde potência, mas passa de R$ 200 mil",
+      "resumo": "",
+      "categoria": "Auto",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:18",
+      "link": "https://www.cnnbrasil.com.br/auto/hyundai-creta-2027-vira-flex-e-perde-potencia-mas-passa-de-r-200-mil/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Mulher procurou Conselho Tutelar antes de desaparecer no RS; ex é suspeito",
+      "resumo": "",
+      "categoria": "Rio Grande do Sul",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:09",
+      "link": "https://www.cnnbrasil.com.br/nacional/sul/rs/mulher-procurou-conselho-tutelar-antes-de-desaparecer-no-rs-ex-e-suspeito/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "SoftBank registra 4º tri consecutivo de lucro com ganhos com OpenAI",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:08",
+      "link": "https://www.cnnbrasil.com.br/economia/negocios/softbank-registra-4o-tri-consecutivo-de-lucro-com-ganhos-com-openai/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Menstruação e dieta podem favorecer falta de ferro em adolescentes",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:07",
+      "link": "https://www.cnnbrasil.com.br/saude/menstruacao-e-dieta-podem-favorecer-falta-de-ferro-em-adolescentes/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Torcida do Velo cobra time antes de jogo com Santos: \"Tirem Neymar da Copa\"",
+      "resumo": "",
+      "categoria": "Futebol",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "14:02",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/torcida-do-velo-cobra-time-antes-de-jogo-com-santos-tirem-neymar-da-copa/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "SP: três suspeitos de envolvimento em roubo a promotor e família são presos",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:52",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/sp-tres-suspeitos-de-envolvimento-em-roubo-a-promotor-e-familia-sao-presos/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Carnaval 2026: Dr. Kalil dá dicas para curtir folia com a saúde em dia",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:50",
+      "link": "https://www.cnnbrasil.com.br/saude/saiba-como-evitar-mal-estar-durante-o-carnaval-segundo-dr-kalil/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Justiça italiana conclui julgamento sobre extradição de Zambelli",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:47",
+      "link": "https://www.cnnbrasil.com.br/politica/justica-italiana-conclui-julgamento-sobre-extradicao-de-zambelli/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Desmatamento na Amazônia cai 11,08% em 2025, menor taxa em 11 anos",
+      "resumo": "",
+      "categoria": "Distrito Federal",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:42",
+      "link": "https://www.cnnbrasil.com.br/nacional/centro-oeste/df/desmatamento-na-amazonia-cai-1108-em-2025-menor-taxa-em-11-anos/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Caso de morte em academia pode ter violado diversas leis; entenda",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:41",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/caso-de-morte-em-academia-pode-ter-violado-diversas-leis-entenda/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Mulher trans é encontrada decapitada em Alagoas; polícia investiga",
+      "resumo": "",
+      "categoria": "Alagoas",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:38",
+      "link": "https://www.cnnbrasil.com.br/nacional/nordeste/al/mulher-trans-e-encontrada-decapitada-em-alagoas-policia-investiga/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Vídeo: Dupla é presa após roubar e fazer mulheres reféns em SP",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:38",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/video-dupla-e-presa-apos-roubar-e-fazer-mulheres-refens-em-sp/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Mais de 600 tartarugas tigre-d’água são apreendidas em carro no RS",
+      "resumo": "",
+      "categoria": "Rio Grande do Sul",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:33",
+      "link": "https://www.cnnbrasil.com.br/nacional/sul/rs/mais-de-600-tartarugas-tigre-dagua-sao-apreendidas-em-carro-no-rs/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Siemens aponta queda em lucro, mas ainda supera estimativas",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:32",
+      "link": "https://www.cnnbrasil.com.br/economia/negocios/siemens-ve-queda-em-lucro-mas-ainda-supera-estimativas-e-eleva-guidance-para-2026/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Restaurant Brands International tem lucro no 4º tri de 2025",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:24",
+      "link": "https://www.cnnbrasil.com.br/economia/negocios/restaurant-brands-international-tem-lucro-de-us-113-milhoes-no-4o-tri-de-2025/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Lucro da Pilgrim's Pride cai 62,7% no 4º trimestre de 2025",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:17",
+      "link": "https://www.cnnbrasil.com.br/economia/negocios/lucro-da-pilgrims-pride-cai-627-no-4o-tri-de-2025-para-us-88-milhoes/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Sinal de Frank pode indicar risco de infarto? Dr. Kalil explica",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:07",
+      "link": "https://www.cnnbrasil.com.br/saude/sinal-de-frank-pode-indicar-risco-de-infarto-dr-kalil-explica/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Pedidos semanais de auxílio-desemprego nos EUA caem menos que esperado",
+      "resumo": "",
+      "categoria": "Macroeconomia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:06",
+      "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/pedidos-semanais-de-auxilio-desemprego-nos-eua-caem-menos-que-esperado/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Banco do Brasil terá em 2026 novo ano desafiador, afirma CEO",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:02",
+      "link": "https://www.cnnbrasil.com.br/economia/negocios/banco-do-brasil-tera-em-2026-novo-ano-desafiador-afirma-ceo/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Brasil discute cotas de exportação à China",
+      "resumo": "",
+      "categoria": "Agro",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:02",
+      "link": "https://www.cnnbrasil.com.br/agro/secretario-luis-rua-explica-cotas-de-exportacao-a-china/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Wall Street opera em baixa impulsionada por setor de tecnologia",
+      "resumo": "",
+      "categoria": "Mercado",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "13:00",
+      "link": "https://www.cnnbrasil.com.br/economia/mercado/wall-street-bolsas-eua-12-fevereiro-2026/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Arthur Elias convoca Seleção Feminina para primeiros jogos de 2026",
+      "resumo": "",
+      "categoria": "Futebol",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:59",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/arthur-elias-convoca-selecao-feminina-para-primeiros-jogos-de-2026/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Sócio de academia apagou mensagens trocadas com manobrista após intoxicação",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:56",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/socio-de-academia-apagou-mensagens-trocadas-com-manobrista-apos-intoxicacao/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Iguatemi compra 4,5% do shopping Pátio Paulista por R$ 113,4 milhões",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:56",
+      "link": "https://www.cnnbrasil.com.br/economia/negocios/iguatemi-compra-45-do-shopping-patio-paulista-por-r-1134-milhoes/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Bap comenta possível saída do Maracanã e construção de estádio do Flamengo",
+      "resumo": "",
+      "categoria": "Flamengo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:55",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/flamengo/bap-comenta-possivel-saida-do-maracana-e-construcao-de-estadio-do-flamengo/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Bate-Bolas? Conheça movimento carnavalesco que inspirou coleção da Farm Rio",
+      "resumo": "",
+      "categoria": "Lifestyle",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:42",
+      "link": "https://www.cnnbrasil.com.br/lifestyle/bate-bolas-conheca-movimento-carnavalesco-que-inspirou-colecao-da-farm-rio/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Confiança do empresário industrial cai em fevereiro, mostra CNI",
+      "resumo": "",
+      "categoria": "Macroeconomia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:41",
+      "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/confianca-do-empresario-industrial-cai-em-fevereiro-mostra-cni/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "MEC revoga edital para cursos de medicina em meio à polêmica do Enamed",
+      "resumo": "",
+      "categoria": "Educação",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:41",
+      "link": "https://www.cnnbrasil.com.br/educacao/mec-revoga-edital-para-cursos-de-medicina-em-meio-a-polemica-do-enamed/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Adolescente ameaça colegas em unidade socioeducativa na zona norte do Rio",
+      "resumo": "",
+      "categoria": "Rio de Janeiro",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:34",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/rj/adolescente-ameaca-colegas-em-unidade-socioeducativa-na-zona-norte-do-rio/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Petróleo testa novo piso entre US$ 65 e US$ 70",
+      "resumo": "",
+      "categoria": "Macroeconomia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:33",
+      "link": "https://www.cnnbrasil.com.br/blogs/pedro-cortes/economia/macroeconomia/petroleo-testa-novo-piso-entre-us-65-e-us-70/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Atlético de Madrid x Barcelona: horário e onde assistir à Copa do Rei",
+      "resumo": "",
+      "categoria": "Futebol Espanhol",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:32",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/futebol-internacional/futebol-espanhol/atletico-de-madrid-x-barcelona-horario-e-onde-assistir-a-copa-do-rei/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Investimentos em energia devem chegar a R$ 3,5 trilhões até 2035",
+      "resumo": "",
+      "categoria": "Macroeconomia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:27",
+      "link": "https://www.cnnbrasil.com.br/economia/macroeconomia/investimentos-em-energia-devem-chegar-a-r-35-trilhoes-ate-2035/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "João Fonseca aponta motivos para derrota em Buenos Aires: \"Senti a pressão\"",
+      "resumo": "",
+      "categoria": "Tênis",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:26",
+      "link": "https://www.cnnbrasil.com.br/esportes/tenis/joao-fonseca-aponta-motivos-para-derrota-em-buenos-aires-senti-a-pressao/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Exportações de ovos crescem 30,9% em janeiro",
+      "resumo": "",
+      "categoria": "Agro",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:21",
+      "link": "https://www.cnnbrasil.com.br/agro/exportacoes-de-ovos-crescem-309-em-janeiro/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Cidade Sete Sóis: modelo de bairro planejado chega a novas cidades",
+      "resumo": "",
+      "categoria": "Negócios",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:19",
+      "link": "https://www.cnnbrasil.com.br/branded-content/economia/negocios/cidade-sete-sois-modelo-de-bairro-planejado-chega-a-novas-cidades/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Anvisa determina recolhimento de lotes de fórmula infantil da Nestlé",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:16",
+      "link": "https://www.cnnbrasil.com.br/nacional/brasil/anvisa-determina-recolhimento-de-lotes-de-formula-infantil-da-nestle/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Enferrujado no inglês? Confira frases para falar com gringos no bloquinho",
+      "resumo": "",
+      "categoria": "Educação",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:13",
+      "link": "https://www.cnnbrasil.com.br/educacao/enferrujado-no-ingles-confira-frases-para-falar-com-gringos-no-bloquinho/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Após morte em piscina, sócios atribuem erro a manobrista de academia em SP",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:12",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/apos-morte-em-piscina-socios-atribuem-erro-a-manobrista-de-academia-em-sp/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Corinthians busca rescisão amigável com José Martínez após polêmicas",
+      "resumo": "",
+      "categoria": "Corinthians",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:12",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/corinthians/corinthians-busca-rescisao-amigavel-com-jose-martinez-apos-polemicas/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Análise: Desdobramentos do caso Master são inéditos na República brasileira",
+      "resumo": "",
+      "categoria": "Política",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:09",
+      "link": "https://www.cnnbrasil.com.br/politica/analise-desdobramentos-do-caso-master-sao-ineditos-na-republica-brasileira/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {
+        "Editorial": 1
+      }
+    },
+    {
+      "titulo": "Câmera em banheiro feminino: polícia encontra aparelho em escola em MS",
+      "resumo": "",
+      "categoria": "Mato Grosso do Sul",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:04",
+      "link": "https://www.cnnbrasil.com.br/nacional/centro-oeste/ms/camera-em-banheiro-feminino-policia-encontra-aparelho-em-escola-em-ms/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Balotelli denuncia racismo em jogo nos Emirados Árabes Unidos",
+      "resumo": "",
+      "categoria": "Futebol Internacional",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "12:03",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/futebol-internacional/balotelli-denuncia-racismo-em-jogo-nos-emirados-arabes-unidos/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Como fica o tempo no feriado de Carnaval em São Paulo",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "11:58",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/como-fica-o-tempo-no-feriado-de-carnaval-em-sao-paulo/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Veja 20 prompts prontos muito úteis para copiar e usar no Gemini",
+      "resumo": "",
+      "categoria": "Tecnologia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "11:42",
+      "link": "https://www.cnnbrasil.com.br/tecnologia/veja-20-prompts-prontos-muito-uteis-para-copiar-e-usar-no-gemini/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Rodízio em São Paulo é suspenso no feriado de Carnaval",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "11:39",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/rodizio-em-sao-paulo-e-suspenso-no-feriado-de-carnaval/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Aneel relata insatisfação com Enel durante temporais em dezembro de 2025",
+      "resumo": "",
+      "categoria": "São Paulo",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "11:30",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/aneel-relata-insatisfacao-com-enel-durante-temporais-em-dezembro-de-2025/",
       "tema_classificado": "Não classificado",
       "score": 0,
       "scores_todos": {}

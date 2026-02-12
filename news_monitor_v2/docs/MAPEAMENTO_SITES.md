@@ -175,6 +175,38 @@ Documento de referência para revisão. Para cada site: **onde coletamos**, **o 
 
 ---
 
+## 5. CNN Brasil (cnnbrasil.com.br)
+
+### Onde coletamos
+- **URL base:** `https://www.cnnbrasil.com.br/ultimas-noticias/`
+- **Páginas seguintes:** `https://www.cnnbrasil.com.br/ultimas-noticias/pagina/2/`, `pagina/3/`, etc.
+- Seção **"Últimas Notícias"** da CNN Brasil.
+
+### O que extraímos por notícia
+- **Título** – do `<h2 class="text-xl font-bold">` dentro do `<a>` da notícia
+- **Link** – `href` do mesmo `<a>`
+- **Categoria** – texto do `span.text-base.font-medium.text-gray-400` (ex.: Política, Mercado, Entretenimento)
+- **Data e hora** – no bloco da notícia, formato **DD/MM/YYYY | HH:MM**
+
+### Como funciona a coleta
+- Paginação por **URL**: página 1 = base, página 2 = `.../pagina/2/`, etc., até **20 páginas**.
+- Em cada página: parse com BeautifulSoup; busca `<a>` que contêm `<h2 class="text-xl font-bold">`; sobe ao container (li/article/div) para pegar categoria e data.
+- **Critérios de parada:** página sem notícias novas (e já na página 2+), ou 20 páginas.
+
+### Filtros aplicados
+- Só notícias nas **últimas 24 horas** (data/hora no formato DD/MM/YYYY | HH:MM).
+- Categorias excluídas da coleta: Esportes, BBB, Entretenimento, Carnaval, Celebridades, Música, Cinema, Televisão, Streaming, Shows, Horóscopo, Viagem & Gastronomia, etc.
+
+### O que NÃO fazemos hoje
+- Não acessamos outras seções (só "últimas notícias").
+- Sem resumo na lista; classificação apenas pelo título.
+
+### Possíveis pontos de melhoria
+- [ ] Ajustar lista de categorias excluídas?
+- [ ] Coletar resumo se a CNN passar a exibir na listagem?
+
+---
+
 ## Resumo rápido
 
 | Site      | Onde              | Paginação      | Limite   | Categoria        | Data/hora              |
@@ -183,6 +215,7 @@ Documento de referência para revisão. Para cada site: **onde coletamos**, **o 
 | Estadão  | /ultimas/         | Botão “Carregar mais” | 15 cliques | Pela URL   | DD/MM/AAAA, XhYY        |
 | Folha    | /ultimas-noticias | Botão “Ver mais”      | 10 cliques | Pela URL   | DD.mes.AAAA às HhMM     |
 | O Globo  | /ultimas-noticias | URL por página | 20 págs  | Do HTML          | Relativo (há N min/hora) |
+| CNN Brasil | /ultimas-noticias | URL por página | 20 págs  | Do HTML          | DD/MM/AAAA \| HH:MM       |
 
 ---
 
