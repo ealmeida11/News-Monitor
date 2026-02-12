@@ -1,0 +1,38 @@
+<div class="feed-post-body" data-mrf-recirculation="Mais do valor final">
+ <div class="feed-post-header with-post-chapeu">
+  <h3 class="feed-post-header-chapeu">
+   <a class="hat" cmp-ltrk="Mais do valor final" cmp-ltrk-idx="0" data-mrf-link="https://valor.globo.com/mundo/noticia/2026/02/12/fabricantes-de-armas-ucranianos-recebem-licenca-de-exportacao-em-tempos-de-guerra.ghtml" href="https://valor.globo.com/mundo/noticia/2026/02/12/fabricantes-de-armas-ucranianos-recebem-licenca-de-exportacao-em-tempos-de-guerra.ghtml" mrfobservableid="f7c9922b-0c30-43c3-b7c2-44abc415f3a3">
+    Mundo
+   </a>
+  </h3>
+ </div>
+ <div class="feed-post-body-title gui-color-primary gui-color-hover" ref="[object Object]">
+  <div class="_b">
+   <h2 class="feed-post-link gui-color-primary gui-color-hover">
+    <a class="feed-post-link" cmp-ltrk="Mais do valor final" cmp-ltrk-idx="0" data-mrf-link="https://valor.globo.com/mundo/noticia/2026/02/12/fabricantes-de-armas-ucranianos-recebem-licenca-de-exportacao-em-tempos-de-guerra.ghtml" elementtiming="text-csr" href="https://valor.globo.com/mundo/noticia/2026/02/12/fabricantes-de-armas-ucranianos-recebem-licenca-de-exportacao-em-tempos-de-guerra.ghtml" mrfobservableid="25312f30-eef3-4791-9619-86a7913973ff">
+     Fabricantes de armas ucranianos recebem licença de exportação em tempos de guerra
+    </a>
+   </h2>
+  </div>
+ </div>
+ <p class="feed-post-body-resumo" elementtiming="text-csr" ref="[object Object]">
+  Kiev tomou recentemente a decisão politicamente delicada de exportar armas enquanto trava uma guerra contra a Rússia, buscando fundos para expandir sua indústria de defesa nacional
+ </p>
+ <div class="feed-media-wrapper">
+  <a class="feed-post-figure-link gui-image-hover" cmp-ltrk="Mais do valor final" cmp-ltrk-idx="0" data-mrf-link="https://valor.globo.com/mundo/noticia/2026/02/12/fabricantes-de-armas-ucranianos-recebem-licenca-de-exportacao-em-tempos-de-guerra.ghtml" href="https://valor.globo.com/mundo/noticia/2026/02/12/fabricantes-de-armas-ucranianos-recebem-licenca-de-exportacao-em-tempos-de-guerra.ghtml" mrfobservableid="66700656-ec17-4448-a3ee-3d5c391877a0" ref="[object Object]">
+   <div class="bstn-fd-item-cover">
+    <picture class="bstn-fd-cover-picture">
+     <img alt="Fabricantes de armas ucranianos recebem licença de exportação em tempos de guerra" class="bstn-fd-picture-image" elementtiming="image-csr" loading="lazy" src="https://s2-valor.glbimg.com/Oof7qj9RA8M65YZJiT-kd1Wxt6I=/540x304/top/smart/https://i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2026/B/9/t10PvpS8CZZdoL1nmtTQ/2026-02-04t122720z-1803427392-rc2zejacwhtc-rtrmadp-3-ukraine-crisis-zaporizhzhia-evacuation.jpg" srcset="https://s2-valor.glbimg.com/Oof7qj9RA8M65YZJiT-kd1Wxt6I=/540x304/top/smart/https://i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2026/B/9/t10PvpS8CZZdoL1nmtTQ/2026-02-04t122720z-1803427392-rc2zejacwhtc-rtrmadp-3-ukraine-crisis-zaporizhzhia-evacuation.jpg 1x,https://s2-valor.glbimg.com/XTLhRhlNEkQs_XM1CZYMNLXBbus=/810x456/top/smart/https://i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2026/B/9/t10PvpS8CZZdoL1nmtTQ/2026-02-04t122720z-1803427392-rc2zejacwhtc-rtrmadp-3-ukraine-crisis-zaporizhzhia-evacuation.jpg 1.5x,https://s2-valor.glbimg.com/KRlO7gLqVgZ4M1KxS7Bru91rhyo=/1080x608/top/smart/https://i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2026/B/9/t10PvpS8CZZdoL1nmtTQ/2026-02-04t122720z-1803427392-rc2zejacwhtc-rtrmadp-3-ukraine-crisis-zaporizhzhia-evacuation.jpg 2x" title="Fabricantes de armas ucranianos recebem licença de exportação em tempos de guerra"/>
+    </picture>
+   </div>
+  </a>
+ </div>
+ <div class="feed-post-metadata">
+  <span class="feed-post-datetime">
+   12/02/2026, 11:12
+  </span>
+  <span class="feed-post-metadata-section">
+   Mundo
+  </span>
+ </div>
+</div>
