@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Teste: coleta TODAS as notícias do Valor das últimas 18 horas,
+Teste: coleta TODAS as notícias do Valor das últimas 24 horas,
 classifica cada uma por tema e mostra agrupadas por tema.
 
 Também mostra as não classificadas para identificar gaps nas palavras-chave.
@@ -29,7 +29,7 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
     linhas = []
     linhas.append('<!DOCTYPE html>')
     linhas.append('<html lang="pt-BR">')
-    linhas.append('<head><meta charset="UTF-8"><title>Valor - Classificação por tema (18h)</title>')
+    linhas.append('<head><meta charset="UTF-8"><title>Valor - Classificação por tema (24h)</title>')
     linhas.append('<style>')
     linhas.append('body{font-family:Segoe UI,sans-serif;margin:20px;background:#f5f5f5;}')
     linhas.append('.container{max-width:900px;margin:0 auto;background:#fff;padding:24px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);}')
@@ -45,7 +45,7 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
     linhas.append('</style>')
     linhas.append('</head><body><div class="container">')
     linhas.append('<h1>Valor Econômico – Classificação por tema</h1>')
-    linhas.append(f'<p class="meta">Últimas 18 horas | Total coletado: {total_coletado} | '
+    linhas.append(f'<p class="meta">Últimas 24 horas | Total coletado: {total_coletado} | '
                   f'Classificadas: {total_coletado - len(nao_classificadas)} | '
                   f'Não classificadas: {len(nao_classificadas)}</p>')
 
@@ -82,13 +82,13 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
         f.write("\n".join(linhas))
 
 
-def noticia_dentro_18h(data, hora):
-    """Verifica se uma notícia está dentro das últimas 18 horas."""
+def noticia_dentro_24h(data, hora):
+    """Verifica se uma notícia está dentro das últimas 24 horas."""
     try:
         data_hora_str = f"{data} {hora}"
         data_hora_noticia = datetime.strptime(data_hora_str, "%d/%m/%Y %H:%M")
-        limite_18h = datetime.now() - timedelta(hours=18)
-        return data_hora_noticia >= limite_18h
+        limite_24h = datetime.now() - timedelta(hours=24)
+        return data_hora_noticia >= limite_24h
     except:
         return False
 
@@ -109,10 +109,10 @@ def main():
     URL_BASE = "https://valor.globo.com/ultimas-noticias/"
 
     print("=" * 70)
-    print("  COLETA E CLASSIFICAÇÃO - VALOR (últimas 18 horas)")
+    print("  COLETA E CLASSIFICAÇÃO - VALOR (últimas 24 horas)")
     print("=" * 70)
     print(f"  URL: {URL_BASE}")
-    print(f"  Período: últimas 18 horas (desde {datetime.now() - timedelta(hours=18):%d/%m/%Y %H:%M})")
+    print(f"  Período: últimas 24 horas (desde {datetime.now() - timedelta(hours=24):%d/%m/%Y %H:%M})")
     print()
 
     chrome_options = ChromeOptions()
@@ -135,8 +135,7 @@ def main():
         driver.implicitly_wait(10)
 
         pagina = 1
-        noticias_antigas_consecutivas = 0
-        limite_paginas = 20
+        limite_paginas = 50  # Aumentado para garantir coleta completa
 
         while pagina <= limite_paginas:
             if pagina == 1:
@@ -193,8 +192,8 @@ def main():
                     data = data_match.group(1)
                     hora = data_match.group(2)
 
-                    # Filtrar por 18 horas
-                    if not noticia_dentro_18h(data, hora):
+                    # Filtrar por 24 horas
+                    if not noticia_dentro_24h(data, hora):
                         antigas_nesta_pagina += 1
                         continue
 
@@ -221,12 +220,14 @@ def main():
 
             print(f"    Página {pagina}: {novas_nesta_pagina} novas, {antigas_nesta_pagina} antigas")
 
-            if antigas_nesta_pagina >= 3:
-                print("    PARADA: muitas notícias antigas detectadas")
+            # Parar apenas se encontrar muitas notícias antigas (fora de 24h) consecutivas
+            # Isso indica que chegamos em notícias antigas e não há mais novas nas próximas páginas
+            if antigas_nesta_pagina >= 5:
+                print("    PARADA: muitas notícias antigas detectadas (fora de 24h)")
                 break
-            if novas_nesta_pagina == 0 and pagina > 1:
-                print("    PARADA: nenhuma notícia nova")
-                break
+            
+            # Se não encontrou nenhum artigo na página (erro de parsing ou página vazia), continuar
+            # Só parar se chegou no limite de páginas
 
             pagina += 1
 
@@ -305,14 +306,29 @@ def main():
         for tema in sorted(noticias_por_tema.keys()):
             print(f"    {tema}: {len(noticias_por_tema[tema])}")
 
-        # Salvar JSON completo
+        # Salvar JSON completo (sempre com o mesmo nome)
         out_dir = Path(__file__).resolve().parent / "output"
         out_dir.mkdir(exist_ok=True)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        arq_json = out_dir / f"valor_classificado_18h_{timestamp}.json"
+        
+        # Limpar arquivos antigos com timestamp
+        for arq_antigo in out_dir.glob("valor_classificado_*_*.json"):
+            try:
+                arq_antigo.unlink()
+            except:
+                pass
+        for arq_antigo in out_dir.glob("valor_classificado_*_*.html"):
+            try:
+                arq_antigo.unlink()
+            except:
+                pass
+        
+        # Nomes fixos (sem timestamp)
+        arq_json = out_dir / "valor_classificado_24h.json"
+        arq_html = out_dir / "valor_classificado_24h.html"
+        
         resultado_completo = {
             "data_coleta": datetime.now().isoformat(),
-            "periodo_horas": 18,
+            "periodo_horas": 24,
             "total_coletado": len(noticias_coletadas),
             "por_tema": {tema: lista for tema, lista in noticias_por_tema.items()},
             "nao_classificadas": nao_classificadas,
@@ -323,7 +339,6 @@ def main():
         print(f"  JSON completo salvo em: {arq_json}")
 
         # Gerar HTML simples para abrir no navegador
-        arq_html = out_dir / f"valor_classificado_18h_{timestamp}.html"
         _gerar_html(noticias_por_tema, nao_classificadas, len(noticias_coletadas), arq_html)
         print(f"  Relatório HTML salvo em: {arq_html}")
         print("=" * 70)

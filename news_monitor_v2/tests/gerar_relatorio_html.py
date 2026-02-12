@@ -23,7 +23,7 @@ def gerar_html(arq_json, arq_html):
     linhas = []
     linhas.append("<!DOCTYPE html>")
     linhas.append("<html lang=\"pt-BR\">")
-    linhas.append("<head><meta charset=\"UTF-8\"><title>Valor - Classificação por tema (18h)</title>")
+    linhas.append("<head><meta charset=\"UTF-8\"><title>Valor - Classificação por tema (24h)</title>")
     linhas.append("<style>")
     linhas.append("body{font-family:Segoe UI,sans-serif;margin:20px;background:#f5f5f5;}")
     linhas.append(".container{max-width:900px;margin:0 auto;background:#fff;padding:24px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);}")
@@ -39,7 +39,8 @@ def gerar_html(arq_json, arq_html):
     linhas.append("</style>")
     linhas.append("</head><body><div class=\"container\">")
     linhas.append("<h1>Valor Econômico – Classificação por tema</h1>")
-    linhas.append(f"<p class=\"meta\">Coleta: {escape(data_coleta)} | Últimas 18h | Total: {total_coletado} | "
+    periodo = data.get("periodo_horas", 24)
+    linhas.append(f"<p class=\"meta\">Coleta: {escape(data_coleta)} | Últimas {periodo}h | Total: {total_coletado} | "
                   f"Classificadas: {total_coletado - len(nao_classificadas)} | "
                   f"Não classificadas: {len(nao_classificadas)}</p>")
 
@@ -78,13 +79,20 @@ def gerar_html(arq_json, arq_html):
 
 if __name__ == "__main__":
     OUTPUT_DIR.mkdir(exist_ok=True)
-    jsons = sorted(OUTPUT_DIR.glob("valor_classificado_18h_*.json"), reverse=True)
-    if not jsons:
-        print("Nenhum arquivo valor_classificado_18h_*.json encontrado em tests/output/")
-        print("Rode antes: python test_valor_classificar_todas.py")
-        exit(1)
-    arq_json = jsons[0]
-    arq_html = arq_json.with_suffix(".html")
+    # Procurar primeiro pelo arquivo com nome fixo
+    arq_json = OUTPUT_DIR / "valor_classificado_24h.json"
+    if not arq_json.exists():
+        # Fallback: procurar por arquivos com timestamp
+        jsons = sorted(OUTPUT_DIR.glob("valor_classificado_24h_*.json"), reverse=True)
+        if not jsons:
+            jsons = sorted(OUTPUT_DIR.glob("valor_classificado_18h_*.json"), reverse=True)
+        if not jsons:
+            print("Nenhum arquivo valor_classificado_24h.json encontrado em tests/output/")
+            print("Rode antes: python test_valor_classificar_todas.py")
+            exit(1)
+        arq_json = jsons[0]
+    
+    arq_html = OUTPUT_DIR / "valor_classificado_24h.html"
     gerar_html(arq_json, arq_html)
     print(f"Relatório gerado: {arq_html}")
     print("Abra esse arquivo no navegador.")
