@@ -1,0 +1,355 @@
+{
+  "data_coleta": "2026-02-12T17:19:39.898621",
+  "periodo_horas": 24,
+  "total_coletado": 27,
+  "por_tema": {
+    "STF": [
+      {
+        "titulo": "Alessandro Vieira pede à PGR afastamento de Toffoli do caso Master",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "17:04",
+        "link": "https://www.cnnbrasil.com.br/politica/alessandro-vieira-pede-a-pgr-afastamento-de-toffoli-do-caso-master/",
+        "tema_classificado": "STF",
+        "score": 1,
+        "scores_todos": {
+          "STF": 1
+        }
+      },
+      {
+        "titulo": "Oposição protocola novo pedido de impeachment contra Toffoli",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "16:49",
+        "link": "https://www.cnnbrasil.com.br/blogs/caio-junqueira/politica/oposicao-protocola-novo-pedido-de-impeachment-contra-toffoli/",
+        "tema_classificado": "STF",
+        "score": 1,
+        "scores_todos": {
+          "STF": 1
+        }
+      },
+      {
+        "titulo": "PGR e ministros do STF defendem afastamento de Toffoli do caso Master",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "16:38",
+        "link": "https://www.cnnbrasil.com.br/blogs/caio-junqueira/politica/pgr-e-ministros-do-stf-defendem-afastamento-de-toffoli-do-caso-master/",
+        "tema_classificado": "STF",
+        "score": 2,
+        "scores_todos": {
+          "STF": 2
+        }
+      }
+    ],
+    "Banco Central": [
+      {
+        "titulo": "BC pede acesso a processo do caso Master após TCU aumentar sigilo",
+        "resumo": "",
+        "categoria": "Política",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "17:02",
+        "link": "https://www.cnnbrasil.com.br/politica/bc-pede-acesso-a-processo-do-caso-master-apos-tcu-aumentar-sigilo/",
+        "tema_classificado": "Banco Central",
+        "score": 1,
+        "scores_todos": {
+          "Banco Central": 1
+        }
+      }
+    ],
+    "Governo/Congresso": [
+      {
+        "titulo": "Ambev deve seguir expandindo margem, diz presidente",
+        "resumo": "",
+        "categoria": "Mercado",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "16:57",
+        "link": "https://www.cnnbrasil.com.br/economia/mercado/ambev-deve-seguir-expandindo-margem-diz-presidente/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Chacina em padaria: novo suspeito é preso e MP pede soltura de adolescente",
+        "resumo": "",
+        "categoria": "Minas Gerais",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "16:53",
+        "link": "https://www.cnnbrasil.com.br/nacional/sudeste/mg/chacina-em-padaria-novo-suspeito-e-preso-e-mp-pede-soltura-de-adolescente/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      },
+      {
+        "titulo": "Ministro diz que exclusão de ucraniano é \"injusta\", mas descarta boicote",
+        "resumo": "",
+        "categoria": "Olimpíadas",
+        "fonte": "CNN Brasil",
+        "data": "12/02/2026",
+        "hora": "16:35",
+        "link": "https://www.cnnbrasil.com.br/esportes/olimpiadas/ministro-diz-que-exclusao-de-ucraniano-e-injusta-mas-descarta-boicote/",
+        "tema_classificado": "Governo/Congresso",
+        "score": 1,
+        "scores_todos": {
+          "Governo/Congresso": 1
+        }
+      }
+    ]
+  },
+  "nao_classificadas": [
+    {
+      "titulo": "STJD pune Abel Braga com 5 partidas e R$ 20 mil por declaração homofóbica",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "17:19",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/internacional-futebol/stjd-pune-abel-braga-com-5-partidas-e-r-20-mil-por-declaracao-homofobica/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Zelensky condecora ucraniano desclassificado por homenagem nas Olimpíadas",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "17:18",
+      "link": "https://www.cnnbrasil.com.br/internacional/zelensky-condecora-ucraniano-desclassificado-por-homenagem-nas-olimpiadas/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Pesquisa aponta busca por encontros casuais e reforça alerta de prevenção",
+      "resumo": "",
+      "categoria": "Lifestyle",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "17:17",
+      "link": "https://www.cnnbrasil.com.br/lifestyle/pesquisa-aponta-busca-por-encontros-casuais-e-reforca-alerta-de-prevencao/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Estudantes da USP podem se inscrever em curso gratuito de inglês; saiba",
+      "resumo": "",
+      "categoria": "Educação",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "17:16",
+      "link": "https://www.cnnbrasil.com.br/educacao/estudantes-da-usp-podem-se-inscrever-em-curso-gratuito-de-ingles-saiba/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Grokipedia: por que Elon Musk criou uma concorrente da Wikipédia com IA?",
+      "resumo": "",
+      "categoria": "Tecnologia",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "17:05",
+      "link": "https://www.cnnbrasil.com.br/tecnologia/grokipedia-por-que-elon-musk-criou-uma-concorrente-da-wikipedia-com-ia/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Criança escreve carta de socorro após ser obrigada pela mãe a se prostituir",
+      "resumo": "",
+      "categoria": "Minas Gerais",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:59",
+      "link": "https://www.cnnbrasil.com.br/nacional/sudeste/mg/crianca-escreve-carta-de-socorro-apos-ser-obrigada-pela-mae-a-se-prostituir/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "\"Pegue, Leve e Leia\": feiras de doação de livros para renovar a estante",
+      "resumo": "",
+      "categoria": "Educação",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:57",
+      "link": "https://www.cnnbrasil.com.br/educacao/pegue-leve-e-leia-feiras-de-doacao-de-livros-para-renovar-a-estante/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Número de acidentes em rodovias federais do Brasil diminuiu 5% em 2025",
+      "resumo": "",
+      "categoria": "Brasil",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:56",
+      "link": "https://www.cnnbrasil.com.br/nacional/brasil/numero-de-acidentes-em-rodovias-federais-do-brasil-diminuiu-5-em-2025/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Trump diz que relação entre EUA e Venezuela é “extraordinária”",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:53",
+      "link": "https://www.cnnbrasil.com.br/internacional/trump-diz-que-relacao-entre-eua-e-venezuela-e-extraordinaria/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Universidad Católica-EQU x Juventud: horário e onde assistir à Libertadores",
+      "resumo": "",
+      "categoria": "Libertadores da América",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:52",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/futebol-internacional/libertadores-da-america/universidad-catolica-equ-x-juventud-horario-e-onde-assistir-a-libertadores/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Bia Haddad anuncia fim de parceria com técnico Rafael Paciaroni",
+      "resumo": "",
+      "categoria": "Tênis",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:46",
+      "link": "https://www.cnnbrasil.com.br/esportes/tenis/bia-haddad-anuncia-fim-de-parceria-com-tecnico-rafael-paciaroni/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Um dia antes de matar filho, secretário postou família por IA: \"Minha vida\"",
+      "resumo": "",
+      "categoria": "Goiás",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:44",
+      "link": "https://www.cnnbrasil.com.br/nacional/centro-oeste/go/um-dia-antes-de-matar-filho-secretario-postou-familia-por-ia-minha-vida/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Com grupo da morte, chaves da Nations League 2026-27 são definidas",
+      "resumo": "",
+      "categoria": "Futebol Internacional",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:40",
+      "link": "https://www.cnnbrasil.com.br/esportes/futebol/futebol-internacional/com-grupo-da-morte-chaves-da-nations-league-2026-27-sao-definidas/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Ouro cai com juros nos EUA no radar; prata tomba 9,8%",
+      "resumo": "",
+      "categoria": "Mercado",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:34",
+      "link": "https://www.cnnbrasil.com.br/economia/mercado/ouro-fecha-em-queda-e-prata-tomba-98-com-menor-expectativa-de-corte-de-juros-nos-eua/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Trump revoga base legal de medidas que combatem mudanças climáticas nos EUA",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:30",
+      "link": "https://www.cnnbrasil.com.br/internacional/trump-revoga-base-legal-de-medidas-que-combatem-mudancas-climaticas-nos-eua/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Por que comer o \"caranguejo do diabo\" pode ser fatal? Entenda",
+      "resumo": "",
+      "categoria": "Saúde",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:17",
+      "link": "https://www.cnnbrasil.com.br/saude/por-que-comer-o-caranguejo-do-diabo-pode-ser-fatal-entenda/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Governo Trump confirma cúpula com direitistas latinos, mas não com Lula",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:16",
+      "link": "https://www.cnnbrasil.com.br/blogs/lourival-santanna/internacional/governo-trump-confirma-cupula-com-direitistas-latinos-mas-nao-com-lula/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {
+        "Eleições": 1
+      }
+    },
+    {
+      "titulo": "Jeffrey Epstein tem CPF ativo e discutiu sobre cidadania brasileira",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:13",
+      "link": "https://www.cnnbrasil.com.br/internacional/jeffrey-epstein-tem-cpf-ativo-e-discutiu-sobre-cidadania-brasileira/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "Canadá pede que seus cidadãos deixem Cuba e que evitem viagens à ilha",
+      "resumo": "",
+      "categoria": "Internacional",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:06",
+      "link": "https://www.cnnbrasil.com.br/internacional/canada-pede-que-seus-cidadaos-deixem-cuba-e-que-evitem-viagens-a-ilha/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    },
+    {
+      "titulo": "\"Atinge em cheio a família\", diz Caiado sobre secretário que matou filho",
+      "resumo": "",
+      "categoria": "Goiás",
+      "fonte": "CNN Brasil",
+      "data": "12/02/2026",
+      "hora": "16:05",
+      "link": "https://www.cnnbrasil.com.br/nacional/centro-oeste/go/atinge-em-cheio-a-familia-diz-caiado-sobre-secretario-que-matou-filho/",
+      "tema_classificado": "Não classificado",
+      "score": 0,
+      "scores_todos": {}
+    }
+  ]
+}
