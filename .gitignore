@@ -50,3 +50,7 @@ Thumbs.db
 news_monitor_v2/noticias_v2.db
 news_monitor_v2/noticias_v2.db-wal
 news_monitor_v2/noticias_v2.db-shm
+# Monitor V2 - output gerado a cada execução (não versionar)
+news_monitor_v2/output/*.json
+news_monitor_v2/output/*.html
+news_monitor_v2/output/links_existentes.txt

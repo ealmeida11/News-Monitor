@@ -27,13 +27,17 @@ from classificador.lexico_classifier import classificar, NAO_CLASSIFICADO
 
 def _extrair_categoria_folha(link):
     """Categoria a partir da URL da Folha."""
+    link_lower = (link or "").lower()
+    # Coluna Mônica Bergamo costuma ser política/notícia relevante — incluir (não tratar como Colunas)
+    if "monica-bergamo" in link_lower or "mônica-bergamo" in link_lower or "bergamo" in link_lower:
+        return "Política"
     categorias_map = {
         "poder": "Política", "mercado": "Economia", "cotidiano": "Cotidiano",
         "mundo": "Mundo", "esporte": "Esporte", "ilustrada": "Cultura",
         "f5": "Entretenimento", "ambiente": "Ambiente", "ciencia": "Ciência",
         "equilibrioesaude": "Saúde", "educacao": "Educação", "tecnologia": "Tecnologia",
     }
-    url_match = re.search(r"folha\.uol\.com\.br/([^/]+)/", link or "")
+    url_match = re.search(r"folha\.uol\.com\.br/([^/]+)/", link_lower)
     if url_match:
         categoria_url = url_match.group(1).lower()
         return categorias_map.get(categoria_url, categoria_url.replace("-", " ").title())
@@ -72,6 +76,68 @@ def _processar_data_folha(data_hora_texto):
             if mes_texto in meses:
                 return (f"{dia}/{meses[mes_texto]}/{ano}", f"{h}:{minu}")
     return None
+
+
+# Colunas/colunistas da Folha (colunaseblogs) que entram na categoria Editorial
+# href contém o slug; valor é o nome exibido no título "Autor: titulo"
+EDITORIAL_COLUNAS_FOLHA = {
+    "painel": "Painel",
+    "adriana-fernandes": "Adriana Fernandes",
+    "monica-bergamo": "Mônica Bergamo",
+}
+URL_FOLHA_COLUNAS = "https://www1.folha.uol.com.br/colunaseblogs/"
+
+
+def _extrair_editoriais_colunaseblogs(soup, titulos_unicos, links_unicos, limite_24h):
+    """
+    Extrai da página colunaseblogs itens cuja coluna está em EDITORIAL_COLUNAS_FOLHA.
+    Procura links para colunas/painel, colunas/adriana-fernandes, colunas/monica-bergamo e no mesmo card o link do artigo.
+    """
+    noticias = []
+    for a_col in soup.find_all("a", href=re.compile(r"colunas/(painel|adriana-fernandes|monica-bergamo)", re.I)):
+        href_col = (a_col.get("href") or "").lower()
+        autor_editorial = None
+        for slug, nome in EDITORIAL_COLUNAS_FOLHA.items():
+            if f"colunas/{slug}" in href_col:
+                autor_editorial = nome
+                break
+        if not autor_editorial:
+            continue
+        container = a_col.find_parent("article") or a_col.find_parent("div", class_=re.compile(r"card|headline|list|item|c-headline", re.I)) or a_col.find_parent("li") or a_col.find_parent("div")
+        if not container:
+            continue
+        # No mesmo container, link do artigo (.shtml)
+        a_art = container.find("a", href=re.compile(r"folha\.uol\.com\.br.*\.shtml"))
+        if not a_art:
+            continue
+        titulo_el = a_art.find("h2") or a_art.find("h3") or a_art
+        titulo = (titulo_el.get_text(strip=True) if titulo_el else "").strip()
+        if not titulo or len(titulo) < 10 or titulo in titulos_unicos:
+            continue
+        link = (a_art.get("href") or "").strip()
+        if not link.startswith("http"):
+            link = "https://www1.folha.uol.com.br" + link if link.startswith("/") else "https://www1.folha.uol.com.br/" + link
+        if link in links_unicos:
+            continue
+        time_el = container.find("time", class_=re.compile(r"dateline|date|time", re.I)) or container.find("time")
+        data_hora = _processar_data_folha(time_el.get_text(strip=True)) if time_el else None
+        if not data_hora:
+            continue
+        if not noticia_dentro_24h(data_hora[0], data_hora[1]):
+            continue
+        titulos_unicos.add(titulo)
+        links_unicos.add(link)
+        noticias.append({
+            "titulo": titulo,
+            "resumo": "",
+            "categoria": "Editorial",
+            "fonte": "Folha de S.Paulo",
+            "data": data_hora[0],
+            "hora": data_hora[1],
+            "link": link,
+            "autor_editorial": autor_editorial,
+        })
+    return noticias
 
 
 def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html, limite_24h=None, intervalo_noticias=None):
@@ -153,13 +219,26 @@ def main():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
-    for arg in ["--disable-logging", "--log-level=3", "--silent"]:
+    chrome_options.add_argument("--log-level=3")
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    for arg in ["--disable-logging", "--silent"]:
         chrome_options.add_argument(arg)
 
     driver = None
     noticias_coletadas = []
     titulos_unicos = set()
     categorias_excluidas_folha = {"Mundo", "Esporte", "Cultura", "Entretenimento", "Educação", "Colunas", "Colunistas"}
+    _out = Path(__file__).resolve().parent.parent / "output"
+    _links_file = _out / "links_existentes.txt"
+    links_existentes = set()
+    if _links_file.exists():
+        try:
+            with open(_links_file, "r", encoding="utf-8") as f:
+                links_existentes = {ln.strip() for ln in f if ln.strip()}
+        except Exception:
+            pass
+    ja_no_banco = 0
+    parar_por_banco = False
 
     try:
         service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)
@@ -191,30 +270,61 @@ def main():
             antigas_nesta_rodada = 0
             repetidas_nesta_rodada = 0
 
-            # Notícia principal (só na primeira rodada)
+            # Notícia principal / destaque (só na primeira rodada) — estrutura pode variar (c-main-headline ou primeiro bloco com título+data)
             if clique == 0:
-                main_headline = soup.find("a", class_="c-main-headline__url")
+                main_headline = (
+                    soup.find("a", class_="c-main-headline__url")
+                    or soup.find("a", class_=re.compile(r"c-main-headline.*url|main-headline.*url", re.I))
+                    or soup.find("a", attrs={"class": lambda c: c and "main-headline" in " ".join(c).lower() and "url" in " ".join(c).lower()})
+                )
+                if not main_headline:
+                    # Fallback: primeiro link para a Folha que tenha h2/h1 + time (destaque pode ter classe/URL diferente da lista)
+                    for a in soup.find_all("a", href=re.compile(r"folha\.uol\.com\.br/")):
+                        h2 = a.find("h2") or a.find("h1")
+                        time_el = a.find("time")
+                        if h2 and time_el and h2.get_text(strip=True) and time_el.get_text(strip=True):
+                            main_headline = a
+                            break
                 if main_headline:
                     try:
-                        titulo_el = main_headline.find("h2", class_="c-main-headline__title")
+                        titulo_el = (
+                            main_headline.find("h2", class_="c-main-headline__title")
+                            or main_headline.find("h2", class_=re.compile(r"main-headline|headline.*title", re.I))
+                            or main_headline.find("h2") or main_headline.find("h1")
+                        )
                         if titulo_el:
                             titulo = titulo_el.get_text(strip=True)
                             if titulo and titulo not in titulos_unicos:
                                 link = main_headline.get("href") or "#"
+                                if "folha.uol.com.br" not in link:
+                                    link = ("https://www.folha.uol.com.br" + link) if link.startswith("/") else link
                                 categoria = _extrair_categoria_folha(link)
                                 if categoria not in categorias_excluidas_folha:
-                                    time_el = main_headline.find("time", class_="c-headline__dateline")
+                                    time_el = (
+                                        main_headline.find("time", class_="c-headline__dateline")
+                                        or main_headline.find("time", class_=re.compile(r"dateline|date|time", re.I))
+                                        or main_headline.find("time")
+                                    )
                                     if time_el:
                                         data_hora = _processar_data_folha(time_el.get_text(strip=True))
                                         if data_hora and noticia_dentro_24h(data_hora[0], data_hora[1]):
-                                            resumo_el = main_headline.find("p", class_="c-headline__standfirst")
-                                            resumo = (resumo_el.get_text(strip=True) if resumo_el else "")[:500] or ""
-                                            noticias_coletadas.append({
-                                                "titulo": titulo, "resumo": resumo, "categoria": categoria,
-                                                "fonte": "Folha de S.Paulo", "data": data_hora[0], "hora": data_hora[1], "link": link,
-                                            })
-                                            titulos_unicos.add(titulo)
-                                            novas_nesta_rodada += 1
+                                            if links_existentes and link in links_existentes:
+                                                ja_no_banco += 1
+                                                if ja_no_banco >= 3:
+                                                    parar_por_banco = True
+                                            else:
+                                                resumo_el = (
+                                                    main_headline.find("p", class_="c-headline__standfirst")
+                                                    or main_headline.find("p", class_=re.compile(r"standfirst|resumo|summary", re.I))
+                                                    or main_headline.find("p")
+                                                )
+                                                resumo = (resumo_el.get_text(strip=True) if resumo_el else "")[:500] or ""
+                                                noticias_coletadas.append({
+                                                    "titulo": titulo, "resumo": resumo, "categoria": categoria,
+                                                    "fonte": "Folha de S.Paulo", "data": data_hora[0], "hora": data_hora[1], "link": link,
+                                                })
+                                                titulos_unicos.add(titulo)
+                                                novas_nesta_rodada += 1
                     except Exception:
                         pass
 
@@ -244,6 +354,12 @@ def main():
                     if not noticia_dentro_24h(data_hora[0], data_hora[1]):
                         antigas_nesta_rodada += 1
                         continue
+                    if links_existentes and link in links_existentes:
+                        ja_no_banco += 1
+                        if ja_no_banco >= 3:
+                            parar_por_banco = True
+                            break
+                        continue
                     # Resumo: verificar se existe elemento na lista (ex.: c-headline__kicker ou similar)
                     resumo_el = artigo.find("p", class_="c-headline__standfirst")
                     resumo = (resumo_el.get_text(strip=True) if resumo_el else "")[:500] or ""
@@ -263,6 +379,9 @@ def main():
 
             print(f"  Rodada (clique {clique}): {novas_nesta_rodada} novas, {antigas_nesta_rodada} antigas, {repetidas_nesta_rodada} repetidas")
 
+            if parar_por_banco:
+                print("  PARADA: 3 noticias ja estavam no banco")
+                break
             if antigas_nesta_rodada >= 5:
                 print("  PARADA: muitas noticias antigas (fora de 24h)")
                 break
@@ -280,7 +399,7 @@ def main():
                 print("  PARADA: limite de cliques em Ver mais")
                 break
 
-            # Clicar em "Ver mais"
+            # Clicar em "Ver mais" (ultimas-noticias)
             try:
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 time.sleep(1.5)
@@ -306,6 +425,36 @@ def main():
                     print("  PARADA: botao Ver mais nao clicavel:", str(e)[:50])
                 break
 
+        # Coleta editorial: colunaseblogs (Painel, Adriana Fernandes, Mônica Bergamo)
+        print()
+        print("  Coletando editoriais (colunaseblogs)...")
+        try:
+            driver.get(URL_FOLHA_COLUNAS)
+            WebDriverWait(driver, 15).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='colunas/']"))
+            )
+            time.sleep(2)
+            for _ in range(2):
+                try:
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    time.sleep(1)
+                    b = driver.find_elements(By.CSS_SELECTOR, "button.c-button--expand[data-pagination-trigger]")
+                    if b:
+                        driver.execute_script("arguments[0].click();", b[0])
+                        time.sleep(2)
+                except Exception:
+                    break
+            soup = BeautifulSoup(driver.page_source, "html.parser")
+            links_unicos = {n.get("link") for n in noticias_coletadas if n.get("link")}
+            editoriais = _extrair_editoriais_colunaseblogs(soup, titulos_unicos, links_unicos, limite_24h)
+            for n in editoriais:
+                if links_existentes and n.get("link") in links_existentes:
+                    continue
+                noticias_coletadas.append(n)
+            print(f"    Editoriais colunaseblogs: {len(editoriais)} (total: {len(noticias_coletadas)})")
+        except Exception as e:
+            print(f"  AVISO: erro ao coletar colunaseblogs: {e}")
+
         print()
         print(f"  Total coletado: {len(noticias_coletadas)} noticias")
         if noticias_coletadas:
@@ -320,6 +469,13 @@ def main():
         noticias_por_tema = defaultdict(list)
         nao_classificadas = []
         for noticia in noticias_coletadas:
+            if noticia.get("autor_editorial"):
+                noticia["titulo"] = f"{noticia['autor_editorial']}: {noticia['titulo']}"
+                noticia["tema_classificado"] = "Editorial"
+                noticia["score"] = 1
+                noticia["scores_todos"] = {}
+                noticias_por_tema["Editorial"].append(noticia)
+                continue
             resultado = classificar(noticia["titulo"], resumo=noticia.get("resumo") or "")
             tema = resultado["tema"]
             if tema == "Mundo":

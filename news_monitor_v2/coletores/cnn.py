@@ -164,6 +164,74 @@ def _extrair_noticias_pagina(soup, titulos_unicos, limite_24h, categorias_exclui
     return noticias
 
 
+# Colunistas da CNN Blogs que entram na categoria Editorial (titulo = "Autor: titulo")
+EDITORIAL_AUTORES_CNN = {
+    "Caio Junqueira", "Matheus Teixeira", "Teo Cury", "Larissa Rodrigues",
+    "Gustavo Uribe", "Isabel Mega", "Thaís Herédia", "Débora Bergamasco",
+}
+URL_CNN_BLOGS = "https://www.cnnbrasil.com.br/blogs/"
+
+
+def _extrair_editoriais_blogs(soup, titulos_unicos, limite_24h):
+    """
+    Extrai da página de blogs da CNN apenas itens cujo autor está em EDITORIAL_AUTORES_CNN.
+    Retorna lista de dicts com autor_editorial preenchido (titulo = "Autor: titulo" será aplicado na classificação).
+    """
+    noticias = []
+    for a in soup.find_all("a", href=True):
+        if "cnnbrasil.com.br" not in (a.get("href") or ""):
+            continue
+        h2 = a.find("h2", class_=re.compile(r"text-xl\s+font-bold|font-bold\s+text-xl"))
+        if not h2:
+            continue
+        titulo = (h2.get_text(strip=True) or "").strip()
+        if not titulo or titulo in titulos_unicos:
+            continue
+        link = (a.get("href") or "").strip()
+        if not link.startswith("http"):
+            link = "https://www.cnnbrasil.com.br" + link if link.startswith("/") else "https://www.cnnbrasil.com.br/" + link
+        container = a.find_parent("li") or a.find_parent("article") or a.find_parent("div", class_=re.compile(r"card|item|post|noticia", re.I))
+        if not container:
+            container = a.find_parent("div")
+        autor = None
+        data, hora = None, None
+        if container:
+            # Autor: span com font-normal text-sm leading-normal text-gray-400 (nome do colunista)
+            for span in container.find_all("span", class_=re.compile(r"text-gray-400|font-normal")):
+                txt = (span.get_text(strip=True) or "").strip()
+                if txt in EDITORIAL_AUTORES_CNN:
+                    autor = txt
+                    break
+            for elem in container.find_all(string=re.compile(r"\d{2}/\d{2}/\d{4}\s*\|\s*\d{1,2}:\d{2}")):
+                texto = str(elem).strip() if elem else ""
+                if texto:
+                    data, hora = _parse_data_hora_cnn(texto)
+                    if data and hora:
+                        break
+            if not data or not hora:
+                for tag in container.find_all(["span", "time", "p"]):
+                    texto = tag.get_text(strip=True) or ""
+                    if re.search(r"\d{2}/\d{2}/\d{4}\s*\|\s*\d{1,2}:\d{2}", texto):
+                        data, hora = _parse_data_hora_cnn(texto)
+                        break
+        if not autor or not data or not hora:
+            continue
+        if not noticia_dentro_24h(data, hora):
+            continue
+        titulos_unicos.add(titulo)
+        noticias.append({
+            "titulo": titulo,
+            "resumo": "",
+            "categoria": "Editorial",
+            "fonte": "CNN Brasil",
+            "data": data,
+            "hora": hora,
+            "link": link,
+            "autor_editorial": autor,
+        })
+    return noticias
+
+
 def main():
     import os
     os.environ["WDM_LOG_LEVEL"] = "0"
@@ -201,13 +269,24 @@ def main():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
-    for arg in ["--disable-logging", "--log-level=3", "--silent"]:
+    chrome_options.add_argument("--log-level=3")
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    for arg in ["--disable-logging", "--silent"]:
         chrome_options.add_argument(arg)
 
     driver = None
     noticias_coletadas = []
     titulos_unicos = set()
     max_paginas = 20
+    _out = Path(__file__).resolve().parent.parent / "output"
+    _links_file = _out / "links_existentes.txt"
+    links_existentes = set()
+    if _links_file.exists():
+        try:
+            with open(_links_file, "r", encoding="utf-8") as f:
+                links_existentes = {ln.strip() for ln in f if ln.strip()}
+        except Exception:
+            pass
 
     try:
         service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)
@@ -232,7 +311,6 @@ def main():
             novas = _extrair_noticias_pagina(soup, titulos_unicos, limite_24h, categorias_excluidas_cnn)
             noticias_coletadas.extend(novas)
             print(f"    -> {len(novas)} novas nesta página (total acumulado: {len(noticias_coletadas)})")
-
             if len(novas) == 0 and num_pag > 1:
                 print("  PARADA: página sem notícias novas")
                 break
@@ -244,6 +322,31 @@ def main():
             if num_pag < max_paginas:
                 next_url = f"{URL_BASE}pagina/{num_pag + 1}/"
                 time.sleep(1)
+
+        # Coleta editorial: blogs CNN (colunistas em EDITORIAL_AUTORES_CNN)
+        print()
+        print("  Coletando editoriais (blogs CNN)...")
+        for num_pag in range(1, 4):
+            url_blogs = URL_CNN_BLOGS if num_pag == 1 else f"{URL_CNN_BLOGS}pagina/{num_pag}/"
+            try:
+                driver.get(url_blogs)
+                WebDriverWait(driver, 15).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, "h2"))
+                )
+                time.sleep(2)
+            except Exception as e:
+                print(f"  AVISO: erro ao carregar blogs página {num_pag}: {e}")
+                break
+            soup = BeautifulSoup(driver.page_source, "html.parser")
+            editoriais = _extrair_editoriais_blogs(soup, titulos_unicos, limite_24h)
+            for n in editoriais:
+                if links_existentes and n.get("link") in links_existentes:
+                    continue
+                noticias_coletadas.append(n)
+            print(f"    Blogs p.{num_pag}: {len(editoriais)} editoriais (total acumulado: {len(noticias_coletadas)})")
+            if len(editoriais) == 0 and num_pag > 1:
+                break
+            time.sleep(1)
 
         print()
         print(f"  Total coletado: {len(noticias_coletadas)} notícias")
@@ -262,6 +365,14 @@ def main():
         nao_classificadas = []
 
         for noticia in noticias_coletadas:
+            autor_ed = noticia.get("autor_editorial")
+            if autor_ed:
+                noticia["titulo"] = f"{autor_ed}: {noticia['titulo']}"
+                noticia["tema_classificado"] = "Editorial"
+                noticia["score"] = 1
+                noticia["scores_todos"] = {}
+                noticias_por_tema["Editorial"].append(noticia)
+                continue
             resultado = classificar(noticia["titulo"], resumo="")
             tema = resultado["tema"]
             if tema == "Mundo":

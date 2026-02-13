@@ -175,12 +175,25 @@ def main():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
-    for arg in ["--disable-logging", "--log-level=3", "--silent"]:
+    chrome_options.add_argument("--log-level=3")
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    for arg in ["--disable-logging", "--silent"]:
         chrome_options.add_argument(arg)
 
     driver = None
     noticias_coletadas = []
     titulos_unicos = set()
+    _out = Path(__file__).resolve().parent.parent / "output"
+    _links_file = _out / "links_existentes.txt"
+    links_existentes = set()
+    if _links_file.exists():
+        try:
+            with open(_links_file, "r", encoding="utf-8") as f:
+                links_existentes = {ln.strip() for ln in f if ln.strip()}
+        except Exception:
+            pass
+    ja_no_banco = 0
+    parar_por_banco = False
 
     try:
         service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)
@@ -245,6 +258,13 @@ def main():
                         antigas_nesta_rodada += 1
                         continue
 
+                    if links_existentes and link in links_existentes:
+                        ja_no_banco += 1
+                        if ja_no_banco >= 3:
+                            parar_por_banco = True
+                            break
+                        continue
+
                     # Estadão não tem resumo na lista; usamos apenas título na classificação
                     noticia = {
                         "titulo": titulo,
@@ -274,6 +294,9 @@ def main():
 
             print(f"  Rodada (clique {clique}): {novas_nesta_rodada} novas, {antigas_nesta_rodada} antigas, {repetidas_nesta_rodada} repetidas")
 
+            if parar_por_banco:
+                print("  PARADA: 3 noticias ja estavam no banco")
+                break
             if antigas_nesta_rodada >= 3:
                 print("  PARADA: muitas noticias antigas (fora de 24h)")
                 break

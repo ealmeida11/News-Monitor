@@ -116,6 +116,10 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html, 
         f.write("\n".join(linhas))
 
 
+# Colunistas do O Globo (feed-post-metadata-section) que entram na categoria Editorial
+EDITORIAL_AUTORES_GLOBO = {"Bela Megale", "Fábio Graner", "Fabio Graner", "Lauro Jardim", "Miriam Leitão"}
+
+
 def main():
     import os
     os.environ["WDM_LOG_LEVEL"] = "0"
@@ -147,13 +151,26 @@ def main():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
-    for arg in ["--disable-logging", "--log-level=3", "--silent"]:
+    chrome_options.add_argument("--log-level=3")
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    for arg in ["--disable-logging", "--silent"]:
         chrome_options.add_argument(arg)
 
     driver = None
     noticias_coletadas = []
     titulos_unicos = set()
     categorias_excluidas_oglobo = {"Mundo", "Colunas", "Colunistas", "Esportes"}
+    _out = Path(__file__).resolve().parent.parent / "output"
+    _links_file = _out / "links_existentes.txt"
+    links_existentes = set()
+    if _links_file.exists():
+        try:
+            with open(_links_file, "r", encoding="utf-8") as f:
+                links_existentes = {ln.strip() for ln in f if ln.strip()}
+        except Exception:
+            pass
+    ja_no_banco = 0
+    parar_por_banco = False
 
     try:
         service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)
@@ -210,6 +227,7 @@ def main():
                     categoria = cat_el.get_text(strip=True) if cat_el else "Não especificada"
                     if categoria in categorias_excluidas_oglobo:
                         continue
+                    autor_editorial = categoria if categoria in EDITORIAL_AUTORES_GLOBO else None
 
                     tempo_el = artigo.find("span", class_="feed-post-datetime")
                     if not tempo_el:
@@ -219,13 +237,23 @@ def main():
                         antigas_nesta_pagina += 1
                         continue
 
+                    if links_existentes and link in links_existentes:
+                        ja_no_banco += 1
+                        if ja_no_banco >= 3:
+                            parar_por_banco = True
+                            break
+                        continue
+
                     resumo_el = artigo.find("p", class_="feed-post-body-resumo")
                     resumo = (resumo_el.get_text(strip=True) if resumo_el else "")[:500] or ""
 
-                    noticias_coletadas.append({
+                    item = {
                         "titulo": titulo, "resumo": resumo, "categoria": categoria,
                         "fonte": "O Globo", "data": data, "hora": hora, "link": link,
-                    })
+                    }
+                    if autor_editorial:
+                        item["autor_editorial"] = autor_editorial
+                    noticias_coletadas.append(item)
                     titulos_unicos.add(titulo)
                     novas_nesta_pagina += 1
                     duplicatas_consecutivas = 0
@@ -239,6 +267,9 @@ def main():
 
             print(f"    {novas_nesta_pagina} novas, {antigas_nesta_pagina} antigas, {repetidas_nesta_pagina} repetidas")
 
+            if parar_por_banco:
+                print("  PARADA: 3 noticias ja estavam no banco")
+                break
             if antigas_nesta_pagina >= 3:
                 print("  PARADA: muitas noticias antigas (fora de 24h)")
                 break
@@ -264,6 +295,13 @@ def main():
         noticias_por_tema = defaultdict(list)
         nao_classificadas = []
         for noticia in noticias_coletadas:
+            if noticia.get("autor_editorial"):
+                noticia["titulo"] = f"{noticia['autor_editorial']}: {noticia['titulo']}"
+                noticia["tema_classificado"] = "Editorial"
+                noticia["score"] = 1
+                noticia["scores_todos"] = {}
+                noticias_por_tema["Editorial"].append(noticia)
+                continue
             resultado = classificar(noticia["titulo"], resumo=noticia.get("resumo") or "")
             tema = resultado["tema"]
             if tema == "Mundo":

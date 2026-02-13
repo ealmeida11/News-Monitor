@@ -83,6 +83,13 @@ def noticia_dentro_24h(data, hora):
         return False
 
 
+# Páginas de colunistas do Valor (categoria Editorial, titulo = "Autor: titulo")
+EDITORIAL_AUTORES_VALOR = [
+    ("https://valor.globo.com/autores/alex-ribeiro/", "Alex Ribeiro"),
+    ("https://valor.globo.com/autores/andrea-jube/", "Andrea Jubé"),
+]
+
+
 def main():
     import os
     os.environ['WDM_LOG_LEVEL'] = '0'
@@ -111,12 +118,26 @@ def main():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
-    for arg in ["--disable-logging", "--log-level=3", "--silent"]:
+    chrome_options.add_argument("--log-level=3")
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    for arg in ["--disable-logging", "--silent"]:
         chrome_options.add_argument(arg)
 
     driver = None
     noticias_coletadas = []
     titulos_unicos = set()
+    # Links já no banco (últimos 7 dias): se encontrar 3, para para agilizar o loop
+    _out = Path(__file__).resolve().parent.parent / "output"
+    _links_file = _out / "links_existentes.txt"
+    links_existentes = set()
+    if _links_file.exists():
+        try:
+            with open(_links_file, "r", encoding="utf-8") as f:
+                links_existentes = {ln.strip() for ln in f if ln.strip()}
+        except Exception:
+            pass
+    ja_no_banco = 0
+    parar_por_banco = False
 
     try:
         service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)
@@ -128,6 +149,8 @@ def main():
         limite_paginas = 50  # Aumentado para garantir coleta completa
 
         while pagina <= limite_paginas:
+            if parar_por_banco:
+                break
             if pagina == 1:
                 url = URL_BASE
             else:
@@ -187,6 +210,14 @@ def main():
                         antigas_nesta_pagina += 1
                         continue
 
+                    # Parar cedo se 3 notícias já estiverem no banco (agiliza loop)
+                    if links_existentes and link in links_existentes:
+                        ja_no_banco += 1
+                        if ja_no_banco >= 3:
+                            parar_por_banco = True
+                            break
+                        continue
+
                     # Resumo
                     resumo_element = artigo.find("p", class_="feed-post-body-resumo")
                     resumo = (resumo_element.text.strip() if resumo_element else None) or None
@@ -208,6 +239,9 @@ def main():
                 except Exception as e:
                     continue
 
+            if parar_por_banco:
+                print("    PARADA: 3 notícias já estavam no banco")
+                break
             print(f"    Página {pagina}: {novas_nesta_pagina} novas, {antigas_nesta_pagina} antigas")
 
             # Parar apenas se encontrar muitas notícias antigas (fora de 24h) consecutivas
@@ -221,6 +255,61 @@ def main():
 
             pagina += 1
 
+        # Coleta editorial: páginas de autores (Alex Ribeiro, Andrea Jubé)
+        print()
+        print("  Coletando editoriais (páginas de autores)...")
+        for url_autor, autor_nome in EDITORIAL_AUTORES_VALOR:
+            try:
+                driver.get(url_autor)
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "feed-post-body"))
+                )
+                time.sleep(2)
+            except Exception as e:
+                print(f"    AVISO: erro ao carregar {url_autor}: {e}")
+                continue
+            soup = BeautifulSoup(driver.page_source, "html.parser")
+            artigos = soup.find_all("div", class_="feed-post-body")
+            for artigo in artigos:
+                try:
+                    link_element = artigo.find("a", class_="feed-post-link")
+                    if not link_element:
+                        continue
+                    titulo = link_element.text.strip()
+                    if titulo in titulos_unicos:
+                        continue
+                    link = link_element.get("href")
+                    data_element = artigo.find("span", class_="feed-post-datetime")
+                    if not data_element:
+                        continue
+                    data_hora_texto = data_element.text.strip()
+                    data_match = re.search(r"(\d{2}/\d{2}/\d{4}),\s*(\d{2}:\d{2})", data_hora_texto)
+                    if not data_match:
+                        continue
+                    data = data_match.group(1)
+                    hora = data_match.group(2)
+                    if not noticia_dentro_24h(data, hora):
+                        continue
+                    if links_existentes and link in links_existentes:
+                        continue
+                    resumo_element = artigo.find("p", class_="feed-post-body-resumo")
+                    resumo = (resumo_element.text.strip() if resumo_element else None) or None
+                    noticias_coletadas.append({
+                        "titulo": titulo,
+                        "resumo": resumo,
+                        "categoria": "Editorial",
+                        "fonte": "Valor Econômico",
+                        "data": data,
+                        "hora": hora,
+                        "link": link,
+                        "autor_editorial": autor_nome,
+                    })
+                    titulos_unicos.add(titulo)
+                except Exception:
+                    continue
+            print(f"    {autor_nome}: +{len(artigos)} itens na página")
+        print()
+
         print()
         print(f"  Total coletado: {len(noticias_coletadas)} notícias")
         print()
@@ -231,6 +320,13 @@ def main():
         nao_classificadas = []
 
         for noticia in noticias_coletadas:
+            if noticia.get("autor_editorial"):
+                noticia["titulo"] = f"{noticia['autor_editorial']}: {noticia['titulo']}"
+                noticia["tema_classificado"] = "Editorial"
+                noticia["score"] = 1
+                noticia["scores_todos"] = {}
+                noticias_por_tema["Editorial"].append(noticia)
+                continue
             # Classificar com léxico
             resultado = classificar(noticia['titulo'], resumo=noticia.get('resumo', ''))
             tema = resultado['tema']

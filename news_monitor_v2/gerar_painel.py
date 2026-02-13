@@ -35,6 +35,9 @@ CORES_TEMAS = {
     "Atividade": "#1abc9c",
     "STF": "#2c3e50",
     "Caso Master": "#6c3483",
+    # Categorias da fonte (quando usadas como tema)
+    "Política": "#2980b9",
+    "Economia": "#27ae60",
 }
 
 
@@ -75,6 +78,7 @@ def _escrever_html_painel(todas, data_formatada, periodo_horas, arquivo_saida, t
     html.append("<head>")
     html.append('<meta charset="UTF-8">')
     html.append('<meta name="viewport" content="width=device-width, initial-scale=1.0">')
+    html.append('<meta http-equiv="refresh" content="30">')
     html.append("<title>Newsflow Macro Brasil</title>")
     html.append("<style>")
     html.append("*{margin:0;padding:0;box-sizing:border-box;}")
@@ -117,7 +121,7 @@ def _escrever_html_painel(todas, data_formatada, periodo_horas, arquivo_saida, t
     html.append("</head><body>")
     html.append('<div class="header">')
     html.append("<h1>📡 Newsflow Macro Brasil</h1>")
-    html.append(f'<div class="meta">Última atualização: {data_formatada} | Notícias das últimas {periodo_horas} horas | Fontes: Valor Econômico, Estadão, Folha, O Globo, CNN Brasil</div>')
+    html.append(f'<div class="meta">Última atualização: {data_formatada} | Notícias das últimas {periodo_horas}h | Fontes: Valor, Estadão, Folha, O Globo, CNN | Atualiza a cada 30s</div>')
     html.append("</div>")
     html.append('<div class="container">')
     html.append('<div class="controls">')

@@ -146,21 +146,35 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
     if not scores:
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": {}}
 
-    # Se houver empate, priorizar Mercado quando houver "fluxo cambial"
     texto_lower = texto_completo.lower()
-    tem_fluxo_cambial = "fluxo cambial" in texto_lower
-    
-    if tem_fluxo_cambial and "Mercado" in scores and "Banco Central" in scores:
-        if scores["Mercado"] == scores["Banco Central"]:
-            # Priorizar Mercado quando houver fluxo cambial
-            melhor_tema = "Mercado"
-            melhor_score = scores["Mercado"]
+    # Priorizar Mercado quando houver bitcoin/cripto (evitar classificar como Inflação por "preços" no resumo)
+    tem_cripto = any(x in texto_lower for x in ["bitcoin", "criptomoeda", "criptomoedas", "crypto", "btc", "ethereum"])
+    # Priorizar Mercado quando a notícia é sobre bolsas/fechamento/balanços (inflação no texto = dado que o mercado acompanha)
+    contexto_bolsa = any(x in texto_lower for x in ["bolsas", "bolsa fech", "fecham em", "fechamento", "pregão", "balanços", "balanço ", "ibovespa", "ações em", "dólar em"])
+    # Priorizar Mercado quando fala de ativo/commodity (ouro, petróleo) e movimento de preço — inflação no texto é dado, não tema
+    contexto_ativo = any(x in texto_lower for x in ["ouro", "petróleo", "petroleo", "commodities"]) and any(x in texto_lower for x in ["avanço", "avanco", "alta", "queda", " sobe", " sobe ", " cai", " cai ", "valoriza", "desvaloriza"])
+    if tem_cripto and "Mercado" in scores:
+        melhor_tema = "Mercado"
+        melhor_score = scores["Mercado"]
+    elif contexto_ativo and "Mercado" in scores:
+        melhor_tema = "Mercado"
+        melhor_score = scores["Mercado"]
+    elif contexto_bolsa and "Mercado" in scores and "Inflação" in scores:
+        melhor_tema = "Mercado"
+        melhor_score = scores["Mercado"]
+    else:
+        # Se houver empate, priorizar Mercado quando houver "fluxo cambial"
+        tem_fluxo_cambial = "fluxo cambial" in texto_lower
+        if tem_fluxo_cambial and "Mercado" in scores and "Banco Central" in scores:
+            if scores["Mercado"] == scores["Banco Central"]:
+                melhor_tema = "Mercado"
+                melhor_score = scores["Mercado"]
+            else:
+                melhor_tema = max(scores, key=scores.get)
+                melhor_score = scores[melhor_tema]
         else:
             melhor_tema = max(scores, key=scores.get)
             melhor_score = scores[melhor_tema]
-    else:
-        melhor_tema = max(scores, key=scores.get)
-        melhor_score = scores[melhor_tema]
 
     # Prioridade: Caso Master sobre Governo/Congresso quando a notícia é sobre Vorcaro/Master (ex.: depoimento ao Senado)
     if melhor_tema == "Governo/Congresso" and "Caso Master" in scores and scores["Caso Master"] >= 1:
@@ -180,7 +194,7 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
     if melhor_tema == "Eleições" and melhor_score < 2:
         return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
-    # STF: não classificar como STF quando "corte" e "gastos" aparecem (ex.: "corte de gastos"); usar segundo tema
+    # STF: não classificar quando "corte" e "gastos" (ex.: "corte de gastos"); usar segundo tema
     if melhor_tema == "STF" and "corte" in texto_lower and "gastos" in texto_lower:
         scores_sem_stf = {k: v for k, v in scores.items() if k != "STF"}
         if scores_sem_stf:
@@ -188,10 +202,23 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
             melhor_score = scores_sem_stf[melhor_tema]
         if not scores_sem_stf or melhor_score < SCORE_MINIMO:
             return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+    # STF: não classificar quando "corte" é de cabelo/visual (ex.: "corte bob", "corte de cabelo", Beyoncé)
+    if melhor_tema == "STF" and "corte" in texto_lower:
+        contexto_cabelo = any(x in texto_lower for x in (
+            "corte bob", "corte de cabelo", "corte no cabelo", "corte cabelo",
+            "cabelo", "visual", "posa", "beyoncé", "celebridade", "cabelereiro",
+            "corte masculino", "corte feminino", "novo look", "mudança de visual"
+        ))
+        if contexto_cabelo:
+            scores_sem_stf = {k: v for k, v in scores.items() if k != "STF"}
+            if scores_sem_stf:
+                melhor_tema = max(scores_sem_stf, key=scores_sem_stf.get)
+                melhor_score = scores_sem_stf[melhor_tema]
+            else:
+                return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
-    # Editorial: não classificar por enquanto; depois virão páginas específicas de cada editorial para coleta dedicada (Valor, Estadão, Folha)
-    if melhor_tema == "Editorial":
-        return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+    # Editorial: aceito quando vindo de coleta dedicada (colunistas/editoriais por site) ou quando o léxico aponta para Editorial
+    # (não forçar NAO_CLASSIFICADO)
 
     # Governo/Congresso: não classificar quando "presidente" é de empresa (Ambev, Banrisul, etc.), não do governo
     if melhor_tema == "Governo/Congresso" and "presidente" in texto_lower:
@@ -204,6 +231,20 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
                 melhor_score = scores_sem_gov[melhor_tema]
             if not scores_sem_gov or melhor_score < SCORE_MINIMO:
                 return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+    # Governo/Congresso: não classificar quando é carnaval/sambódromo (ex.: Marquês de Sapucaí, escola de samba)
+    if melhor_tema == "Governo/Congresso":
+        contexto_carnaval = any(x in texto_lower for x in (
+            "sapucaí", "sapucai", "marquês de sapucaí", "sambódromo", "sambodromo",
+            "escola de samba", "desfile das escolas", "cobra coral", "cacique cobra",
+            "avenida marquês", "carnaval", "alegoria", "enredo"
+        ))
+        if contexto_carnaval:
+            scores_sem_gov = {k: v for k, v in scores.items() if k != "Governo/Congresso"}
+            if scores_sem_gov:
+                melhor_tema = max(scores_sem_gov, key=scores_sem_gov.get)
+                melhor_score = scores_sem_gov[melhor_tema]
+            else:
+                return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
     # Mercado: não classificar quando "ações" significa medidas/ato (ex.: "ações do MPF", "insuficientes ações"), não ações de bolsa
     if melhor_tema == "Mercado" and "ações" in texto_lower:
@@ -215,6 +256,20 @@ def classificar(titulo, resumo="", usar_lematizacao=True):
                 melhor_tema = max(scores_sem_merc, key=scores_sem_merc.get)
                 melhor_score = scores_sem_merc[melhor_tema]
             if not scores_sem_merc or melhor_score < SCORE_MINIMO:
+                return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
+    # Mercado: não classificar quando é carnaval/sambódromo (ex.: Unidos da Ponte, Sapucaí, desfilar, baile funk)
+    if melhor_tema == "Mercado":
+        contexto_carnaval_merc = any(x in texto_lower for x in (
+            "sapucaí", "sapucai", "sambódromo", "sambodromo", "desfilar", "desfile das escolas",
+            "escola de samba", "unidos da ", "baile funk", "carnaval", "enredo", "alegoria",
+            "cobra coral", "cacique cobra", "marquês de sapucaí"
+        ))
+        if contexto_carnaval_merc:
+            scores_sem_merc = {k: v for k, v in scores.items() if k != "Mercado"}
+            if scores_sem_merc:
+                melhor_tema = max(scores_sem_merc, key=scores_sem_merc.get)
+                melhor_score = scores_sem_merc[melhor_tema]
+            else:
                 return {"tema": NAO_CLASSIFICADO, "score": 0, "scores": scores}
 
     # Não classificar notícias sobre política/economia de outros países (só queremos Brasil)

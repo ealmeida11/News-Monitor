@@ -54,26 +54,27 @@ def _rodar_coleta_fonte(nome, script_rel):
     """Executa o script de coleta de uma fonte. Retorna True se OK."""
     script_path = BASE_DIR / script_rel
     if not script_path.exists():
-        print(f"  [AVISO] Script não encontrado: {script_path}")
         return False
     try:
-        # Rodar a partir de news_monitor_v2 para imports corretos
+        env = {
+            **os.environ,
+            "PYTHONPATH": os.pathsep.join([str(PROJECT_ROOT), str(BASE_DIR)]),
+            "PYTHONIOENCODING": "utf-8",
+        }
         r = subprocess.run(
             [sys.executable, str(script_path)],
             cwd=str(BASE_DIR),
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             timeout=600,
-            env={**os.environ, "PYTHONPATH": os.pathsep.join([str(PROJECT_ROOT), str(BASE_DIR)])},
+            env=env,
         )
-        if r.returncode != 0 and r.stderr:
-            print(f"  [AVISO] {nome}: {r.stderr[:200]}")
-        return True
+        return r.returncode == 0
     except subprocess.TimeoutExpired:
-        print(f"  [AVISO] {nome}: timeout")
         return False
-    except Exception as e:
-        print(f"  [AVISO] {nome}: {e}")
+    except Exception:
         return False
 
 
@@ -105,30 +106,43 @@ def _extrair_noticias_do_json(arq):
 
 
 def main():
-    print("=" * 70)
-    print("  MONITOR MACRO BRASIL V2 - Coleta e painel")
-    print("=" * 70)
-    print(f"  Data/Hora: {datetime.now():%d/%m/%Y %H:%M}")
+    t0 = datetime.now()
+    W = 56  # largura do bloco
+
+    # ---- Cabeçalho ----
+    print()
+    print("  " + "=" * (W - 2))
+    print("  MONITOR MACRO BRASIL  v2")
+    print("  " + "=" * (W - 2))
+    print(f"  {t0:%d/%m/%Y  %H:%M:%S}")
     print()
 
     db_path = db.get_db_path()
     db.init_db(db_path)
-    print(f"  Banco: {db_path}")
-
     links_existentes = db.get_links_existentes(db_path, ultimos_dias=7)
-    print(f"  Links já no banco (últimos 7 dias): {len(links_existentes)}")
-    print()
+    _links_file = OUTPUT_DIR / "links_existentes.txt"
+    try:
+        with open(_links_file, "w", encoding="utf-8") as f:
+            for link in links_existentes:
+                f.write(link + "\n")
+    except Exception:
+        pass
 
-    # 1) Rodar coleta de cada fonte
-    print("  [1/3] Coletando fontes...")
+    # ---- Coleta ----
+    print("  Coleta")
+    print("  " + "-" * (W - 2))
+    ok = 0
     for nome, script in COLETORES:
-        print(f"    - {nome}...", end=" ", flush=True)
-        _rodar_coleta_fonte(nome, script)
-        print("OK")
+        status = _rodar_coleta_fonte(nome, script)
+        ok += status
+        sym = "ok" if status else ".."
+        print(f"    {nome:<22} [{sym}]")
+    print(f"  fontes: {ok}/{len(COLETORES)}")
     print()
 
-    # 2) Ler JSONs e inserir no banco (apenas links novos)
-    print("  [2/3] Inserindo notícias novas no banco...")
+    # ---- Banco ----
+    print("  Banco")
+    print("  " + "-" * (W - 2))
     inseridas = 0
     for arq in ARQUIVOS_JSON:
         noticias = _extrair_noticias_do_json(arq)
@@ -139,16 +153,34 @@ def main():
             if db.insert_noticia(n, db_path):
                 inseridas += 1
                 links_existentes.add(link)
-    print(f"    Inseridas: {inseridas} novas notícias")
+    print(f"    links (7 dias)  {len(links_existentes):>6}")
+    print(f"    inseridas       {inseridas:>6}")
     print()
 
-    # 3) Gerar painel a partir do banco (últimas 24h)
-    print("  [3/3] Gerando painel (últimas 24h)...")
-    noticias_24h = db.get_noticias_ultimas_24h(db_path)
+    # ---- Painel ----
+    print("  Painel (24h)")
+    print("  " + "-" * (W - 2))
+    noticias_24h_bruto = db.get_noticias_ultimas_24h(db_path)
+    # Categorias da fonte usadas como tema quando o classificador não atribuiu (ex.: CNN "Política", "Macroeconomia")
+    CATEGORIAS_COMO_TEMA = {"Política", "Economia", "Mercado", "Macroeconomia"}
+    MAPEAMENTO_CATEGORIA_TEMA = {"Macroeconomia": "Mercado"}  # categoria do site -> tema no painel
+    TEMAS_EXCLUIDOS_PAINEL = {"Saúde", "Mundo", "Ambiente", "Ciência", "Cotidiano", "Tecnologia"}
+    noticias_24h = []
+    for n in noticias_24h_bruto:
+        tema = (n.get("tema") or "").strip()
+        cat = (n.get("categoria") or "").strip()
+        if tema and tema not in TEMAS_EXCLUIDOS_PAINEL:
+            noticias_24h.append(n)
+        elif not tema and cat in CATEGORIAS_COMO_TEMA:
+            n_copy = dict(n)
+            n_copy["tema"] = MAPEAMENTO_CATEGORIA_TEMA.get(cat, cat)
+            noticias_24h.append(n_copy)
+    sem_tema = len(noticias_24h_bruto) - len(noticias_24h)
     data_formatada = datetime.now().strftime("%d/%m/%Y %H:%M")
 
     if noticias_24h:
         from gerar_painel import gerar_painel_de_lista
+        import shutil
         painel_path = OUTPUT_DIR / "painel_dashboard.html"
         index_path = PROJECT_ROOT / "index.html"
         gerar_painel_de_lista(
@@ -157,19 +189,21 @@ def main():
             periodo_horas=24,
             arquivo_saida=painel_path,
         )
-        # Copiar para index.html (GitHub Pages)
-        import shutil
         shutil.copy2(painel_path, index_path)
-        print(f"    Painel: {painel_path}")
-        print(f"    index.html (GitHub): {index_path}")
-        print(f"    Notícias no painel: {len(noticias_24h)}")
+        print(f"    noticias        {len(noticias_24h):>6}")
+        if sem_tema:
+            print(f"    sem tema        {sem_tema:>6} (nao exibidas)")
+        print(f"    index.html      atualizado")
     else:
-        print("    Nenhuma notícia nas últimas 24h no banco.")
-
+        print("    (nenhuma noticia com tema nas 24h)")
     print()
-    print("=" * 70)
-    print("  Concluído.")
-    print("=" * 70)
+
+    # ---- Rodapé ----
+    elapsed = (datetime.now() - t0).total_seconds()
+    print("  " + "=" * (W - 2))
+    print(f"  concluido  {elapsed:.0f}s")
+    print("  " + "=" * (W - 2))
+    print()
     return 0
 
 
