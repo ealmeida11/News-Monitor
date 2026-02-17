@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="30">
+<title>Newsflow Macro Brasil</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',-apple-system,sans-serif;background:#f5f7fa;color:#2c3e50;line-height:1.6;}
+.header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#1a5276 0%,#2980b9 100%);color:#fff;padding:12px 24px;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.header h1{font-size:20px;font-weight:600;margin-bottom:4px;}
+.header .meta{font-size:12px;opacity:.9;}
+.container{max-width:1600px;margin:0 auto;padding:28px 32px;}
+.controls{background:#fff;padding:20px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.08);margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.controls input[type='text']{flex:1;min-width:250px;padding:10px 14px;border:1px solid #ddd;border-radius:6px;font-size:14px;}
+.controls select{padding:10px 14px;border:1px solid #ddd;border-radius:6px;font-size:14px;background:#fff;cursor:pointer;}
+.controls .count{color:#666;font-size:14px;margin-left:auto;}
+.table-wrapper{background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+thead{background:#1a5276;color:#fff;}
+th{padding:14px 16px;text-align:left;font-size:13px;font-weight:600;cursor:pointer;user-select:none;position:relative;}
+th:hover{background:#164a6b;}
+th.sortable::after{content:' ↕';opacity:.5;font-size:11px;margin-left:4px;}
+th.sort-asc::after{content:' ↑';opacity:1;}
+th.sort-desc::after{content:' ↓';opacity:1;}
+tbody tr{border-bottom:1px solid #e9ecef;transition:background .15s;}
+tbody tr:hover{background:#f8f9fa;}
+tbody tr:last-child{border-bottom:none;}
+td{padding:14px 16px;font-size:14px;vertical-align:top;}
+.titulo-cell{font-weight:500;color:#2c3e50;max-width:400px;}
+.resumo-cell{max-width:450px;color:#555;font-size:13px;line-height:1.5;}
+.badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:500;color:#fff;white-space:nowrap;}
+.link-cell a{color:#2980b9;text-decoration:none;font-weight:500;padding:6px 12px;border:1px solid #2980b9;border-radius:4px;display:inline-block;transition:all .2s;}
+.link-cell a:hover{background:#2980b9;color:#fff;}
+.fonte-cell{font-size:13px;color:#555;white-space:nowrap;}
+.dh-cell{white-space:nowrap;font-size:13px;color:#666;font-family:monospace;}
+.pagination{display:flex;justify-content:center;gap:8px;padding:20px;background:#fff;border-top:1px solid #e9ecef;}
+.pagination button{padding:8px 14px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer;font-size:14px;transition:all .2s;}
+.pagination button:hover:not(:disabled){background:#2980b9;color:#fff;border-color:#2980b9;}
+.pagination button:disabled{opacity:.5;cursor:not-allowed;}
+.pagination .active{background:#2980b9;color:#fff;border-color:#2980b9;}
+@media (max-width:1200px){.resumo-cell{max-width:300px;}.titulo-cell{max-width:250px;}}
+@media (max-width:768px){.container{padding:16px;}.controls{flex-direction:column;align-items:stretch;}.controls .count{margin-left:0;margin-top:8px;}table{font-size:12px;}th,td{padding:10px 8px;}}
+</style>
+</head><body>
+<div class="header">
+<h1>📡 Newsflow Macro Brasil</h1>
+<div class="meta">Última atualização: 17/02/2026 08:01 | Notícias das últimas 24h | Fontes: Valor, Estadão, Folha, O Globo, CNN | Atualiza a cada 30s</div>
+</div>
+<div class="container">
+<div class="controls">
+<input type="text" id="searchInput" placeholder="🔍 Buscar por título ou resumo..." />
+<select id="filterCategoria">
+<option value="">Todas as categorias</option>
+<option value="Atividade">Atividade</option>
+<option value="Banco Central">Banco Central</option>
+<option value="Economia">Economia</option>
+<option value="Editorial">Editorial</option>
+<option value="Eleições">Eleições</option>
+<option value="Governo/Congresso">Governo/Congresso</option>
+<option value="Inflação">Inflação</option>
+<option value="Mercado">Mercado</option>
+<option value="Política">Política</option>
+<option value="STF">STF</option>
+</select>
+<span class="count" id="resultCount">Mostrando todas as notícias</span>
+</div>
+<div class="table-wrapper">
+<table id="newsTable">
+<thead><tr>
+<th class="sortable" data-sort="titulo">Título</th>
+<th class="sortable" data-sort="resumo">Resumo</th>
+<th class="sortable" data-sort="categoria">Categoria</th>
+<th class="sortable" data-sort="fonte">Fonte</th>
+<th>Link</th>
+<th class="sortable" data-sort="datahora">Data/Hora</th>
+</tr></thead>
+<tbody id="tableBody">
+<tr data-titulo="nikolas vai mudar o jogo entre política e religião no brasil" data-resumo="filho de pastor, o deputado mineiro entendeu que voto evangélico não existe" data-categoria="Governo/Congresso" data-fonte="folha de s.paulo" data-datahora="17/02/2026 07:00">
+<td class="titulo-cell">Nikolas vai mudar o jogo entre política e religião no Brasil</td>
+<td class="resumo-cell">Filho de pastor, o deputado mineiro entendeu que voto evangélico não existe</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/cotidiano/2026/02/nikolas-vai-mudar-o-jogo-entre-politica-e-religiao-no-brasil.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 07:00</td>
+</tr>
+<tr data-titulo="programa do tjrj busca ‘padrinhos’ que mudam vidas de crianças e jovens" data-resumo="iniciativa premiada leva apoio afetivo, material e de serviços a assistidos pelas varas de infância e juventude" data-categoria="Atividade" data-fonte="o globo" data-datahora="17/02/2026 06:03">
+<td class="titulo-cell">Programa do TJRJ busca ‘padrinhos’ que mudam vidas de crianças e jovens</td>
+<td class="resumo-cell">Iniciativa premiada leva apoio afetivo, material e de serviços a assistidos pelas varas de Infância e Juventude</td>
+<td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/rio/noticia/2026/02/17/programa-do-tjrj-busca-padrinhos-que-mudam-vidas-de-criancas-e-jovens.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 06:03</td>
+</tr>
+<tr data-titulo="painel: vice-prefeito de sp diz que desfile pró-lula é crime, mas que ninguém acredita em justiça" data-resumo="" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="17/02/2026 06:00">
+<td class="titulo-cell">Painel: Vice-prefeito de SP diz que desfile pró-Lula é crime, mas que ninguém acredita em justiça</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/painel/2026/02/vice-prefeito-de-sp-diz-que-desfile-pro-lula-e-crime-mas-que-ninguem-acredita-em-justica.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 06:00</td>
+</tr>
+<tr data-titulo="brasil é o 42º em ranking global de maturidade digital" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="17/02/2026 05:30">
+<td class="titulo-cell">Brasil é o 42º em ranking global de maturidade digital</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/coluna-do-estadao/brasil-e-o-42-em-ranking-global-de-maturidade-digital/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 05:30</td>
+</tr>
+<tr data-titulo="agenda ferroviária, de r$ 140 bi, prevê oito leilões para tentar destravar setor após décadas" data-resumo="" data-categoria="Economia" data-fonte="estadão" data-datahora="17/02/2026 05:30">
+<td class="titulo-cell">Agenda ferroviária, de R$ 140 bi, prevê oito leilões para tentar destravar setor após décadas</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/economia/agenda-ferroviaria-de-r-140-bi-preve-oito-leiloes-para-tentar-destravar-setor-apos-decadas/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 05:30</td>
+</tr>
+<tr data-titulo="relação tensa entre tarcísio e kassab pode deixar psd fora da vice ao governo de são paulo" data-resumo="" data-categoria="Eleições" data-fonte="estadão" data-datahora="17/02/2026 05:30">
+<td class="titulo-cell">Relação tensa entre Tarcísio e Kassab pode deixar PSD fora da vice ao governo de São Paulo</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/relacao-tensa-entre-tarcisio-e-kassab-pode-deixar-psd-fora-da-vice-ao-governo-de-sao-paulo/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 05:30</td>
+</tr>
+<tr data-titulo="luma de oliveira elogia coleira de virgínia com nome de vini jr." data-resumo="criadora da fantasia que inspirou influenciadora, luma diz que só mulheres livres e seguras podem fazer o que querem com liberdade" data-categoria="Política" data-fonte="folha de s.paulo" data-datahora="17/02/2026 05:25">
+<td class="titulo-cell">Luma de Oliveira elogia coleira de Virgínia com nome de Vini Jr.</td>
+<td class="resumo-cell">Criadora da fantasia que inspirou influenciadora, Luma diz que só mulheres livres e seguras podem fazer o que querem com liberdade</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/monicabergamo/2026/02/luma-de-oliveira-elogia-coleira-de-virginia-com-nome-de-vini-jr.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 05:25</td>
+</tr>
+<tr data-titulo="rj investiu r$ 100 milhões e colheu r$ 5,9 bi, pense se fizesse isso sempre" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="17/02/2026 05:00">
+<td class="titulo-cell">RJ investiu R$ 100 milhões e colheu R$ 5,9 bi, pense se fizesse isso sempre</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/gilvan-bueno/economia/macroeconomia/rj-investiu-r-100-milhoes-e-colheu-r-59-bi-pense-se-fizesse-isso-sempre/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 05:00</td>
+</tr>
+<tr data-titulo="governo vê mais danos políticos do que jurídicos com desfile sobre lula" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="17/02/2026 05:00">
+<td class="titulo-cell">Governo vê mais danos políticos do que jurídicos com desfile sobre Lula</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/caio-junqueira/politica/governo-ve-mais-danos-politicos-do-que-juridicos-com-desfile-sobre-lula/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 05:00</td>
+</tr>
+<tr data-titulo="o favoritismo de lula em 2026" data-resumo="com bons números na economia, lula chega como favorito na campanha. e flávio tenta herdar o espólio bolsonarista" data-categoria="Eleições" data-fonte="o globo" data-datahora="17/02/2026 04:38">
+<td class="titulo-cell">O favoritismo de Lula em 2026</td>
+<td class="resumo-cell">Com bons números na economia, Lula chega como favorito na campanha. E Flávio tenta herdar o espólio bolsonarista</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/blogs/miriam-leitao/post/2026/02/o-favoritismo-de-lula-em-2026.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:38</td>
+</tr>
+<tr data-titulo="china espera recorde de 9,5 bilhões de viagens no feriadão do ano novo, que começa nesta terça-feira" data-resumo="em 2026, período de descanso prolongado terá nove dias, um a mais do que o usual, dando impulso à economia do país" data-categoria="Economia" data-fonte="o globo" data-datahora="17/02/2026 04:32">
+<td class="titulo-cell">China espera recorde de 9,5 bilhões de viagens no feriadão do ano novo, que começa nesta terça-feira</td>
+<td class="resumo-cell">Em 2026, período de descanso prolongado terá nove dias, um a mais do que o usual, dando impulso à economia do país</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/economia/noticia/2026/02/17/china-espera-recorde-de-95-bilhoes-de-viagens-no-feriadao-do-ano-novo-que-comeca-nesta-terca-feira.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:32</td>
+</tr>
+<tr data-titulo="análise: novo e antigo maestros comandam fluminense em classificação quase irretocável no carioca" data-resumo="placar de 3 a 1 contra o bangu poderia ter sido bem mais elástico se não fossem bolas na trave e defesas do goleiro bruno; gol alvirrubro saiu em falha que rendeu vaias a freytes" data-categoria="Editorial" data-fonte="o globo" data-datahora="17/02/2026 04:32">
+<td class="titulo-cell">Análise: novo e antigo maestros comandam Fluminense em classificação quase irretocável no Carioca</td>
+<td class="resumo-cell">Placar de 3 a 1 contra o Bangu poderia ter sido bem mais elástico se não fossem bolas na trave e defesas do goleiro Bruno; gol alvirrubro saiu em falha que rendeu vaias a Freytes</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/esportes/futebol/fluminense/noticia/2026/02/17/analise-novo-e-antigo-maestros-comandam-fluminense-em-classificacao-quase-irretocavel-no-carioca.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:32</td>
+</tr>
+<tr data-titulo="brasil deve bater recorde na produção de noz-pecã em 2026" data-resumo="clima favorável e abertura de novos mercados animam produtores" data-categoria="Economia" data-fonte="o globo" data-datahora="17/02/2026 04:11">
+<td class="titulo-cell">Brasil deve bater recorde na produção de noz-pecã em 2026</td>
+<td class="resumo-cell">Clima favorável e abertura de novos mercados animam produtores</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/economia/noticia/2026/02/17/brasil-deve-bater-recorde-na-producao-de-noz-peca-em-2026.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:11</td>
+</tr>
+<tr data-titulo="gestão da previdência de estados e cidades é falha" data-resumo="além das revelações do caso master, levantamento mostra dispersão excessiva de recursos em grande quantidade de fundos de investimento: quase 30% distribuíam verbas em 20 ou mais tipos diferentes de aplicações" data-categoria="Economia" data-fonte="o globo" data-datahora="17/02/2026 04:11">
+<td class="titulo-cell">Gestão da previdência de estados e cidades é falha</td>
+<td class="resumo-cell">Além das revelações do caso Master, levantamento mostra dispersão excessiva de recursos em grande quantidade de fundos de investimento: quase 30% distribuíam verbas em 20 ou mais tipos diferentes de aplicações</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/economia/noticia/2026/02/17/gestao-da-previdencia-de-estados-e-cidades-e-falha.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:11</td>
+</tr>
+<tr data-titulo="petroleiras reduzem aposta em energia renovável, com recuo no preço do  petróleo" data-resumo="para especialistas, valor do barril a us$ 60 diminui competitividade das fontes limpas. mudança geopolítica, com trump nos eua e captura de maduro na venezuela, reacende apetite por óleo e gás" data-categoria="Mercado" data-fonte="o globo" data-datahora="17/02/2026 04:11">
+<td class="titulo-cell">Petroleiras reduzem aposta em energia renovável, com recuo no preço do  petróleo</td>
+<td class="resumo-cell">Para especialistas, valor do barril a US$ 60 diminui competitividade das fontes limpas. Mudança geopolítica, com Trump nos EUA e captura de Maduro na Venezuela, reacende apetite por óleo e gás</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/economia/negocios/noticia/2026/02/17/petroleiras-reduzem-aposta-em-energia-renovavel-com-recuo-no-preco-do-petroleo.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:11</td>
+</tr>
+<tr data-titulo="lula tem uma semana para decidir sobre veto a penduricalhos do legislativo" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="17/02/2026 04:05">
+<td class="titulo-cell">Lula tem uma semana para decidir sobre veto a penduricalhos do Legislativo</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/lula-tem-uma-semana-para-decidir-sobre-veto-a-penduricalhos-do-legislativo/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:05</td>
+</tr>
+<tr data-titulo="protesto expõe atrito entre nikolas e ala bolsonarista que evita &amp;#x27;fora, toffoli&amp;#x27;" data-resumo="após conclamação do deputado para ato em 1º de março, correligionários foram às redes dizer que a pauta é a anistia" data-categoria="Governo/Congresso" data-fonte="folha de s.paulo" data-datahora="17/02/2026 04:00">
+<td class="titulo-cell">Protesto expõe atrito entre Nikolas e ala bolsonarista que evita &#x27;Fora, Toffoli&#x27;</td>
+<td class="resumo-cell">Após conclamação do deputado para ato em 1º de março, correligionários foram às redes dizer que a pauta é a anistia</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/poder/2026/02/protesto-expoe-atrito-entre-nikolas-e-ala-bolsonarista-que-evita-fora-toffoli.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:00</td>
+</tr>
+<tr data-titulo="aumento de salário com ia impulsiona interesse por acordos pré-nupciais nos eua" data-resumo="incerteza sobre movimento de ações e bolha da inteligência artificial motivam funcionários do setor a proteger patrimônio" data-categoria="Mercado" data-fonte="folha de s.paulo" data-datahora="17/02/2026 04:00">
+<td class="titulo-cell">Aumento de salário com IA impulsiona interesse por acordos pré-nupciais nos EUA</td>
+<td class="resumo-cell">Incerteza sobre movimento de ações e bolha da inteligência artificial motivam funcionários do setor a proteger patrimônio</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/aumento-de-salario-com-ia-impulsiona-interesse-por-acordos-pre-nupciais-nos-eua.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:00</td>
+</tr>
+<tr data-titulo="em menos de 24h, oposição anuncia ao menos 12 ações sobre desfile pró-lula" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="17/02/2026 04:00">
+<td class="titulo-cell">Em menos de 24h, oposição anuncia ao menos 12 ações sobre desfile pró-Lula</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/em-menos-de-24h-oposicao-anuncia-ao-menos-12-acoes-sobre-desfile-pro-lula/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:00</td>
+</tr>
+<tr data-titulo="lula embarca hoje rumo à ásia para ampliar comércio e reforçar alianças" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="17/02/2026 04:00">
+<td class="titulo-cell">Lula embarca hoje rumo à Ásia para ampliar comércio e reforçar alianças</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/lula-embarca-hoje-rumo-a-asia-para-ampliar-comercio-e-reforcar-aliancas/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:00</td>
+</tr>
+<tr data-titulo="ala “lata de conserva” na sapucaí amplia ruído de lula com evangélicos" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="17/02/2026 04:00">
+<td class="titulo-cell">Ala “lata de conserva” na Sapucaí amplia ruído de Lula com evangélicos</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/jussara-soares/politica/ala-lata-de-conserva-na-sapucai-amplia-ruido-de-lula-com-evangelicos/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:00</td>
+</tr>
+<tr data-titulo="bolsonaro já vê flávio vencer lula se &amp;quot;ganhar o povo&amp;quot;" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="17/02/2026 04:00">
+<td class="titulo-cell">Bolsonaro já vê Flávio vencer Lula se &quot;ganhar o povo&quot;</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/eleicoes/bolsonaro-ja-ve-flavio-vencer-lula-se-ganhar-o-povo/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:00</td>
+</tr>
+<tr data-titulo="por que ficar horas parado prejudica sua coluna; veja com dr. kalil" data-resumo="" data-categoria="Editorial" data-fonte="cnn brasil" data-datahora="17/02/2026 04:00">
+<td class="titulo-cell">Por que ficar horas parado prejudica sua coluna; veja com Dr. Kalil</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/saude/por-que-ficar-horas-parado-prejudica-sua-coluna-veja-com-dr-kalil/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 04:00</td>
+</tr>
+<tr data-titulo="disputando eleitores de direita com arthur lira, relator da cpi do inss embola briga pelo senado de alagoas" data-resumo="intenção de alfredo gaspar ameaça dividir votos bolsonaristas no estado, atrapalhando a estratégia do ex-presidente da câmara e beneficiando o governista renan calheiros (mdb)" data-categoria="Governo/Congresso" data-fonte="o globo" data-datahora="17/02/2026 03:37">
+<td class="titulo-cell">Disputando eleitores de direita com Arthur Lira, relator da CPI do INSS embola briga pelo Senado de Alagoas</td>
+<td class="resumo-cell">Intenção de Alfredo Gaspar ameaça dividir votos bolsonaristas no estado, atrapalhando a estratégia do ex-presidente da Câmara e beneficiando o governista Renan Calheiros (MDB)</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/noticia/2026/02/17/disputando-eleitores-de-direita-com-arthur-lira-relator-da-cpi-do-inss-embola-briga-pelo-senado-de-alagoas.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 03:37</td>
+</tr>
+<tr data-titulo="desfile em homenagem a lula gera repercussão negativa nas redes e nova ofensiva judicial da oposição" data-resumo="o partido novo e o senador flávio bolsonaro (pl) anunciaram que vão acionar a justiça eleitoral para pedir a inelegibilidade de lula, sob argumento de campanha antecipada na sapucaí" data-categoria="Eleições" data-fonte="o globo" data-datahora="17/02/2026 03:37">
+<td class="titulo-cell">Desfile em homenagem a Lula gera repercussão negativa nas redes e nova ofensiva judicial da oposição</td>
+<td class="resumo-cell">O partido Novo e o senador Flávio Bolsonaro (PL) anunciaram que vão acionar a Justiça Eleitoral para pedir a inelegibilidade de Lula, sob argumento de campanha antecipada na Sapucaí</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/noticia/2026/02/17/desfile-em-homenagem-a-lula-gera-repercussao-negativa-nas-redes-e-nova-ofensiva-judicial-da-oposicao.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 03:37</td>
+</tr>
+<tr data-titulo="fantasiados de personagens de desenho, policiais se infiltram em blocos em sp e rio para coibir crimes" data-resumo="delegada do dhpp de são paulo, que coordena as ações, afirma que as fantasias priorizam &amp;#x27;personagens e trajes que se integrem ao perfil dos blocos e do público&amp;#x27;, mas ainda garantindo &amp;#x27;o conforto e a segurança adequada&amp;#x27; dos agentes" data-categoria="Mercado" data-fonte="o globo" data-datahora="17/02/2026 03:37">
+<td class="titulo-cell">Fantasiados de personagens de desenho, policiais se infiltram em blocos em SP e Rio para coibir crimes</td>
+<td class="resumo-cell">Delegada do DHPP de São Paulo, que coordena as ações, afirma que as fantasias priorizam &#x27;personagens e trajes que se integrem ao perfil dos blocos e do público&#x27;, mas ainda garantindo &#x27;o conforto e a segurança adequada&#x27; dos agentes</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/brasil/noticia/2026/02/17/fantasiados-de-personagens-de-desenho-policiais-se-infiltram-em-blocos-em-sp-e-rio-para-coibir-crimes.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 03:37</td>
+</tr>
+<tr data-titulo="pl 1482: passo decisivo para acabar com o crime de roubo de cargas de combustíveis e lubrificantes" data-resumo="" data-categoria="Governo/Congresso" data-fonte="estadão" data-datahora="17/02/2026 03:00">
+<td class="titulo-cell">PL 1482: passo decisivo para acabar com o crime de roubo de cargas de combustíveis e lubrificantes</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/opiniao/espaco-aberto/pl-1482-passo-decisivo-para-acabar-com-o-crime-de-roubo-de-cargas-de-combustiveis-e-lubrificantes/" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 03:00</td>
+</tr>
+<tr data-titulo="juliana paes retorna à sapucaí com fantasia da dolce &amp;amp; gabbana e sem valor comercial" data-resumo="atriz retorna à avenida após hiato e deixa futuro como rainha em aberto" data-categoria="Política" data-fonte="folha de s.paulo" data-datahora="17/02/2026 02:53">
+<td class="titulo-cell">Juliana Paes retorna à Sapucaí com fantasia da Dolce &amp; Gabbana e sem valor comercial</td>
+<td class="resumo-cell">Atriz retorna à avenida após hiato e deixa futuro como rainha em aberto</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/monicabergamo/2026/02/juliana-paes-retorna-a-sapucai-com-fantasia-da-dolce-gabbana-e-deixa-futuro-na-viradouro-em-aberto.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 02:53</td>
+</tr>
+<tr data-titulo="estou me divertindo, é isso que importa, diz iza sobre affair com ator joão vitor" data-resumo="cantora e ator foram fotografados aos beijos no camarote allegria, na sapucaí" data-categoria="Política" data-fonte="folha de s.paulo" data-datahora="17/02/2026 02:05">
+<td class="titulo-cell">Estou me divertindo, é isso que importa, diz Iza sobre affair com ator João Vitor</td>
+<td class="resumo-cell">Cantora e ator foram fotografados aos beijos no camarote Allegria, na Sapucaí</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/monicabergamo/2026/02/estou-me-divertindo-e-isso-que-importa-diz-iza-sobre-affair-com-ator-joao-vitor.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 02:05</td>
+</tr>
+<tr data-titulo="integrantes do stf são avisados de quebra de sigilo de dados de parentes de ministros" data-resumo="" data-categoria="STF" data-fonte="valor econômico" data-datahora="17/02/2026 01:12">
+<td class="titulo-cell">Integrantes do STF são avisados de quebra de sigilo de dados de parentes de ministros</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2c3e50;">STF</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/17/integrantes-do-stf-so-avisados-de-quebra-de-sigilo-de-dados-de-parentes-de-ministros.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 01:12</td>
+</tr>
+<tr data-titulo="amanhã é um novo começo" data-resumo="tudo se concentra na eleição presidencial. mas é preciso advertir que o congresso, no brasil, tornou-se muito poderoso" data-categoria="Governo/Congresso" data-fonte="o globo" data-datahora="17/02/2026 00:11">
+<td class="titulo-cell">Amanhã é um novo começo</td>
+<td class="resumo-cell">Tudo se concentra na eleição presidencial. Mas é preciso advertir que o Congresso, no Brasil, tornou-se muito poderoso</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/opiniao/fernando-gabeira/coluna/2026/02/amanha-e-um-novo-comeco.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 00:11</td>
+</tr>
+<tr data-titulo="mega-sena não tem sorteio nesta terça-feira; veja próxima data do concurso" data-resumo="carnaval provocou mudança no calendário da caixa econômica federal" data-categoria="Economia" data-fonte="o globo" data-datahora="17/02/2026 00:04">
+<td class="titulo-cell">Mega-Sena não tem sorteio nesta terça-feira; veja próxima data do concurso</td>
+<td class="resumo-cell">Carnaval provocou mudança no calendário da Caixa Econômica Federal</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/economia/noticia/2026/02/17/mega-sena-nao-tem-sorteio-nesta-terca-feira-veja-proxima-data-do-concurso.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 00:04</td>
+</tr>
+<tr data-titulo="cratera se abre em obra na presidente vargas e deixa guindaste suspenso durante os desfiles" data-resumo="área foi isolada após deslocamento do terreno" data-categoria="Governo/Congresso" data-fonte="o globo" data-datahora="17/02/2026 00:00">
+<td class="titulo-cell">Cratera se abre em obra na Presidente Vargas e deixa guindaste suspenso durante os desfiles</td>
+<td class="resumo-cell">Área foi isolada após deslocamento do terreno</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/rio/carnaval/noticia/2026/02/16/cratera-se-abre-em-obra-na-presidente-vargas-e-deixa-guindaste-suspenso-durante-os-desfiles.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">17/02/2026 00:00</td>
+</tr>
+<tr data-titulo="bbb 26: &amp;#x27;você é muito egoísta&amp;#x27;, dispara maxiane para jonas" data-resumo="comentário aconteceu após brother comentar sobre o sincerão da semana" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:48">
+<td class="titulo-cell">BBB 26: &#x27;Você é muito egoísta&#x27;, dispara Maxiane para Jonas</td>
+<td class="resumo-cell">Comentário aconteceu após brother comentar sobre o Sincerão da semana</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://f5.folha.uol.com.br/televisao/bbb26/2026/02/bbb-26-voce-e-muito-egoista-dispara-maxiane-para-jonas.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:48</td>
+</tr>
+<tr data-titulo="presidente da rede de hotéis hyatt anuncia aposentadoria e cita vínculos com epstein" data-resumo="tom pritzker disse se &amp;#x27;arrepender profundamente&amp;#x27; de ter mantido contato com financista" data-categoria="Governo/Congresso" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:45">
+<td class="titulo-cell">Presidente da rede de hotéis Hyatt anuncia aposentadoria e cita vínculos com Epstein</td>
+<td class="resumo-cell">Tom Pritzker disse se &#x27;arrepender profundamente&#x27; de ter mantido contato com financista</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/presidente-da-rede-de-hoteis-hyatt-anuncia-aposentadoria-e-cita-vinculos-com-epstein.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:45</td>
+</tr>
+<tr data-titulo="cão orelha é homenageado em desfile da mocidade sobre rita lee" data-resumo="roberto de carvalho falou sobre amor da cantora por animais" data-categoria="Política" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:37">
+<td class="titulo-cell">Cão Orelha é homenageado em desfile da Mocidade sobre Rita Lee</td>
+<td class="resumo-cell">Roberto de Carvalho falou sobre amor da cantora por animais</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/monicabergamo/2026/02/cao-orelha-e-homenageado-em-desfile-da-mocidade-sobre-rita-lee.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:37</td>
+</tr>
+<tr data-titulo="direita reage a desfile sobre lula com trend de família em lata de conserva" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 23:37">
+<td class="titulo-cell">Direita reage a desfile sobre Lula com trend de família em lata de conserva</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/direita-reage-a-desfile-sobre-lula-com-trend-de-familia-em-lata-de-conserva/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:37</td>
+</tr>
+<tr data-titulo="&amp;#x27;é uma explosão dentro do coração&amp;#x27;, diz lilia cabral sobre homenagem a rita lee na sapucaí" data-resumo="atriz, que vai interpretar rainha do rock nos palcos, participa de desfile da mocidade independente de padre miguel" data-categoria="Política" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:15">
+<td class="titulo-cell">&#x27;É uma explosão dentro do coração&#x27;, diz Lilia Cabral sobre homenagem a Rita Lee na Sapucaí</td>
+<td class="resumo-cell">Atriz, que vai interpretar rainha do rock nos palcos, participa de desfile da Mocidade Independente de Padre Miguel</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/monicabergamo/2026/02/e-uma-explosao-dentro-do-coracao-diz-lilia-cabral-sobre-homenagem-a-rita-lee-na-sapucai.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:15</td>
+</tr>
+<tr data-titulo="claudio castro diz que vai se reunir com presidente do pl e com flávio bolsonaro para decidir seu futuro político" data-resumo="governador do rio, que não tem um vice, pode se candidatar ao senado" data-categoria="Eleições" data-fonte="o globo" data-datahora="16/02/2026 23:02">
+<td class="titulo-cell">Claudio Castro diz que vai se reunir com presidente do PL e com Flávio Bolsonaro para decidir seu futuro político</td>
+<td class="resumo-cell">Governador do Rio, que não tem um vice, pode se candidatar ao Senado</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/eleicoes-2026/noticia/2026/02/16/claudio-castro-diz-que-vai-se-reunir-com-presidente-do-pl-e-com-flavio-bolsonaro-para-decidir-seu-futuro-politico.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:02</td>
+</tr>
+<tr data-titulo="painel: alcolumbre teme precedente perigoso e não deve aceitar impeachment de toffoli, dizem aliados" data-resumo="" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:00">
+<td class="titulo-cell">Painel: Alcolumbre teme precedente perigoso e não deve aceitar impeachment de Toffoli, dizem aliados</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/painel/2026/02/alcolumbre-teme-precedente-perigoso-e-nao-deve-aceitar-impeachment-de-toffoli-dizem-aliados.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:00</td>
+</tr>
+<tr data-titulo="cidade do rs que produz uva e frango lidera trabalho por conta própria no brasil" data-resumo="autônomos respondiam por 74,2% da população ocupada em coronel pilar em 2022, diz censo" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:00">
+<td class="titulo-cell">Cidade do RS que produz uva e frango lidera trabalho por conta própria no Brasil</td>
+<td class="resumo-cell">Autônomos respondiam por 74,2% da população ocupada em Coronel Pilar em 2022, diz Censo</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/cidade-do-rs-que-produz-uva-e-frango-lidera-trabalho-por-conta-propria-no-brasil.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:00</td>
+</tr>
+<tr data-titulo="levante militar na amazônia tentou derrubar jk no 1º mês de governo, há 70 anos" data-resumo="revolta de jacareacanga, em 1956, durou 19 dias e chegou ao fim sufocada pelas tropas do governo" data-categoria="Política" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:00">
+<td class="titulo-cell">Levante militar na Amazônia tentou derrubar JK no 1º mês de governo, há 70 anos</td>
+<td class="resumo-cell">Revolta de Jacareacanga, em 1956, durou 19 dias e chegou ao fim sufocada pelas tropas do governo</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/poder/2026/02/levante-militar-na-amazonia-tentou-derrubar-jk-no-1o-mes-de-governo-ha-70-anos.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:00</td>
+</tr>
+<tr data-titulo="saída de toffoli do caso master é positiva, mas resposta do stf é superficial, diz líder da oab-sp" data-resumo="leonardo sica diz que corte tem dificuldade de julgar casos criminais complexos" data-categoria="STF" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:00">
+<td class="titulo-cell">Saída de Toffoli do caso Master é positiva, mas resposta do STF é superficial, diz líder da OAB-SP</td>
+<td class="resumo-cell">Leonardo Sica diz que corte tem dificuldade de julgar casos criminais complexos</td>
+<td><span class="badge" style="background:#2c3e50;">STF</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/poder/2026/02/saida-de-toffoli-do-caso-master-e-positiva-mas-resposta-do-stf-e-superficial-diz-lider-da-oab-sp.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:00</td>
+</tr>
+<tr data-titulo="novo nissan kait mede forças com o volkswagen t-cross, líder entre os suvs" data-resumo="compactos passam pelo teste folha mauá em versões com preços semelhantes" data-categoria="Inflação" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:00">
+<td class="titulo-cell">Novo Nissan Kait mede forças com o Volkswagen T-Cross, líder entre os SUVs</td>
+<td class="resumo-cell">Compactos passam pelo teste Folha Mauá em versões com preços semelhantes</td>
+<td><span class="badge" style="background:#d35400;">Inflação</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/novo-nissan-kait-mede-forcas-com-o-volkswagen-t-cross-lider-entre-os-suvs.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:00</td>
+</tr>
+<tr data-titulo="reduzir jornada para 36 horas pode encolher pib em 6,2%, mas centrais esperam compensação de perdas" data-resumo="estudos do fgv-ibre e ipea analisam impactos sobre produção, salários e custos" data-categoria="Atividade" data-fonte="folha de s.paulo" data-datahora="16/02/2026 23:00">
+<td class="titulo-cell">Reduzir jornada para 36 horas pode encolher PIB em 6,2%, mas centrais esperam compensação de perdas</td>
+<td class="resumo-cell">Estudos do FGV-Ibre e Ipea analisam impactos sobre produção, salários e custos</td>
+<td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/reduzir-jornada-para-36-horas-pode-encolher-pib-em-62-mas-centrais-esperam-compensacao-de-perdas.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 23:00</td>
+</tr>
+<tr data-titulo="cláudio castro diz que ainda não definiu data para deixar governo do rio de janeiro" data-resumo="" data-categoria="Política" data-fonte="valor econômico" data-datahora="16/02/2026 22:49">
+<td class="titulo-cell">Cláudio Castro diz que ainda não definiu data para deixar governo do Rio de Janeiro</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/cludio-castro-diz-que-ainda-no-definiu-data-para-deixar-governo-do-rio-de-janeiro.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 22:49</td>
+</tr>
+<tr data-titulo="castro diz que não viu desfile sobre lula e que não cumprimentou petista pois ‘horários não bateram’" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 22:31">
+<td class="titulo-cell">Castro diz que não viu desfile sobre Lula e que não cumprimentou petista pois ‘horários não bateram’</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/castro-diz-que-nao-viu-desfile-sobre-lula-e-que-nao-cumprimentou-petista-pois-horarios-nao-bateram/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 22:31</td>
+</tr>
+<tr data-titulo="após exaltar lula em desfile, acadêmicos de niterói diz sofrer perseguição política" data-resumo="" data-categoria="Política" data-fonte="valor econômico" data-datahora="16/02/2026 22:27">
+<td class="titulo-cell">Após exaltar Lula em desfile, Acadêmicos de Niterói diz sofrer perseguição política</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/aps-exaltar-lula-em-desfile-acadmicos-de-niteri-diz-sofrer-perseguio-poltica.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 22:27</td>
+</tr>
+<tr data-titulo="mel lisboa é destaque como rita lee no primeiro carro da mocidade independente de padre miguel" data-resumo="atriz interpreta a rainha do rock em desfile que homenageia a cantora" data-categoria="Política" data-fonte="folha de s.paulo" data-datahora="16/02/2026 22:09">
+<td class="titulo-cell">Mel Lisboa é destaque como Rita Lee no primeiro carro da Mocidade Independente de Padre Miguel</td>
+<td class="resumo-cell">Atriz interpreta a rainha do rock em desfile que homenageia a cantora</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/monicabergamo/2026/02/mel-lisboa-e-destaque-como-rita-lee-no-primeiro-carro-da-mocidade-independente-de-padre-miguel.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 22:09</td>
+</tr>
+<tr data-titulo="análise: lula testa a justiça eleitoral com desfile de escola de samba" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 22:05">
+<td class="titulo-cell">Análise: Lula testa a Justiça Eleitoral com desfile de escola de samba</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/caio-junqueira/politica/analise-lula-testa-a-justica-eleitoral-com-desfile-de-escola-de-samba/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 22:05</td>
+</tr>
+<tr data-titulo="crise fiscal e dívida precisam ocupar centro da campanha" data-resumo="ao burlar regras do arcabouço, lula levou endividamento público a dar um salto, colocando o país em risco" data-categoria="Eleições" data-fonte="folha de s.paulo" data-datahora="16/02/2026 22:00">
+<td class="titulo-cell">Crise fiscal e dívida precisam ocupar centro da campanha</td>
+<td class="resumo-cell">Ao burlar regras do arcabouço, Lula levou endividamento público a dar um salto, colocando o país em risco</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/opiniao/2026/02/crise-fiscal-e-divida-precisam-ocupar-centro-da-campanha.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 22:00</td>
+</tr>
+<tr data-titulo="modelo de rede neutra não avança no brasil e teles voltam atrás" data-resumo="" data-categoria="Economia" data-fonte="estadão" data-datahora="16/02/2026 22:00">
+<td class="titulo-cell">Modelo de rede neutra não avança no Brasil e teles voltam atrás</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/economia/coluna-do-broad/modelo-de-rede-neutra-nao-avanca-no-brasil-e-teles-voltam-atras/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 22:00</td>
+</tr>
+<tr data-titulo="norueguesa dnv conclui compra da brasileira automa e planeja crescimento acelerado" data-resumo="" data-categoria="Economia" data-fonte="estadão" data-datahora="16/02/2026 21:59">
+<td class="titulo-cell">Norueguesa DNV conclui compra da brasileira Automa e planeja crescimento acelerado</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/economia/coluna-do-broad/norueguesa-dnv-conclui-compra-da-brasileira-automa-e-planeja-crescimento-acelerado/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 21:59</td>
+</tr>
+<tr data-titulo="tarcísio compara denúncias contra desfile pró-lula com casos de bolsonaro" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 21:38">
+<td class="titulo-cell">Tarcísio compara denúncias contra desfile pró-Lula com casos de Bolsonaro</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/tarcisio-compara-denuncias-contra-desfile-pro-lula-com-casos-de-bolsonaro/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 21:38</td>
+</tr>
+<tr data-titulo="é positivo para o país que o carnaval seja capturado pela retórica ‘dura’ da política?" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 21:33">
+<td class="titulo-cell">É positivo para o País que o carnaval seja capturado pela retórica ‘dura’ da política?</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/fernando-schuler/e-positivo-para-o-pais-que-o-carnaval-seja-capturado-pela-retorica-dura-da-politica/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 21:33</td>
+</tr>
+<tr data-titulo="brb anuncia renúncia de conselheiros que tiveram indicação atribuída à reag" data-resumo="leonardo vasconcelos e celivaldo de sousa afirmam desconhecer ligação com fundo borneo, da gestora" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 21:15">
+<td class="titulo-cell">BRB anuncia renúncia de conselheiros que tiveram indicação atribuída à Reag</td>
+<td class="resumo-cell">Leonardo Vasconcelos e Celivaldo de Sousa afirmam desconhecer ligação com fundo Borneo, da gestora</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/brb-anuncia-renuncia-de-conselheiros-que-tiveram-indicacao-atribuida-a-reag.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 21:15</td>
+</tr>
+<tr data-titulo="o carnaval de lula vai virar espuma. e se fosse bolsonaro?" data-resumo="" data-categoria="Eleições" data-fonte="estadão" data-datahora="16/02/2026 21:08">
+<td class="titulo-cell">O carnaval de Lula vai virar espuma. E se fosse Bolsonaro?</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/eliane-cantanhede/o-carnaval-de-lula-vai-virar-espuma-e-se-fosse-bolsonaro/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 21:08</td>
+</tr>
+<tr data-titulo="carlos diz que bolsonaro passou mal e está sendo monitorado" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 20:52">
+<td class="titulo-cell">Carlos diz que Bolsonaro passou mal e está sendo monitorado</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/carlos-diz-que-bolsonaro-passou-mal-e-esta-sendo-monitorado/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 20:52</td>
+</tr>
+<tr data-titulo="caso epstein derruba mais um: presidente da rede de hotéis hyatt renuncia" data-resumo="thomas  pritzker anunciou aposentadoria e citou ligações com o financista acusado de pedofilia" data-categoria="Governo/Congresso" data-fonte="o globo" data-datahora="16/02/2026 20:31">
+<td class="titulo-cell">Caso Epstein derruba mais um: presidente da rede de hotéis Hyatt renuncia</td>
+<td class="resumo-cell">Thomas  Pritzker anunciou aposentadoria e citou ligações com o financista acusado de pedofilia</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/economia/noticia/2026/02/16/caso-epstein-derruba-mais-um-presidente-da-rede-de-hoteis-hyatt-renuncia.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 20:31</td>
+</tr>
+<tr data-titulo="relator retira novas taxações de novo marco do transporte público" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="16/02/2026 20:14">
+<td class="titulo-cell">Relator retira novas taxações de novo marco do transporte público</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/macroeconomia/relator-retira-novas-taxacoes-de-novo-marco-do-transporte-publico/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 20:14</td>
+</tr>
+<tr data-titulo="apple corre atrás de youtube, spotify e netflix, reformula podcasts e faz aposta em vídeos" data-resumo="empresa está fazendo parcerias para garantir que os podcasters possam disponibilizar seus episódios em vídeo no aplicativo  apple podcasts" data-categoria="Economia" data-fonte="o globo" data-datahora="16/02/2026 20:05">
+<td class="titulo-cell">Apple corre atrás de YouTube, Spotify e Netflix, reformula podcasts e faz aposta em vídeos</td>
+<td class="resumo-cell">Empresa está fazendo parcerias para garantir que os podcasters possam disponibilizar seus episódios em vídeo no aplicativo  Apple Podcasts</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/economia/noticia/2026/02/16/apple-corre-atras-de-youtube-spotify-e-netflix-reformula-podcasts-e-faz-aposta-em-videos.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 20:05</td>
+</tr>
+<tr data-titulo="aliados: reação sóbria a desfile sobre lula é &amp;quot;flávio bolsonaro paz e amor&amp;quot;" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 19:48">
+<td class="titulo-cell">Aliados: Reação sóbria a desfile sobre Lula é &quot;Flávio Bolsonaro paz e amor&quot;</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/aliados-reacao-sobria-a-desfile-sobre-lula-e-flavio-bolsonaro-paz-e-amor/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 19:48</td>
+</tr>
+<tr data-titulo="criticado em desfile, temer chama homenagem a lula na sapucaí de &amp;#x27;bajulação&amp;#x27;" data-resumo="ele lembrou de quando foi retratado como vampiro, mas afirmou que &amp;quot;a sátira política é parte da tradição do carnaval&amp;quot;" data-categoria="Política" data-fonte="valor econômico" data-datahora="16/02/2026 19:45">
+<td class="titulo-cell">Criticado em desfile, Temer chama homenagem a Lula na Sapucaí de &#x27;bajulação&#x27;</td>
+<td class="resumo-cell">Ele lembrou de quando foi retratado como vampiro, mas afirmou que &quot;a sátira política é parte da tradição do carnaval&quot;</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/criticado-em-desfile-temer-chama-homenagem-a-lula-na-sapucai-de-bajulacao.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 19:45</td>
+</tr>
+<tr data-titulo="caso master: brb comunica renúncia de conselheiros após indicação ser atribuída a fundo da reag" data-resumo="conselheiros foram apontados como ligados a fundos suspeitos da gestora de recursos reag, mas negam" data-categoria="Economia" data-fonte="o globo" data-datahora="16/02/2026 19:10">
+<td class="titulo-cell">Caso Master: BRB comunica renúncia de conselheiros após indicação ser atribuída a fundo da Reag</td>
+<td class="resumo-cell">Conselheiros foram apontados como ligados a fundos suspeitos da gestora de recursos Reag, mas negam</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/economia/noticia/2026/02/16/caso-master-brb-comunica-renuncia-de-conselheiros-apos-indicacao-ser-atribuida-a-fundo-da-reag.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 19:10</td>
+</tr>
+<tr data-titulo="fabricantes de vacinas reduzem pesquisas e cortam empregos em meio a políticas de trump" data-resumo="" data-categoria="Economia" data-fonte="estadão" data-datahora="16/02/2026 19:07">
+<td class="titulo-cell">Fabricantes de vacinas reduzem pesquisas e cortam empregos em meio a políticas de Trump</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/economia/fabricantes-de-vacinas-reduzem-pesquisas-e-cortam-empregos-em-meio-a-politicas-de-trump/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 19:07</td>
+</tr>
+<tr data-titulo="lula evitará imagens de desfile de carnaval em campanha" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 18:41">
+<td class="titulo-cell">Lula evitará imagens de desfile de Carnaval em campanha</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/lula-evitara-imagens-de-desfile-de-carnaval-em-campanha/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 18:41</td>
+</tr>
+<tr data-titulo="após ataque hacker contra bnb, bc mandou jd restringir pix durante o carnaval" data-resumo="decisão ocorreu na sexta-feira, antes do carnaval, quando geralmente as tentativas de golpe aumentam" data-categoria="Banco Central" data-fonte="valor econômico" data-datahora="16/02/2026 18:37">
+<td class="titulo-cell">Após ataque hacker contra BNB, BC mandou JD restringir Pix durante o Carnaval</td>
+<td class="resumo-cell">Decisão ocorreu na sexta-feira, antes do carnaval, quando geralmente as tentativas de golpe aumentam</td>
+<td><span class="badge" style="background:#16a085;">Banco Central</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/16/aps-ataque-hacker-contra-bnb-bc-mandou-jd-restringir-pix-durante-o-carnaval.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 18:37</td>
+</tr>
+<tr data-titulo="bolsonaro como bozo e críticas a evangélicos: como foi o desfile em homenagem a lula contestado no tse" data-resumo="corte ainda vai avaliar se houve crime eleitoral como campanha antecipada e abuso de poder" data-categoria="Eleições" data-fonte="folha de s.paulo" data-datahora="16/02/2026 18:28">
+<td class="titulo-cell">Bolsonaro como Bozo e críticas a evangélicos: como foi o desfile em homenagem a Lula contestado no TSE</td>
+<td class="resumo-cell">Corte ainda vai avaliar se houve crime eleitoral como campanha antecipada e abuso de poder</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/cotidiano/2026/02/bolsonaro-como-bozo-e-criticas-a-evangelicos-como-foi-o-desfile-em-homenagem-a-lula-contestado-no-tse.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 18:28</td>
+</tr>
+<tr data-titulo="lula explora sentimento antissistema em meio a silêncio de flávio bolsonaro sobre o banco master" data-resumo="" data-categoria="Eleições" data-fonte="estadão" data-datahora="16/02/2026 18:00">
+<td class="titulo-cell">Lula explora sentimento antissistema em meio a silêncio de Flávio Bolsonaro sobre o Banco Master</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/carlos-andreazza/lula-explora-sentimento-antissistema-em-meio-a-silencio-de-flavio-bolsonaro-sobre-o-banco-master/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 18:00</td>
+</tr>
+<tr data-titulo="lula alguma vez desceu do palanque?" data-resumo="enquanto o presidente faz campanha eleitoral permanente, haddad tenta governar um pouquinho" data-categoria="Eleições" data-fonte="folha de s.paulo" data-datahora="16/02/2026 17:52">
+<td class="titulo-cell">Lula alguma vez desceu do palanque?</td>
+<td class="resumo-cell">Enquanto o presidente faz campanha eleitoral permanente, Haddad tenta governar um pouquinho</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/blogs/claudio-hebdo/2026/02/lula-alguma-vez-desceu-do-palanque.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:52</td>
+</tr>
+<tr data-titulo="governo lula prevê r$ 229 mi de investimentos em primeiro leilão de terminais portuários do ano" data-resumo="ativos estão localizados nos portos de santana (ap), de natal, porto alegre e recife" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 17:42">
+<td class="titulo-cell">Governo Lula prevê R$ 229 mi de investimentos em primeiro leilão de terminais portuários do ano</td>
+<td class="resumo-cell">Ativos estão localizados nos portos de Santana (AP), de Natal, Porto Alegre e Recife</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/governo-lula-preve-r-229-mi-de-investimentos-em-primeiro-leilao-de-terminais-portuarios-do-ano.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:42</td>
+</tr>
+<tr data-titulo="pt rebate oposição e diz que desfile em homenagem a lula está de acordo com a lei" data-resumo="partido diz que elaboração do desfile foi de responsabilidade da escola, sem participação nem financiamento do pt ou de lula" data-categoria="Política" data-fonte="valor econômico" data-datahora="16/02/2026 17:35">
+<td class="titulo-cell">PT rebate oposição e diz que desfile em homenagem a Lula está de acordo com a lei</td>
+<td class="resumo-cell">Partido diz que elaboração do desfile foi de responsabilidade da escola, sem participação nem financiamento do PT ou de Lula</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/pt-rebate-oposio-e-diz-que-desfile-em-homenagem-a-lula-est-de-acordo-com-a-lei.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:35</td>
+</tr>
+<tr data-titulo="homenagem a lula na sapucaí teve ar de campanha antecipada" data-resumo="cabe ao tse avaliar as punições que julgar adequadas para o desfile da acadêmicos de niterói" data-categoria="Eleições" data-fonte="o globo" data-datahora="16/02/2026 17:35">
+<td class="titulo-cell">Homenagem a Lula na Sapucaí teve ar de campanha antecipada</td>
+<td class="resumo-cell">Cabe ao TSE avaliar as punições que julgar adequadas para o desfile da Acadêmicos de Niterói</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/opiniao/editorial/coluna/2026/02/homenagem-a-lula-na-sapucai-teve-ar-de-campanha-antecipada.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:35</td>
+</tr>
+<tr data-titulo="warner bros. poderá reabrir as negociações com a paramount" data-resumo="" data-categoria="Economia" data-fonte="estadão" data-datahora="16/02/2026 17:24">
+<td class="titulo-cell">Warner Bros. poderá reabrir as negociações com a Paramount</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/economia/warner-bros-podera-reabrir-as-negociacoes-com-a-paramount/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:24</td>
+</tr>
+<tr data-titulo="oposição aciona pgr por evangélicos em “lata de conserva” em desfile" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 17:18">
+<td class="titulo-cell">Oposição aciona PGR por evangélicos em “lata de conserva” em desfile</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/jussara-soares/politica/oposicao-aciona-pgr-por-evangelicos-em-lata-de-conserva-em-desfile/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:18</td>
+</tr>
+<tr data-titulo="pl diz que desfile sobre lula interfere nas eleições e que &amp;#x27;providências&amp;#x27; serão tomadas" data-resumo="" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="16/02/2026 17:09">
+<td class="titulo-cell">PL diz que desfile sobre Lula interfere nas eleições e que &#x27;providências&#x27; serão tomadas</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/pl-diz-que-desfile-sobre-lula-interfere-nas-eleicoes-e-que-providencias-serao-tomadas.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:09</td>
+</tr>
+<tr data-titulo="o stf entrega os anéis, mas não sairá do foco do caso master" data-resumo="" data-categoria="STF" data-fonte="o globo" data-datahora="16/02/2026 17:03">
+<td class="titulo-cell">O STF entrega os anéis, mas não sairá do foco do caso Master</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2c3e50;">STF</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/thomas-traumann/post/2026/02/o-stf-entrega-os-aneis-mas-nao-saira-do-foco-do-caso-master.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:03</td>
+</tr>
+<tr data-titulo="thomas traumann: troca de toffoli por mendonça no caso master é tentativa do stf de sair do foco, mas não vai dar certo" data-resumo="newsletter aborda a mudança na relatoria das investigações sobre o banco de vorcaro, a decepção do mercado com flávio bolsonaro e o desfile prejudicial sobre lula na sapucaí" data-categoria="Eleições" data-fonte="o globo" data-datahora="16/02/2026 17:03">
+<td class="titulo-cell">Thomas Traumann: Troca de Toffoli por Mendonça no caso Master é tentativa do STF de sair do foco, mas não vai dar certo</td>
+<td class="resumo-cell">Newsletter aborda a mudança na relatoria das investigações sobre o banco de Vorcaro, a decepção do mercado com Flávio Bolsonaro e o desfile prejudicial sobre Lula na Sapucaí</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/thomas-traumann/coluna/2026/02/thomas-traumann-troca-de-toffoli-por-mendonca-no-caso-master-e-tentativa-do-stf-de-sair-do-foco-mas-nao-vai-dar-certo.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:03</td>
+</tr>
+<tr data-titulo="painel: associação diz que faltam pesquisadores científicos na gestão tarcísio" data-resumo="" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="16/02/2026 17:00">
+<td class="titulo-cell">Painel: Associação diz que faltam pesquisadores científicos na gestão Tarcísio</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/painel/2026/02/associacao-diz-que-faltam-pesquisadores-cientificos-na-gestao-tarcisio.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 17:00</td>
+</tr>
+<tr data-titulo="fed se prepara para flexibilizar regras bancárias nos eua em tentativa de impulsionar crédito imobiliário" data-resumo="banco central planeja aliviar exigências de capital" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 16:55">
+<td class="titulo-cell">Fed se prepara para flexibilizar regras bancárias nos EUA em tentativa de impulsionar crédito imobiliário</td>
+<td class="resumo-cell">Banco central planeja aliviar exigências de capital</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/fed-se-prepara-para-flexibilizar-regras-bancarias-nos-eua-em-tentativa-de-impulsionar-credito-imobiliario.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:55</td>
+</tr>
+<tr data-titulo="pt rebate críticas e aponta que desfile sobre lula foi de acordo com a lei" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 16:47">
+<td class="titulo-cell">PT rebate críticas e aponta que desfile sobre Lula foi de acordo com a lei</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/caio-junqueira/politica/pt-rebate-criticas-e-aponta-que-desfile-sobre-lula-foi-de-acordo-com-a-lei/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:47</td>
+</tr>
+<tr data-titulo="caso master: defesa de vorcaro avalia pedir nulidade de processo alegando violação de garantia de juiz natural após troca de relator" data-resumo="argumento é que redistribuição do caso a andré mendonça ocorreu sem que dias toffoli se declarasse suspeito ou impedido" data-categoria="STF" data-fonte="o globo" data-datahora="16/02/2026 16:45">
+<td class="titulo-cell">Caso Master: Defesa de Vorcaro avalia pedir nulidade de processo alegando violação de garantia de juiz natural após troca de relator</td>
+<td class="resumo-cell">Argumento é que redistribuição do caso a André Mendonça ocorreu sem que Dias Toffoli se declarasse suspeito ou impedido</td>
+<td><span class="badge" style="background:#2c3e50;">STF</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/economia/noticia/2026/02/16/defesa-de-vorcaro-avalia-pedir-nulidade-de-processo-alegando-violacao-de-garantia-de-juiz-natural-apos-troca-de-relator.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:45</td>
+</tr>
+<tr data-titulo="investigadora paga fiança e se livra da prisão após tráfico de influência para ‘bolsonaro’ e ‘xixo’" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 16:41">
+<td class="titulo-cell">Investigadora paga fiança e se livra da prisão após tráfico de influência para ‘Bolsonaro’ e ‘Xixo’</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/blog-do-fausto-macedo/investigadora-paga-fianca-e-se-livra-da-prisao-apos-trafico-de-influencia-para-bolsonaro-e-xixo/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:41</td>
+</tr>
+<tr data-titulo="flávio mira eleitor independente ao criticar desfile em homenagem a lula" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 16:39">
+<td class="titulo-cell">Flávio mira eleitor independente ao criticar desfile em homenagem a Lula</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/flavio-mira-eleitor-independente-ao-criticar-desfile-em-homenagem-a-lula/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:39</td>
+</tr>
+<tr data-titulo="painel: auxiliares de lula dizem que desfile teve cautela e que gritaria da oposição era esperada" data-resumo="" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="16/02/2026 16:23">
+<td class="titulo-cell">Painel: Auxiliares de Lula dizem que desfile teve cautela e que gritaria da oposição era esperada</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/painel/2026/02/auxiliares-de-lula-dizem-que-desfile-teve-cautela-e-que-gritaria-da-oposicao-era-esperada.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:23</td>
+</tr>
+<tr data-titulo="pt reage à oposição e diz que não há &amp;quot;fundamento jurídico&amp;quot; para discussão de inelegibilidade após desfile" data-resumo="em nota, jurídico do partido diz que jurisprudência é &amp;quot;firme no sentido de que manifestações políticas e culturais espontâneas de artistas constituem exercício legítimo da liberdade de expressão, inclusive em contextos eleitorais e em eventos públicos”" data-categoria="Política" data-fonte="o globo" data-datahora="16/02/2026 16:21">
+<td class="titulo-cell">PT reage à oposição e diz que não há &quot;fundamento jurídico&quot; para discussão de inelegibilidade após desfile</td>
+<td class="resumo-cell">Em nota, jurídico do partido diz que jurisprudência é &quot;firme no sentido de que manifestações políticas e culturais espontâneas de artistas constituem exercício legítimo da liberdade de expressão, inclusive em contextos eleitorais e em eventos públicos”</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/noticia/2026/02/16/pt-reage-a-oposicao-e-diz-que-nao-ha-fundamento-juridico-para-discussao-de-inelegibilidade-apos-desfile.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:21</td>
+</tr>
+<tr data-titulo="michel temer afirma que escola de samba que homenageou lula trocou crítica social por &amp;quot;bajulação na sapucaí&amp;quot;" data-resumo="em nota, ex-presidente também criticou a forma como foi retratado pela acadêmicos de niterói" data-categoria="Eleições" data-fonte="o globo" data-datahora="16/02/2026 16:18">
+<td class="titulo-cell">Michel Temer afirma que escola de samba que homenageou Lula trocou crítica social por &quot;bajulação na Sapucaí&quot;</td>
+<td class="resumo-cell">Em nota, ex-presidente também criticou a forma como foi retratado pela Acadêmicos de Niterói</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/noticia/2026/02/16/michel-temer-afirma-que-escola-de-samba-que-homenageou-lula-trocou-critica-social-por-bajulacao-na-sapucai.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:18</td>
+</tr>
+<tr data-titulo="tst manda chapecoense pagar adicional noturno devido a jogador morto em acidente aéreo" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 16:08">
+<td class="titulo-cell">TST manda Chapecoense pagar adicional noturno devido a jogador morto em acidente aéreo</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/coluna-do-estadao/tst-manda-chapecoense-pagar-adicional-noturno-devido-a-jogador-morto-em-acidente-aereo/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:08</td>
+</tr>
+<tr data-titulo="ft: irã inicia exercícios navais em região estratégica para transporte de petróleo" data-resumo="" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="16/02/2026 16:01">
+<td class="titulo-cell">FT: Irã inicia exercícios navais em região estratégica para transporte de petróleo</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/mundo/noticia/2026/02/16/ft-ira-inicia-exercicios-navais-em-regiao-estrategica-para-transporte-de-petroleo.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:01</td>
+</tr>
+<tr data-titulo="moraes autoriza visita de derrite a bolsonaro na papudinha" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 16:01">
+<td class="titulo-cell">Moraes autoriza visita de Derrite a Bolsonaro na Papudinha</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/moraes-autoriza-visita-de-derrite-a-bolsonaro-na-papudinha/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:01</td>
+</tr>
+<tr data-titulo="desfile com político pode ferir a lei eleitoral? especialista explica" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 16:00">
+<td class="titulo-cell">Desfile com político pode ferir a lei eleitoral? Especialista explica</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/desfile-com-politico-pode-ferir-a-lei-eleitoral-especialista-explica/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 16:00</td>
+</tr>
+<tr data-titulo="pl vai pedir ao tse que abra as contas do desfile da acadêmicos de niterói" data-resumo="" data-categoria="Governo/Congresso" data-fonte="cnn brasil" data-datahora="16/02/2026 15:50">
+<td class="titulo-cell">PL vai pedir ao TSE que abra as contas do desfile da Acadêmicos de Niterói</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/caio-junqueira/politica/pl-vai-pedir-ao-tse-que-abra-as-contas-do-desfile-da-academicos-de-niteroi/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 15:50</td>
+</tr>
+<tr data-titulo="aliados de lula falam em alívio com desistência de janja e descartam crime eleitoral por desfile" data-resumo="escola de samba do rio de janeiro homenageou presidente da república" data-categoria="Eleições" data-fonte="folha de s.paulo" data-datahora="16/02/2026 15:36">
+<td class="titulo-cell">Aliados de Lula falam em alívio com desistência de Janja e descartam crime eleitoral por desfile</td>
+<td class="resumo-cell">Escola de samba do Rio de Janeiro homenageou presidente da República</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/poder/2026/02/aliados-de-lula-falam-em-alivio-com-desistencia-de-janja-e-descartam-crime-eleitoral-por-desfile.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 15:36</td>
+</tr>
+<tr data-titulo="tcu tem que cuidar das contas da união, e não do sistema, diz candidato à corte após caso master" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 15:24">
+<td class="titulo-cell">TCU tem que cuidar das contas da União, e não do sistema, diz candidato à Corte após caso Master</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/tcu-tem-que-cuidar-das-contas-da-uniao-e-nao-do-sistema-diz-candidato-a-corte-apos-caso-master/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 15:24</td>
+</tr>
+<tr data-titulo="ex-ministro da ucrânia é acusado de lavagem de dinheiro em meio a escândalo de corrupção" data-resumo="" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="16/02/2026 15:18">
+<td class="titulo-cell">Ex-ministro da Ucrânia é acusado de lavagem de dinheiro em meio a escândalo de corrupção</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/mundo/noticia/2026/02/16/ex-ministro-da-ucrnia-acusado-de-lavagem-de-dinheiro-em-meio-a-escndalo-de-corrupo.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 15:18</td>
+</tr>
+<tr data-titulo="bolsas da europa fecham majoritariamente em alta com bancos e balanços" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="16/02/2026 15:15">
+<td class="titulo-cell">Bolsas da Europa fecham majoritariamente em alta com bancos e balanços</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/mercado/bolsas-da-europa-fecham-majoritariamente-em-alta-com-bancos-e-balancos/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 15:15</td>
+</tr>
+<tr data-titulo="pl elenca ilícitos eleitorais em desfile e aponta influência do planalto" data-resumo="" data-categoria="Governo/Congresso" data-fonte="cnn brasil" data-datahora="16/02/2026 15:11">
+<td class="titulo-cell">PL elenca ilícitos eleitorais em desfile e aponta influência do Planalto</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/caio-junqueira/eleicoes/pl-elenca-ilicitos-eleitorais-em-desfile-e-aponta-influencia-do-planalto/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 15:11</td>
+</tr>
+<tr data-titulo="fintech levará ao stf discussão sobre enquadramento de trabalhadores" data-resumo="classificação como &amp;quot;bancários&amp;quot; tornará relação trabalhista mais custosa" data-categoria="STF" data-fonte="valor econômico" data-datahora="16/02/2026 15:08">
+<td class="titulo-cell">Fintech levará ao STF discussão sobre enquadramento de trabalhadores</td>
+<td class="resumo-cell">Classificação como &quot;bancários&quot; tornará relação trabalhista mais custosa</td>
+<td><span class="badge" style="background:#2c3e50;">STF</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/legislacao/noticia/2026/02/16/fintech-levara-ao-stf-discussao-sobre-enquadramento-de-trabalhadores.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 15:08</td>
+</tr>
+<tr data-titulo="robôs humanóides chineses são centro das atenções no espetáculo do ano novo lunar; veja vídeo" data-resumo="unitree, galbot, noetix e magiclab demonstraram produtos em evento comparável ao super bowl" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 15:04">
+<td class="titulo-cell">Robôs humanóides chineses são centro das atenções no espetáculo do Ano Novo Lunar; veja vídeo</td>
+<td class="resumo-cell">Unitree, Galbot, Noetix e MagicLab demonstraram produtos em evento comparável ao Super Bowl</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/robos-humanoides-chineses-sao-centro-das-atencoes-no-espetaculo-do-ano-novo-lunar-veja-video.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 15:04</td>
+</tr>
+<tr data-titulo="emirados árabes e iraque planejam investir us$ 700 milhões em cabo de dados" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="16/02/2026 15:01">
+<td class="titulo-cell">Emirados Árabes e Iraque planejam investir US$ 700 milhões em cabo de dados</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/macroeconomia/emirados-arabes-e-iraque-planejam-investir-us-700-milhoes-em-cabo-de-dados/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 15:01</td>
+</tr>
+<tr data-titulo="ceo da scania: principal vantagem do acordo mercosul-ue é competitividade" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="16/02/2026 14:59">
+<td class="titulo-cell">CEO da Scania: principal vantagem do acordo Mercosul-UE é competitividade</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/macroeconomia/ceo-da-scania-principal-vantagem-do-acordo-mercosul-ue-e-competitividade/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:59</td>
+</tr>
+<tr data-titulo="bolsas da europa fecham sem direção única com apoio de bancos e peso de ia" data-resumo="feriado de dia do presidente nos eua manteve os mercados em nova york fechados" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="16/02/2026 14:56">
+<td class="titulo-cell">Bolsas da Europa fecham sem direção única com apoio de bancos e peso de IA</td>
+<td class="resumo-cell">Feriado de Dia do Presidente nos EUA manteve os mercados em Nova York fechados</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/16/bolsas-da-europa-fecham-sem-direcao-unica-com-apoio-de-bancos-e-peso-de-ia.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:56</td>
+</tr>
+<tr data-titulo="abono salarial começa a ser pago nesta segunda-feira (16); veja quem recebe" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="16/02/2026 14:52">
+<td class="titulo-cell">Abono salarial começa a ser pago nesta segunda-feira (16); veja quem recebe</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/macroeconomia/abono-salarial-comeca-a-ser-pago-nesta-segunda-feira-16-veja-quem-recebe/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:52</td>
+</tr>
+<tr data-titulo="nunes diz que desfile sobre lula é &amp;quot;afronta à legislação eleitoral&amp;quot;" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 14:52">
+<td class="titulo-cell">Nunes diz que desfile sobre Lula é &quot;afronta à legislação eleitoral&quot;</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/eleicoes/nunes-diz-que-desfile-sobre-lula-e-afronta-a-legislacao-eleitoral/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:52</td>
+</tr>
+<tr data-titulo="painel: desfile sobre lula teve deboche criminoso contra fé cristã, diz presidente da frente evangélica" data-resumo="" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="16/02/2026 14:51">
+<td class="titulo-cell">Painel: Desfile sobre Lula teve deboche criminoso contra fé cristã, diz presidente da frente evangélica</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/painel/2026/02/desfile-sobre-lula-teve-deboche-criminoso-contra-fe-crista-diz-presidente-da-frente-evangelica.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:51</td>
+</tr>
+<tr data-titulo="desfile sobre lula vira alvo da oposição; governistas falam em ato cultural" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 14:48">
+<td class="titulo-cell">Desfile sobre Lula vira alvo da oposição; governistas falam em ato cultural</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/desfile-sobre-lula-vira-alvo-da-oposicao-governistas-falam-em-ato-cultural/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:48</td>
+</tr>
+<tr data-titulo="participação de lula em desfile pode configurar crime eleitoral? veja o que dizem analistas" data-resumo="" data-categoria="Eleições" data-fonte="estadão" data-datahora="16/02/2026 14:43">
+<td class="titulo-cell">Participação de Lula em desfile pode configurar crime eleitoral? Veja o que dizem analistas</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/participacao-de-lula-em-desfile-pode-configurar-crime-eleitoral-veja-o-que-dizem-analistas/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:43</td>
+</tr>
+<tr data-titulo="vemos china como &amp;quot;escola&amp;quot;, diz ceo da scania ao cnn money" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="16/02/2026 14:43">
+<td class="titulo-cell">Vemos China como &quot;escola&quot;, diz CEO da Scania ao CNN Money</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/macroeconomia/vemos-china-como-escola-diz-ceo-da-scania-ao-cnn-money/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:43</td>
+</tr>
+<tr data-titulo="análise: enredo sobre lula rende mais embate nas redes do que memória de carnaval" data-resumo="narrativa sobre a extraordinária trajetória de lula deixou a desejar em impacto e criatividade" data-categoria="Política" data-fonte="valor econômico" data-datahora="16/02/2026 14:42">
+<td class="titulo-cell">Análise: Enredo sobre Lula rende mais embate nas redes do que memória de carnaval</td>
+<td class="resumo-cell">Narrativa sobre a extraordinária trajetória de Lula deixou a desejar em impacto e criatividade</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/analise-enredo-sobre-lula-rende-mais-embate-nas-redes-do-que-memoria-de-carnaval.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:42</td>
+</tr>
+<tr data-titulo="painel: governo de sp aporta r$ 35 milhões em fundo de emergências climáticas" data-resumo="" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="16/02/2026 14:39">
+<td class="titulo-cell">Painel: Governo de SP aporta R$ 35 milhões em fundo de emergências climáticas</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/painelsa/2026/02/governo-de-sp-r-35-milhoes-em-fundo-de-emergencias-climaticas.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:39</td>
+</tr>
+<tr data-titulo="produção industrial da zona do euro cai 1,4% em dezembro ante novembro" data-resumo="" data-categoria="Atividade" data-fonte="cnn brasil" data-datahora="16/02/2026 14:33">
+<td class="titulo-cell">Produção industrial da zona do euro cai 1,4% em dezembro ante novembro</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/macroeconomia/producao-industrial-da-zona-do-euro-cai-14-em-dezembro-ante-novembro/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:33</td>
+</tr>
+<tr data-titulo="dados da economia estão fantasiados?" data-resumo="" data-categoria="Economia" data-fonte="estadão" data-datahora="16/02/2026 14:30">
+<td class="titulo-cell">Dados da economia estão fantasiados?</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/economia/pedro-fernando-nery/dados-da-economia-estao-fantasiados/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:30</td>
+</tr>
+<tr data-titulo="preços do petróleo sobem com negociações nucleares entre eua e irã no radar" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="16/02/2026 14:26">
+<td class="titulo-cell">Preços do petróleo sobem com negociações nucleares entre EUA e Irã no radar</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/precos-do-petroleo-sobem-com-negociacoes-nucleares-entre-eua-e-ira-no-radar/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:26</td>
+</tr>
+<tr data-titulo="ft: gestores de fundos adotam postura mais pessimista em relação ao dólar em uma década" data-resumo="apostas contra a moeda americana superam as favoráveis no acumulado do ano" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="16/02/2026 14:14">
+<td class="titulo-cell">FT: Gestores de fundos adotam postura mais pessimista em relação ao dólar em uma década</td>
+<td class="resumo-cell">Apostas contra a moeda americana superam as favoráveis no acumulado do ano</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/16/ft-gestores-de-fundos-adotam-postura-mais-pessimista-em-relao-ao-dlar-em-uma-dcada.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 14:14</td>
+</tr>
+<tr data-titulo="economia da colômbia desacelera no 4º tri e fecha 2025 em alta de 2,6%" data-resumo="atividade desacelerou à medida que a inflação acima da meta e as altas taxas de juros pesaram sobre a demanda interna" data-categoria="Inflação" data-fonte="valor econômico" data-datahora="16/02/2026 13:59">
+<td class="titulo-cell">Economia da Colômbia desacelera no 4º tri e fecha 2025 em alta de 2,6%</td>
+<td class="resumo-cell">Atividade desacelerou à medida que a inflação acima da meta e as altas taxas de juros pesaram sobre a demanda interna</td>
+<td><span class="badge" style="background:#d35400;">Inflação</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/mundo/noticia/2026/02/16/economia-da-colmbia-desacelera-no-4-tri-e-fecha-2025-em-alta-de-26-pontos-percentuais.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:59</td>
+</tr>
+<tr data-titulo="economia da colômbia cresce 2,3% no 4º trimestre, abaixo das expectativas" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="16/02/2026 13:59">
+<td class="titulo-cell">Economia da Colômbia cresce 2,3% no 4º trimestre, abaixo das expectativas</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/macroeconomia/economia-da-colombia-cresce-23-no-4o-trimestre-abaixo-das-expectativas/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:59</td>
+</tr>
+<tr data-titulo="homenagem a lula na sapucaí: juristas analisam se desfile da acadêmicos de niterói configura ilícito eleitoral" data-resumo="especialistas ouvidos pela reportagem divergem sobre a ocorrência de ilicitude na sapucaí na noite de domingo" data-categoria="Eleições" data-fonte="o globo" data-datahora="16/02/2026 13:58">
+<td class="titulo-cell">Homenagem a Lula na Sapucaí: juristas analisam se desfile da Acadêmicos de Niterói configura ilícito eleitoral</td>
+<td class="resumo-cell">Especialistas ouvidos pela reportagem divergem sobre a ocorrência de ilicitude na Sapucaí na noite de domingo</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/noticia/2026/02/16/homenagem-a-lula-na-sapucai-juristas-analisam-se-desfile-da-academicos-de-niteroi-configura-ilicito-eleitoral.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:58</td>
+</tr>
+<tr data-titulo="temer cita escola de samba que o retratou como vampiro, fala em bajulação na sapucaí e alfineta lula" data-resumo="ex-presidente diz ter &amp;#x27;saudade da tuiuti&amp;#x27;, em referência à escola de samba que o criticou em 2018" data-categoria="Eleições" data-fonte="folha de s.paulo" data-datahora="16/02/2026 13:55">
+<td class="titulo-cell">Temer cita escola de samba que o retratou como vampiro, fala em bajulação na Sapucaí e alfineta Lula</td>
+<td class="resumo-cell">Ex-presidente diz ter &#x27;saudade da Tuiuti&#x27;, em referência à escola de samba que o criticou em 2018</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/poder/2026/02/temer-cita-escola-de-samba-que-o-retratou-como-vampiro-fala-em-bajulacao-na-sapucai-e-alfineta-lula.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:55</td>
+</tr>
+<tr data-titulo="painel: vivenda do camarão, rede de restaurantes em shoppings, entra no atacado" data-resumo="" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="16/02/2026 13:54">
+<td class="titulo-cell">Painel: Vivenda do Camarão, rede de restaurantes em shoppings, entra no atacado</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/painelsa/2026/02/vivenda-do-camarao-rede-de-restaurantes-em-shoppings-entra-no-atacado.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:54</td>
+</tr>
+<tr data-titulo="quatro desembargadores sem trabalhar há 16 meses ganharam salários de r$ 627 mil desde novembro" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 13:54">
+<td class="titulo-cell">Quatro desembargadores sem trabalhar há 16 meses ganharam salários de R$ 627 mil desde novembro</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/blog-do-fausto-macedo/quatro-desembargadores-sem-trabalhar-ha-16-meses-ganharam-salarios-de-r-627-mil-desde-novembro/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:54</td>
+</tr>
+<tr data-titulo="&amp;#x27;inimigas de trump&amp;#x27;, empresas de energia eólica offshore dos eua lutam para sobreviver" data-resumo="ações judiciais e lobby são algumas das armas usadas por quem quer gerar energia limpa" data-categoria="Mercado" data-fonte="folha de s.paulo" data-datahora="16/02/2026 13:45">
+<td class="titulo-cell">&#x27;Inimigas de Trump&#x27;, empresas de energia eólica offshore dos EUA lutam para sobreviver</td>
+<td class="resumo-cell">Ações judiciais e lobby são algumas das armas usadas por quem quer gerar energia limpa</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/inimigas-de-trump-empresas-de-energia-eolica-offshore-dos-eua-lutam-para-sobreviver.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:45</td>
+</tr>
+<tr data-titulo="moraes autoriza derrite a visitar bolsonaro na &amp;quot;papudinha&amp;quot;" data-resumo="desde a prisão em janeiro, cela de bolsonaro tem funcionado como ponto de conversas sobre movimentos políticos mirando a eleição de 2026" data-categoria="Política" data-fonte="o globo" data-datahora="16/02/2026 13:36">
+<td class="titulo-cell">Moraes autoriza Derrite a visitar Bolsonaro na &quot;Papudinha&quot;</td>
+<td class="resumo-cell">Desde a prisão em janeiro, cela de Bolsonaro tem funcionado como ponto de conversas sobre movimentos políticos mirando a eleição de 2026</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/noticia/2026/02/16/moraes-autoriza-derrite-a-visitar-bolsonaro-na-papudinha.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:36</td>
+</tr>
+<tr data-titulo="desembargadores dizem que decisão de dino poderá impactar seus salários e na estrutura dos tribunais" data-resumo="" data-categoria="STF" data-fonte="estadão" data-datahora="16/02/2026 13:34">
+<td class="titulo-cell">Desembargadores dizem que decisão de Dino poderá impactar seus salários e na estrutura dos tribunais</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2c3e50;">STF</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/blog-do-fausto-macedo/desembargadores-dizem-que-decisao-de-dino-podera-impactar-seus-salarios-e-na-estrutura-dos-tribunais/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:34</td>
+</tr>
+<tr data-titulo="painel: prefeito de são paulo diz que desfile em homenagem a lula afronta a legislação" data-resumo="" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="16/02/2026 13:29">
+<td class="titulo-cell">Painel: Prefeito de São Paulo diz que desfile em homenagem a Lula afronta a legislação</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/painel/2026/02/prefeito-de-sao-paulo-diz-que-desfile-em-homenagem-a-lula-afronta-a-legislacao.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:29</td>
+</tr>
+<tr data-titulo="painel: alex allard tentou negócio com epstein envolvendo o luxuoso royal monceau por 12 milhões de euro" data-resumo="" data-categoria="Editorial" data-fonte="folha de s.paulo" data-datahora="16/02/2026 13:22">
+<td class="titulo-cell">Painel: Alex Allard tentou negócio com Epstein envolvendo o luxuoso Royal Monceau por 12 milhões de euro</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/painelsa/2026/02/alex-allard-tentou-negocio-com-epstein-envolvendo-o-luxuoso-royal-monceau-por-12-milhoes-de-euro.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:22</td>
+</tr>
+<tr data-titulo="após desfile, nikolas diz que vai denunciar lula ao mp por improbidade" data-resumo="" data-categoria="Governo/Congresso" data-fonte="cnn brasil" data-datahora="16/02/2026 13:14">
+<td class="titulo-cell">Após desfile, Nikolas diz que vai denunciar Lula ao MP por improbidade</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/apos-desfile-nikolas-diz-que-vai-denunciar-lula-ao-mp-por-improbidade/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:14</td>
+</tr>
+<tr data-titulo="tst cria cotas para mulheres trans em vagas de empresas prestadoras de serviços" data-resumo="são 5% das contratações para mulheres trans e 5% para trabalhadoras em situação de vulnerabilidade" data-categoria="Atividade" data-fonte="folha de s.paulo" data-datahora="16/02/2026 13:00">
+<td class="titulo-cell">TST cria cotas para mulheres trans em vagas de empresas prestadoras de serviços</td>
+<td class="resumo-cell">São 5% das contratações para mulheres trans e 5% para trabalhadoras em situação de vulnerabilidade</td>
+<td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/tst-cria-cotas-para-mulheres-trans-em-vagas-de-empresas-prestadoras-de-servicos.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 13:00</td>
+</tr>
+<tr data-titulo="nikolas diz que vai propor ação de improbidade contra lula após desfile" data-resumo="" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="16/02/2026 12:59">
+<td class="titulo-cell">Nikolas diz que vai propor ação de improbidade contra Lula após desfile</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/nikolas-diz-que-vai-propor-acao-de-improbidade-contra-lula-apos-desfile.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 12:59</td>
+</tr>
+<tr data-titulo="temer diz que governo do pt é ‘volta ao passado’ após receber críticas no desfile sobre vida de lula" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 12:56">
+<td class="titulo-cell">Temer diz que governo do PT é ‘volta ao passado’ após receber críticas no desfile sobre vida de Lula</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/coluna-do-estadao/temer-diz-que-governo-do-pt-e-volta-ao-passado-apos-receber-criticas-no-desfile-sobre-vida-de-lula/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 12:56</td>
+</tr>
+<tr data-titulo="moraes autoriza visita de derrite a bolsonaro" data-resumo="deputado é cotado para concorrer ao senado pelo campo da direita em são paulo" data-categoria="Governo/Congresso" data-fonte="valor econômico" data-datahora="16/02/2026 12:35">
+<td class="titulo-cell">Moraes autoriza visita de Derrite a Bolsonaro</td>
+<td class="resumo-cell">Deputado é cotado para concorrer ao Senado pelo campo da direita em São Paulo</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/moraes-autoriza-visita-de-derrite-a-bolsonaro.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 12:35</td>
+</tr>
+<tr data-titulo="bitcoin inicia semana em baixa e sem força para retomar us$ 70 mil" data-resumo="investidores seguem atentos ao fluxo para os fundos negociados em bolsa (etfs) de criptomoedas, que tiveram fortes resgates no mês de fevereiro," data-categoria="Mercado" data-fonte="valor econômico" data-datahora="16/02/2026 12:25">
+<td class="titulo-cell">Bitcoin inicia semana em baixa e sem força para retomar US$ 70 mil</td>
+<td class="resumo-cell">Investidores seguem atentos ao fluxo para os fundos negociados em bolsa (ETFs) de criptomoedas, que tiveram fortes resgates no mês de fevereiro,</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/criptomoedas/noticia/2026/02/16/bitcoin-inicia-semana-em-baixa-e-sem-fora-para-retomar-us-70-mil.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 12:25</td>
+</tr>
+<tr data-titulo="análise: ala do pt teme nova derrota de haddad em sp" data-resumo="" data-categoria="Editorial" data-fonte="cnn brasil" data-datahora="16/02/2026 12:18">
+<td class="titulo-cell">Análise: Ala do PT teme nova derrota de Haddad em SP</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/eleicoes/analise-ala-do-pt-teme-nova-derrota-de-haddad-em-sp/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 12:18</td>
+</tr>
+<tr data-titulo="janja diz que desistiu de desfilar na sapucaí para evitar &amp;#x27;perseguição&amp;#x27; a lula" data-resumo="" data-categoria="Política" data-fonte="valor econômico" data-datahora="16/02/2026 12:11">
+<td class="titulo-cell">Janja diz que desistiu de desfilar na Sapucaí para evitar &#x27;perseguição&#x27; a Lula</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/janja-diz-que-desistiu-de-desfilar-na-sapucai-para-evitar-perseguicao-a-lula.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 12:11</td>
+</tr>
+<tr data-titulo="desfile sobre lula abre brecha para condenação por ilícito eleitoral, dizem especialistas" data-resumo="advogados citam contexto que pode configurar propaganda antecipada ou abuso de poder; outra parte fala em cenário contido que mitiga risco" data-categoria="Eleições" data-fonte="folha de s.paulo" data-datahora="16/02/2026 12:03">
+<td class="titulo-cell">Desfile sobre Lula abre brecha para condenação por ilícito eleitoral, dizem especialistas</td>
+<td class="resumo-cell">Advogados citam contexto que pode configurar propaganda antecipada ou abuso de poder; outra parte fala em cenário contido que mitiga risco</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/poder/2026/02/desfile-sobre-lula-abre-brecha-para-condenacao-por-ilicito-eleitoral-dizem-especialistas.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 12:03</td>
+</tr>
+<tr data-titulo="não faz sentido cobrar rigor histórico num enredo, diz michel temer" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 12:02">
+<td class="titulo-cell">Não faz sentido cobrar rigor histórico num enredo, diz Michel Temer</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/jussara-soares/politica/nao-faz-sentido-cobrar-rigor-historico-num-enredo-diz-michel-temer/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 12:02</td>
+</tr>
+<tr data-titulo="a invectiva de d. amélia" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 11:40">
+<td class="titulo-cell">A invectiva de D. Amélia</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/blog-do-fausto-macedo/a-invectiva-de-d-amelia/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:40</td>
+</tr>
+<tr data-titulo="janja diz que desistiu de desfilar para evitar perseguição a lula e escola de samba" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 11:38">
+<td class="titulo-cell">Janja diz que desistiu de desfilar para evitar perseguição a Lula e escola de samba</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/janja-diz-que-desistiu-de-desfilar-para-evitar-perseguicao-a-lula-e-escola-de-samba-npr/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:38</td>
+</tr>
+<tr data-titulo="desfile em homenagem a lula pode gerar multa por campanha antecipada, diz especialista" data-resumo="" data-categoria="Eleições" data-fonte="valor econômico" data-datahora="16/02/2026 11:36">
+<td class="titulo-cell">Desfile em homenagem a Lula pode gerar multa por campanha antecipada, diz especialista</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/desfile-em-homenagem-a-lula-pode-gerar-multa-por-campanha-antecipada-diz-especialista.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:36</td>
+</tr>
+<tr data-titulo="ong denuncia fábrica de labubu por explorar trabalhadores na china e regular idas ao banheiro" data-resumo="outro lado: pop mart afirma que implementará ações corretivas caso acusações sejam verdadeiras" data-categoria="Mercado" data-fonte="folha de s.paulo" data-datahora="16/02/2026 11:27">
+<td class="titulo-cell">ONG denuncia fábrica de Labubu por explorar trabalhadores na China e regular idas ao banheiro</td>
+<td class="resumo-cell">OUTRO LADO: Pop Mart afirma que implementará ações corretivas caso acusações sejam verdadeiras</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/ong-denuncia-fabrica-de-labubu-por-explorar-trabalhadores-na-china-e-regular-idas-ao-banheiro.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:27</td>
+</tr>
+<tr data-titulo="os penduricalhos brilham no país dos privilégios" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 11:25">
+<td class="titulo-cell">Os penduricalhos brilham no país dos privilégios</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/blog-do-fausto-macedo/os-penduricalhos-brilham-no-pais-dos-privilegios/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:25</td>
+</tr>
+<tr data-titulo="entre ações na justiça e orientações do governo: o caminho até o desfile que homenageou lula" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 11:24">
+<td class="titulo-cell">Entre ações na Justiça e orientações do governo: o caminho até o desfile que homenageou Lula</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/acoes-na-justica-e-orientacoes-do-governo-o-que-antecedeu-o-desfile-em-homenagem-a-lula-na-sapucai/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:24</td>
+</tr>
+<tr data-titulo="pib do japão volta a crescer e abre espaço para altas de juros" data-resumo="" data-categoria="Atividade" data-fonte="cnn brasil" data-datahora="16/02/2026 11:16">
+<td class="titulo-cell">PIB do Japão volta a crescer e abre espaço para altas de juros</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/macroeconomia/pib-do-japao-volta-a-crescer-e-abre-espaco-para-altas-de-juros/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:16</td>
+</tr>
+<tr data-titulo="produção brasileira de petróleo fica mais poluente em 2025" data-resumo="queima de gás em plataformas atingiu o maior volume desde 2010; emissões da petrobras crescem" data-categoria="Mercado" data-fonte="folha de s.paulo" data-datahora="16/02/2026 11:15">
+<td class="titulo-cell">Produção brasileira de petróleo fica mais poluente em 2025</td>
+<td class="resumo-cell">Queima de gás em plataformas atingiu o maior volume desde 2010; emissões da Petrobras crescem</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/ambiente/2026/02/producao-brasileira-de-petroleo-fica-mais-poluente-em-2025.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:15</td>
+</tr>
+<tr data-titulo="bndes aprova r$ 7,5 bilhões para renegociações de dívidas de produtor rural" data-resumo="" data-categoria="Mercado" data-fonte="cnn brasil" data-datahora="16/02/2026 11:08">
+<td class="titulo-cell">BNDES aprova R$ 7,5 bilhões para renegociações de dívidas de produtor rural</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/economia/macroeconomia/bndes-aprova-r-75-bilhoes-para-renegociacoes-de-dividas-de-produtor-rural/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:08</td>
+</tr>
+<tr data-titulo="oposição tenta judicializar manifestação cultural, diz presidente do pt" data-resumo="" data-categoria="Governo/Congresso" data-fonte="cnn brasil" data-datahora="16/02/2026 11:07">
+<td class="titulo-cell">Oposição tenta judicializar manifestação cultural, diz presidente do PT</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/gustavo-uribe/politica/oposicao-tenta-judicializar-manifestacao-cultural-diz-presidente-do-pt/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:07</td>
+</tr>
+<tr data-titulo="flávio bolsonaro anuncia ação no tse contra pt após homenagem a lula na sapucaí" data-resumo="" data-categoria="Eleições" data-fonte="estadão" data-datahora="16/02/2026 11:04">
+<td class="titulo-cell">Flávio Bolsonaro anuncia ação no TSE contra PT após homenagem a Lula na Sapucaí</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/flavio-bolsonaro-anuncia-acao-no-tse-contra-pt-apos-homenagem-a-lula-na-sapucai/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:04</td>
+</tr>
+<tr data-titulo="caixa e banco do brasil começam a pagar abono do pis/pasep; veja quem recebe e próximas datas" data-resumo="nascidos em janeiro recebem até um salário mínimo caso cumpram regras" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 11:03">
+<td class="titulo-cell">Caixa e Banco do Brasil começam a pagar abono do PIS/Pasep; veja quem recebe e próximas datas</td>
+<td class="resumo-cell">Nascidos em janeiro recebem até um salário mínimo caso cumpram regras</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/caixa-e-banco-do-brasil-comecam-a-pagar-abono-do-pispasep-veja-quem-recebe-e-proximas-datas.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:03</td>
+</tr>
+<tr data-titulo="consórcio liderado pela chevron assina acordo para explorar gás natural na grécia" data-resumo="petrolífera lidera grupo que terá direito a buscar gnl em quatro blocos de águas profundas no país" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 11:01">
+<td class="titulo-cell">Consórcio liderado pela Chevron assina acordo para explorar gás natural na Grécia</td>
+<td class="resumo-cell">Petrolífera lidera grupo que terá direito a buscar GNL em quatro blocos de águas profundas no país</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/consorcio-liderado-pela-chevron-assina-acordo-para-explorar-gas-natural-na-grecia.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:01</td>
+</tr>
+<tr data-titulo="saída de toffoli do caso master sem suspeição mantém crise de reputação do stf, dizem especialistas" data-resumo="leitura é que fórmula encontrada reforçou corporativismo do tribunal, e andré mendonça terá desafio" data-categoria="STF" data-fonte="valor econômico" data-datahora="16/02/2026 11:00">
+<td class="titulo-cell">Saída de Toffoli do caso Master sem suspeição mantém crise de reputação do STF, dizem especialistas</td>
+<td class="resumo-cell">Leitura é que fórmula encontrada reforçou corporativismo do tribunal, e André Mendonça terá desafio</td>
+<td><span class="badge" style="background:#2c3e50;">STF</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/saida-de-toffoli-do-caso-master-sem-suspeicao-mantem-crise-de-reputacao-do-stf-dizem-especialistas.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:00</td>
+</tr>
+<tr data-titulo="antes rejeitado por ser apenas um powerpoint, porto no es vira projeto de r$ 2,5 bi" data-resumo="multinacional hapag-lloyd assinou acordo com imetame para operação de contêineres em aracruz" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 11:00">
+<td class="titulo-cell">Antes rejeitado por ser apenas um PowerPoint, porto no ES vira projeto de R$ 2,5 bi</td>
+<td class="resumo-cell">Multinacional Hapag-Lloyd assinou acordo com Imetame para operação de contêineres em Aracruz</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/antes-rejeitado-por-ser-apenas-um-powerpoint-porto-no-es-vira-projeto-de-r-25-bi.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 11:00</td>
+</tr>
+<tr data-titulo="enquete bbb 26: veja como está a votação do paredão entre marcelo, samira e solange" data-resumo="" data-categoria="Governo/Congresso" data-fonte="o globo" data-datahora="16/02/2026 10:55">
+<td class="titulo-cell">Enquete BBB 26: veja como está a votação do paredão entre Marcelo, Samira e Solange</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/play/realities/noticia/2026/02/16/enquete-bbb-26-veja-como-esta-a-votacao-do-paredao-entre-marcelo-samira-e-solange.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:55</td>
+</tr>
+<tr data-titulo="instituto cultural candonga vai receber a medalha pedro ernesto, da câmara do rio" data-resumo="quem receberá a medalha é maurício de jesus, filho de candonga e presidente do instituto" data-categoria="Governo/Congresso" data-fonte="o globo" data-datahora="16/02/2026 10:51">
+<td class="titulo-cell">Instituto Cultural Candonga vai receber a Medalha Pedro Ernesto, da Câmara do Rio</td>
+<td class="resumo-cell">Quem receberá a medalha é Maurício de Jesus, filho de Candonga e presidente do instituto</td>
+<td><span class="badge" style="background:#2980b9;">Governo/Congresso</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/blogs/ancelmo-gois/post/2026/02/instituto-cultural-candonga-vai-receber-a-medalha-pedro-ernesto-da-camara-do-rio.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:51</td>
+</tr>
+<tr data-titulo="lula publica fotos com 4 escolas de samba e tenta rebater acusações de propaganda eleitoral" data-resumo="" data-categoria="Eleições" data-fonte="estadão" data-datahora="16/02/2026 10:46">
+<td class="titulo-cell">Lula publica fotos com 4 escolas de samba e tenta rebater acusações de propaganda eleitoral</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/coluna-do-estadao/lula-publica-fotos-com-4-escolas-de-samba-e-tenta-rebater-acusacoes-de-propaganda-eleitoral/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:46</td>
+</tr>
+<tr data-titulo="lula posa com casais de mestre sala e porta bandeira das quatro escolas que desfilaram na sapucaí no domingo" data-resumo="presidente acompanhou os quatro desfiles da noite no camarote da prefeitura do rio junto com eduardo paes e a primeira-dama janja, além de oito ministros e dezenas de aliados" data-categoria="Eleições" data-fonte="o globo" data-datahora="16/02/2026 10:44">
+<td class="titulo-cell">Lula posa com casais de mestre sala e porta bandeira das quatro escolas que desfilaram na Sapucaí no domingo</td>
+<td class="resumo-cell">Presidente acompanhou os quatro desfiles da noite no camarote da prefeitura do Rio junto com Eduardo Paes e a primeira-dama Janja, além de oito ministros e dezenas de aliados</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/rio/carnaval/noticia/2026/02/16/lula-posa-com-casais-de-mestre-sala-e-porta-bandeira-das-quatro-escolas-que-desfilaram-na-sapucai-no-domingo.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:44</td>
+</tr>
+<tr data-titulo="o recuo do janja no desfile foi um bom sinal em meio ao caos" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 10:40">
+<td class="titulo-cell">O recuo do Janja no desfile foi um bom sinal em meio ao caos</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/fabiano-lana/o-recuo-do-janja-no-desfile-foi-um-bom-sinal-em-meio-ao-caos/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:40</td>
+</tr>
+<tr data-titulo="análise: não se pode confiar nos eua para liderar uma coalizão de minerais críticos" data-resumo="um objetivo louvável como a independência da china em relação às terras raras exige uma base mais sólida" data-categoria="Editorial" data-fonte="valor econômico" data-datahora="16/02/2026 10:36">
+<td class="titulo-cell">Análise: Não se pode confiar nos EUA para liderar uma coalizão de minerais críticos</td>
+<td class="resumo-cell">Um objetivo louvável como a independência da China em relação às terras raras exige uma base mais sólida</td>
+<td><span class="badge" style="background:#7f8c8d;">Editorial</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/mundo/noticia/2026/02/16/analise-nao-se-pode-confiar-nos-eua-para-liderar-uma-coalizao-de-minerais-criticos.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:36</td>
+</tr>
+<tr data-titulo="lula consultou equipe jurídica antes de desfile na sapucaí" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 10:35">
+<td class="titulo-cell">Lula consultou equipe jurídica antes de desfile na Sapucaí</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/gustavo-uribe/politica/lula-consultou-equipe-juridica-antes-de-desfile-na-sapucai/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:35</td>
+</tr>
+<tr data-titulo="oposição anuncia pedido de inelegibilidade contra lula por desfile; presidente exalta carnaval" data-resumo="flavio bolsonaro e partido novo disseram na manhã dessa segunda-feira que entrarão com processo no tse pedindo que lula não possa concorrer após desfile da acadêmicos de niterói, enquanto o presidente tentar marcar distância regulamentar e destaca que participou de vários eventos de carnaval" data-categoria="Eleições" data-fonte="o globo" data-datahora="16/02/2026 10:25">
+<td class="titulo-cell">Oposição anuncia pedido de inelegibilidade contra Lula por desfile; presidente exalta carnaval</td>
+<td class="resumo-cell">Flavio Bolsonaro e partido NOVO disseram na manhã dessa segunda-feira que entrarão com processo no TSE pedindo que Lula não possa concorrer após desfile da Acadêmicos de Niterói, enquanto o presidente tentar marcar distância regulamentar e destaca que participou de vários eventos de carnaval</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/politica/noticia/2026/02/16/oposicao-anuncia-pedido-de-inelegibilidade-contra-lula-por-desfile-presidente-exalta-carnaval.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:25</td>
+</tr>
+<tr data-titulo="bancos fecham nesta segunda (16) e terça (17); atendimento volta na quarta (18)" data-resumo="pix funciona 24 horas, mas ted não será processado; atendimento retorna na quarta ao meio-dia" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 10:24">
+<td class="titulo-cell">Bancos fecham nesta segunda (16) e terça (17); atendimento volta na quarta (18)</td>
+<td class="resumo-cell">Pix funciona 24 horas, mas TED não será processado; atendimento retorna na quarta ao meio-dia</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/bancos-fecham-nesta-segunda-16-e-terca-17-atendimento-volta-na-quarta-18.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:24</td>
+</tr>
+<tr data-titulo="novo diz que pedirá inelegibilidade de lula por desfile em homenagem ao petista na sapucaí" data-resumo="presidente foi homenageado por escola de samba e acompanhou apresentação no sambódromo" data-categoria="Eleições" data-fonte="folha de s.paulo" data-datahora="16/02/2026 10:21">
+<td class="titulo-cell">Novo diz que pedirá inelegibilidade de Lula por desfile em homenagem ao petista na Sapucaí</td>
+<td class="resumo-cell">Presidente foi homenageado por escola de samba e acompanhou apresentação no sambódromo</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/poder/2026/02/novo-diz-que-pedira-inelegibilidade-de-lula-por-desfile-em-homenagem-ao-petista-na-sapucai.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:21</td>
+</tr>
+<tr data-titulo="ouro cai pressionado por liquidez baixa e dólar mais forte" data-resumo="mercados nos estados unidos e na ásia ficaram fechados por feriados, o que reduz volume de negócios" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="16/02/2026 10:20">
+<td class="titulo-cell">Ouro cai pressionado por liquidez baixa e dólar mais forte</td>
+<td class="resumo-cell">Mercados nos Estados Unidos e na Ásia ficaram fechados por feriados, o que reduz volume de negócios</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/16/ouro-cai-pressionado-por-liquidez-baixa-e-dlar-mais-forte.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:20</td>
+</tr>
+<tr data-titulo="petróleo tem leve alta com foco em geopolítica e decisão da opep+" data-resumo="ambiente é de incertezas sobre as tensões entre eua e irã, mas com avanços nas negociações de paz entre ucrânia e rússia" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="16/02/2026 10:15">
+<td class="titulo-cell">Petróleo tem leve alta com foco em geopolítica e decisão da Opep+</td>
+<td class="resumo-cell">Ambiente é de incertezas sobre as tensões entre EUA e Irã, mas com avanços nas negociações de paz entre Ucrânia e Rússia</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/16/petroleo-tem-leve-alta-com-foco-em-geopolitica-e-decisao-da-opep.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:15</td>
+</tr>
+<tr data-titulo="lula fala em &amp;quot;muita emoção&amp;quot; ao comentar noite de desfiles na sapucaí" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 10:10">
+<td class="titulo-cell">Lula fala em &quot;muita emoção&quot; ao comentar noite de desfiles na Sapucaí</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/lula-fala-em-muita-emocao-ao-comentar-noite-de-desfiles-na-sapucai/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:10</td>
+</tr>
+<tr data-titulo="flávio bolsonaro e novo vão à justiça contra lula após desfile da sapucaí" data-resumo="" data-categoria="Eleições" data-fonte="valor econômico" data-datahora="16/02/2026 10:06">
+<td class="titulo-cell">Flávio Bolsonaro e Novo vão à Justiça contra Lula após desfile da Sapucaí</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/flavio-bolsonaro-e-novo-vao-a-justica-contra-lula-apos-desfile-da-sapucai.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:06</td>
+</tr>
+<tr data-titulo="&amp;quot;tentam achar pelo em ovo&amp;quot;, diz boulos sobre desfile com homenagem a lula" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 10:02">
+<td class="titulo-cell">&quot;Tentam achar pelo em ovo&quot;, diz Boulos sobre desfile com homenagem a Lula</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/gustavo-uribe/politica/tentam-achar-pelo-em-ovo-diz-boulos-sobre-desfile-com-homenagem-a-lula/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:02</td>
+</tr>
+<tr data-titulo="michelle rebate analogia a bolsonaro em desfile e cita prisão de lula" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 10:00">
+<td class="titulo-cell">Michelle rebate analogia a Bolsonaro em desfile e cita prisão de Lula</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/michelle-rebate-analogia-a-bolsonaro-em-desfile-e-cita-prisao-de-lula/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 10:00</td>
+</tr>
+<tr data-titulo="os funcionários que secretamente trabalham quatro dias por semana" data-resumo="algumas empresas adotaram isso como política, enquanto muitos funcionários estão abraçando uma atitude mais descontraída em relação ao trabalho às sextas-feiras" data-categoria="Economia" data-fonte="folha de s.paulo" data-datahora="16/02/2026 09:34">
+<td class="titulo-cell">Os funcionários que secretamente trabalham quatro dias por semana</td>
+<td class="resumo-cell">Algumas empresas adotaram isso como política, enquanto muitos funcionários estão abraçando uma atitude mais descontraída em relação ao trabalho às sextas-feiras</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/mercado/2026/02/os-funcionarios-que-secretamente-trabalham-quatro-dias-por-semana.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:34</td>
+</tr>
+<tr data-titulo="‘brasilização’: sistema tributário caótico vira vitrine negativa do país" data-resumo="" data-categoria="Economia" data-fonte="estadão" data-datahora="16/02/2026 09:34">
+<td class="titulo-cell">‘Brasilização’: sistema tributário caótico vira vitrine negativa do País</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/economia/duquesa-de-tax/brasilizacao-sistema-tributario-caotico-vira-vitrine-negativa-do-pais/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:34</td>
+</tr>
+<tr data-titulo="possível propaganda pró-lula em desfile deve ser analisada no tse; entenda" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 09:34">
+<td class="titulo-cell">Possível propaganda pró-Lula em desfile deve ser analisada no TSE; entenda</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/possivel-propaganda-pro-lula-em-desfile-deve-ser-analisada-no-tse-entenda/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:34</td>
+</tr>
+<tr data-titulo="após ação de trump na venezuela, exército muda projetos estratégicos e acrescenta defesa antiaérea" data-resumo="" data-categoria="Política" data-fonte="estadão" data-datahora="16/02/2026 09:30">
+<td class="titulo-cell">Após ação de Trump na Venezuela, Exército muda projetos estratégicos e acrescenta defesa antiaérea</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/marcelo-godoy/apos-acao-de-trump-na-venezuela-exercito-muda-projetos-estrategicos-e-acrescenta-defesa-antiaerea/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:30</td>
+</tr>
+<tr data-titulo="&amp;quot;houve alguns exageros&amp;quot;, diz especialista sobre desfile em homenagem a lula" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 09:29">
+<td class="titulo-cell">&quot;Houve alguns exageros&quot;, diz especialista sobre desfile em homenagem a Lula</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/houve-alguns-exageros-diz-especialista-sobre-desfile-em-homenagem-a-lula/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:29</td>
+</tr>
+<tr data-titulo="homenagem a lula em desfile de carnaval foi contida, mas pode gerar ações judiciais, diz especialista" data-resumo="" data-categoria="Política" data-fonte="valor econômico" data-datahora="16/02/2026 09:24">
+<td class="titulo-cell">Homenagem a Lula em desfile de carnaval foi contida, mas pode gerar ações judiciais, diz especialista</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/politica/noticia/2026/02/16/homenagem-a-lula-em-desfile-de-carnaval-foi-contida-mas-pode-gerar-acoes-judiciais-diz-especialista.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:24</td>
+</tr>
+<tr data-titulo="homenagem a lula pode ser vista como comício de campanha, diz especialista" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 09:21">
+<td class="titulo-cell">Homenagem a Lula pode ser vista como comício de campanha, diz especialista</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/homenagem-a-lula-pode-ser-vista-como-comicio-de-campanha-diz-especialista/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:21</td>
+</tr>
+<tr data-titulo="desfile em homenagem a lula: partido novo e flávio bolsonaro anunciam ações" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 09:21">
+<td class="titulo-cell">Desfile em homenagem a Lula: partido Novo e Flávio Bolsonaro anunciam ações</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/politica/desfile-em-homenagem-a-lula-partido-novo-e-flavio-bolsonaro-anunciam-acoes/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:21</td>
+</tr>
+<tr data-titulo="tensão política preocupa time de lula, que admite risco no tse após desfile" data-resumo="" data-categoria="Eleições" data-fonte="cnn brasil" data-datahora="16/02/2026 09:16">
+<td class="titulo-cell">Tensão política preocupa time de Lula, que admite risco no TSE após desfile</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/clarissa-oliveira/eleicoes/tensao-politica-preocupa-time-de-lula-que-admite-risco-no-tse-apos-desfile/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:16</td>
+</tr>
+<tr data-titulo="recuperação econômica frágil do japão no 4º trimestre impõe primeiro teste a takaichi" data-resumo="pib japonês cresceu a uma taxa anualizada de 0,1% nos três últimos meses do ano passado, abaixo das expectativas de economistas" data-categoria="Atividade" data-fonte="valor econômico" data-datahora="16/02/2026 09:13">
+<td class="titulo-cell">Recuperação econômica frágil do Japão no 4º trimestre impõe primeiro teste a Takaichi</td>
+<td class="resumo-cell">PIB japonês cresceu a uma taxa anualizada de 0,1% nos três últimos meses do ano passado, abaixo das expectativas de economistas</td>
+<td><span class="badge" style="background:#1abc9c;">Atividade</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/mundo/noticia/2026/02/16/recuperao-econmica-frgil-do-japo-no-4-trimestre-impe-primeiro-teste-a-takaichi.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:13</td>
+</tr>
+<tr data-titulo="janja diz que não desfilou para evitar perseguição a quem &amp;#x27;mais ama na vida&amp;#x27;" data-resumo="primeira-dama tomou a decisão na semana passada, mas manteve segredo para não desestimular a escola de samba que o homenageava" data-categoria="Política" data-fonte="folha de s.paulo" data-datahora="16/02/2026 09:03">
+<td class="titulo-cell">Janja diz que não desfilou para evitar perseguição a quem &#x27;mais ama na vida&#x27;</td>
+<td class="resumo-cell">Primeira-dama tomou a decisão na semana passada, mas manteve segredo para não desestimular a escola de samba que o homenageava</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">Folha de S.Paulo</td>
+<td class="link-cell"><a href="https://www1.folha.uol.com.br/colunas/monicabergamo/2026/02/janja-diz-que-nao-desfilou-para-evitar-perseguicao-a-quem-mais-ama-na-vida.shtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 09:03</td>
+</tr>
+<tr data-titulo="não tenha pressa em começar a dirigir" data-resumo="" data-categoria="Economia" data-fonte="estadão" data-datahora="16/02/2026 08:48">
+<td class="titulo-cell">Não tenha pressa em começar a dirigir</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#27ae60;">Economia</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/economia/claudio-considera/nao-tenha-pressa-em-comecar-a-dirigir/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 08:48</td>
+</tr>
+<tr data-titulo="janja diz que desistiu de desfilar para evitar &amp;quot;perseguição&amp;quot; a escola" data-resumo="" data-categoria="Política" data-fonte="cnn brasil" data-datahora="16/02/2026 08:13">
+<td class="titulo-cell">Janja diz que desistiu de desfilar para evitar &quot;perseguição&quot; a escola</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#2980b9;">Política</span></td>
+<td class="fonte-cell">CNN Brasil</td>
+<td class="link-cell"><a href="https://www.cnnbrasil.com.br/blogs/jussara-soares/politica/janja-diz-que-desistiu-de-desfilar-para-evitar-perseguicao-a-escola/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 08:13</td>
+</tr>
+<tr data-titulo="bolsas da europa sobem impulsionadas por setor financeiro, com atenção a dados e balanços" data-resumo="as ações europeias passaram por um período de volatilidade do fim de janeiro ao início de fevereiro" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="16/02/2026 08:06">
+<td class="titulo-cell">Bolsas da Europa sobem impulsionadas por setor financeiro, com atenção a dados e balanços</td>
+<td class="resumo-cell">As ações europeias passaram por um período de volatilidade do fim de janeiro ao início de fevereiro</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/noticia/2026/02/16/bolsas-da-europa-sobem-impulsionadas-por-setor-financeiro-com-ateno-a-dados-e-balanos.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 08:06</td>
+</tr>
+<tr data-titulo="michelle bolsonaro critica desfile de carnaval com homenagem a lula por mostrar jair como palhaço" data-resumo="" data-categoria="Eleições" data-fonte="estadão" data-datahora="16/02/2026 08:06">
+<td class="titulo-cell">Michelle Bolsonaro critica desfile de carnaval com homenagem a Lula por mostrar Jair como palhaço</td>
+<td class="resumo-cell">—</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">Estadão</td>
+<td class="link-cell"><a href="https://www.estadao.com.br/politica/michelle-bolsonaro-critica-desfile-de-carnaval-com-homenagem-a-lula-por-mostrar-jair-como-palhaco-npr/" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 08:06</td>
+</tr>
+<tr data-titulo="além de lula no camarote de paes, políticos dão o tom dentro e fora da sapucaí durante primeira noite de desfiles; confira" data-resumo="em ano eleitoral, ministros, governadores, parlamentares e dirigentes acompanharam os desfiles sob o pano de fundo de disputas, estratégias partidárias e questionamentos na justiça" data-categoria="Eleições" data-fonte="o globo" data-datahora="16/02/2026 08:05">
+<td class="titulo-cell">Além de Lula no camarote de Paes, políticos dão o tom dentro e fora da Sapucaí durante primeira noite de desfiles; confira</td>
+<td class="resumo-cell">Em ano eleitoral, ministros, governadores, parlamentares e dirigentes acompanharam os desfiles sob o pano de fundo de disputas, estratégias partidárias e questionamentos na Justiça</td>
+<td><span class="badge" style="background:#8e44ad;">Eleições</span></td>
+<td class="fonte-cell">O Globo</td>
+<td class="link-cell"><a href="https://oglobo.globo.com/rio/carnaval/noticia/2026/02/16/alem-de-lula-no-camarote-de-paes-politicos-dao-o-tom-dentro-e-fora-da-sapucai-durante-primeira-noite-de-desfiles-confira.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 08:05</td>
+</tr>
+<tr data-titulo="com eleições à vista, calmaria no câmbio pode ter vida curta" data-resumo="volatilidade realizada do real tem sido em torno de 7% em fevereiro" data-categoria="Mercado" data-fonte="valor econômico" data-datahora="16/02/2026 08:02">
+<td class="titulo-cell">Com eleições à vista, calmaria no câmbio pode ter vida curta</td>
+<td class="resumo-cell">Volatilidade realizada do real tem sido em torno de 7% em fevereiro</td>
+<td><span class="badge" style="background:#27ae60;">Mercado</span></td>
+<td class="fonte-cell">Valor Econômico</td>
+<td class="link-cell"><a href="https://valor.globo.com/financas/intraday/post/2026/02/com-eleicoes-a-vista-calmaria-no-cambio-pode-ter-vida-curta.ghtml" target="_blank">Abrir</a></td>
+<td class="dh-cell">16/02/2026 08:02</td>
+</tr>
+</tbody></table>
+</div>
+<script>
+
+    let allRows = Array.from(document.querySelectorAll('#tableBody tr'));
+    let currentSort = { col: 'datahora', dir: 'desc' };
+    let currentPage = 1;
+    const rowsPerPage = 25;
+    function updateTable() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const categoria = document.getElementById('filterCategoria').value.toLowerCase();
+        const tbody = document.getElementById('tableBody');
+        const countSpan = document.getElementById('resultCount');
+        let filtered = allRows.filter(row => {
+            const titulo = row.dataset.titulo || '';
+            const resumo = row.dataset.resumo || '';
+            const cat = row.dataset.categoria || '';
+            const matchSearch = !search || titulo.includes(search) || resumo.includes(search);
+            const matchCat = !categoria || cat.toLowerCase() === categoria;
+            return matchSearch && matchCat;
+        });
+        filtered.sort((a, b) => {
+            const aVal = a.dataset[currentSort.col] || '';
+            const bVal = b.dataset[currentSort.col] || '';
+            if (currentSort.col === 'datahora') {
+                const aDate = parseDateTime(aVal);
+                const bDate = parseDateTime(bVal);
+                return currentSort.dir === 'asc' ? aDate - bDate : bDate - aDate;
+            }
+            const cmp = aVal.localeCompare(bVal);
+            return currentSort.dir === 'asc' ? cmp : -cmp;
+        });
+        const totalPages = Math.ceil(filtered.length / rowsPerPage);
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const pageRows = filtered.slice(start, end);
+        tbody.innerHTML = '';
+        pageRows.forEach(row => tbody.appendChild(row.cloneNode(true)));
+        countSpan.textContent = `Mostrando ${start + 1}-${Math.min(end, filtered.length)} de ${filtered.length} notícias`;
+        updatePagination(totalPages);
+        updateSortIndicators();
+    }
+    function parseDateTime(str) {
+        const parts = str.trim().split(' ');
+        if (parts.length !== 2) return 0;
+        const [data, hora] = parts;
+        const [d, m, y] = data.split('/');
+        const [h, min] = hora.split(':');
+        return new Date(y, m-1, d, h, min).getTime();
+    }
+    function updateSortIndicators() {
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.classList.remove('sort-asc', 'sort-desc');
+            if (th.dataset.sort === currentSort.col) {
+                th.classList.add(currentSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
+            }
+        });
+    }
+    function updatePagination(totalPages) {
+        const pagDiv = document.querySelector('.pagination');
+        if (!pagDiv) { const wrapper = document.querySelector('.table-wrapper'); const pag = document.createElement('div'); pag.className = 'pagination'; wrapper.appendChild(pag); }
+        const pag = document.querySelector('.pagination');
+        pag.innerHTML = '';
+        if (totalPages <= 1) return;
+        const prev = document.createElement('button'); prev.textContent = '« Anterior'; prev.disabled = currentPage === 1; prev.onclick = () => { currentPage--; updateTable(); }; pag.appendChild(prev);
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                const btn = document.createElement('button'); btn.textContent = i; btn.className = i === currentPage ? 'active' : '';
+                btn.onclick = () => { currentPage = i; updateTable(); }; pag.appendChild(btn);
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                const span = document.createElement('span'); span.textContent = '...'; span.style.padding = '8px'; pag.appendChild(span);
+            }
+        }
+        const next = document.createElement('button'); next.textContent = 'Próxima »'; next.disabled = currentPage === totalPages; next.onclick = () => { currentPage++; updateTable(); }; pag.appendChild(next);
+    }
+    document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; updateTable(); });
+    document.getElementById('filterCategoria').addEventListener('change', () => { currentPage = 1; updateTable(); });
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const col = th.dataset.sort;
+            if (currentSort.col === col) { currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc'; } else { currentSort.col = col; currentSort.dir = 'asc'; }
+            currentPage = 1; updateTable();
+        });
+    });
+    updateTable();
+    
+</script>
+</div></body></html>
