@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Gera painel HTML com tabela aprimorada de últimas notícias.
-Funcionalidades: busca, filtro por categoria, ordenação, paginação.
+Gera painel HTML estilo card — layout limpo, mobile-friendly.
+Exibe: fonte, título (link embutido), categoria, horário.
 Exclui tema Mundo.
 
 Uso direto: python gerar_painel.py (lê JSONs de output/).
@@ -35,7 +35,6 @@ CORES_TEMAS = {
     "Atividade": "#1abc9c",
     "STF": "#2c3e50",
     "Caso Master": "#6c3483",
-    # Categorias da fonte (quando usadas como tema)
     "Política": "#2980b9",
     "Economia": "#27ae60",
 }
@@ -50,6 +49,21 @@ def _chave_ordem(n):
         return datetime.min
 
 
+def _hora_relativa(data_str, hora_str):
+    """Retorna horário em formato relativo: HH:MM, ontem HH:MM, ou DD/MM HH:MM."""
+    try:
+        dt = datetime.strptime(f"{data_str} {hora_str}", "%d/%m/%Y %H:%M")
+        agora = datetime.now()
+        if dt.date() == agora.date():
+            return hora_str
+        elif dt.date() == agora.date().replace(day=agora.day - 1):
+            return f"ontem {hora_str}"
+        else:
+            return f"{dt.strftime('%d/%m')} {hora_str}"
+    except Exception:
+        return hora_str or ""
+
+
 def gerar_painel_de_lista(todas, data_formatada=None, periodo_horas=24, arquivo_saida=None):
     """
     Gera o HTML do painel a partir de uma lista de notícias (ex.: vindas do banco).
@@ -62,201 +76,157 @@ def gerar_painel_de_lista(todas, data_formatada=None, periodo_horas=24, arquivo_
     if arquivo_saida is None:
         arquivo_saida = ARQUIVO_PAINEL
     arquivo_saida = Path(arquivo_saida)
-    temas_unicos = sorted(set(n.get("tema", "") for n in todas if n.get("tema")))
-    # Excluir tema Mundo da lista de filtro
-    temas_unicos = [t for t in temas_unicos if t != "Mundo"]
-    _escrever_html_painel(todas, data_formatada, periodo_horas, arquivo_saida, temas_unicos)
+    _escrever_html_painel(todas, data_formatada, periodo_horas, arquivo_saida)
 
 
-def _escrever_html_painel(todas, data_formatada, periodo_horas, arquivo_saida, temas_unicos=None):
+def _escrever_html_painel(todas, data_formatada, periodo_horas, arquivo_saida):
     """Escreve o HTML do painel em arquivo_saida."""
-    if temas_unicos is None:
-        temas_unicos = sorted(set(n.get("tema", "") for n in todas if n.get("tema")))
-    html = []
-    html.append("<!DOCTYPE html>")
-    html.append('<html lang="pt-BR">')
-    html.append("<head>")
-    html.append('<meta charset="UTF-8">')
-    html.append('<meta name="viewport" content="width=device-width, initial-scale=1.0">')
-    html.append('<meta http-equiv="refresh" content="30">')
-    html.append("<title>Newsflow Macro Brasil</title>")
-    html.append("<style>")
-    html.append("*{margin:0;padding:0;box-sizing:border-box;}")
-    html.append("body{font-family:'Segoe UI',-apple-system,sans-serif;background:#f5f7fa;color:#2c3e50;line-height:1.6;}")
-    html.append(".header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#1a5276 0%,#2980b9 100%);color:#fff;padding:12px 24px;box-shadow:0 2px 8px rgba(0,0,0,.15);}")
-    html.append(".header h1{font-size:20px;font-weight:600;margin-bottom:4px;}")
-    html.append(".header .meta{font-size:12px;opacity:.9;}")
-    html.append(".container{max-width:1600px;margin:0 auto;padding:28px 32px;}")
-    html.append(".controls{background:#fff;padding:20px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.08);margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;}")
-    html.append(".controls input[type='text']{flex:1;min-width:250px;padding:10px 14px;border:1px solid #ddd;border-radius:6px;font-size:14px;}")
-    html.append(".controls select{padding:10px 14px;border:1px solid #ddd;border-radius:6px;font-size:14px;background:#fff;cursor:pointer;}")
-    html.append(".controls .count{color:#666;font-size:14px;margin-left:auto;}")
-    html.append(".table-wrapper{background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow:hidden;}")
-    html.append("table{width:100%;border-collapse:collapse;}")
-    html.append("thead{background:#1a5276;color:#fff;}")
-    html.append("th{padding:14px 16px;text-align:left;font-size:13px;font-weight:600;cursor:pointer;user-select:none;position:relative;}")
-    html.append("th:hover{background:#164a6b;}")
-    html.append("th.sortable::after{content:' ↕';opacity:.5;font-size:11px;margin-left:4px;}")
-    html.append("th.sort-asc::after{content:' ↑';opacity:1;}")
-    html.append("th.sort-desc::after{content:' ↓';opacity:1;}")
-    html.append("tbody tr{border-bottom:1px solid #e9ecef;transition:background .15s;}")
-    html.append("tbody tr:hover{background:#f8f9fa;}")
-    html.append("tbody tr:last-child{border-bottom:none;}")
-    html.append("td{padding:14px 16px;font-size:14px;vertical-align:top;}")
-    html.append(".titulo-cell{font-weight:500;color:#2c3e50;max-width:400px;}")
-    html.append(".resumo-cell{max-width:450px;color:#555;font-size:13px;line-height:1.5;}")
-    html.append(".badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:500;color:#fff;white-space:nowrap;}")
-    html.append(".link-cell a{color:#2980b9;text-decoration:none;font-weight:500;padding:6px 12px;border:1px solid #2980b9;border-radius:4px;display:inline-block;transition:all .2s;}")
-    html.append(".link-cell a:hover{background:#2980b9;color:#fff;}")
-    html.append(".fonte-cell{font-size:13px;color:#555;white-space:nowrap;}")
-    html.append(".dh-cell{white-space:nowrap;font-size:13px;color:#666;font-family:monospace;}")
-    html.append(".pagination{display:flex;justify-content:center;gap:8px;padding:20px;background:#fff;border-top:1px solid #e9ecef;}")
-    html.append(".pagination button{padding:8px 14px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer;font-size:14px;transition:all .2s;}")
-    html.append(".pagination button:hover:not(:disabled){background:#2980b9;color:#fff;border-color:#2980b9;}")
-    html.append(".pagination button:disabled{opacity:.5;cursor:not-allowed;}")
-    html.append(".pagination .active{background:#2980b9;color:#fff;border-color:#2980b9;}")
-    html.append("@media (max-width:1200px){.resumo-cell{max-width:300px;}.titulo-cell{max-width:250px;}}")
-    html.append("@media (max-width:768px){.container{padding:16px;}.controls{flex-direction:column;align-items:stretch;}.controls .count{margin-left:0;margin-top:8px;}table{font-size:12px;}th,td{padding:10px 8px;}}")
-    html.append("</style>")
-    html.append("</head><body>")
-    html.append('<div class="header">')
-    html.append("<h1>📡 Newsflow Macro Brasil</h1>")
-    html.append(f'<div class="meta">Última atualização: {data_formatada} | Notícias das últimas {periodo_horas}h | Fontes: Valor, Estadão, Folha, O Globo, CNN | Atualiza a cada 30s</div>')
-    html.append("</div>")
-    html.append('<div class="container">')
-    html.append('<div class="controls">')
-    html.append('<input type="text" id="searchInput" placeholder="🔍 Buscar por título ou resumo..." />')
-    html.append('<select id="filterCategoria">')
-    html.append('<option value="">Todas as categorias</option>')
-    for tema in temas_unicos:
-        html.append(f'<option value="{escape(tema)}">{escape(tema)}</option>')
-    html.append('</select>')
-    html.append('<span class="count" id="resultCount">Mostrando todas as notícias</span>')
-    html.append('</div>')
-    html.append('<div class="table-wrapper">')
-    html.append('<table id="newsTable">')
-    html.append('<thead><tr>')
-    html.append('<th class="sortable" data-sort="titulo">Título</th>')
-    html.append('<th class="sortable" data-sort="resumo">Resumo</th>')
-    html.append('<th class="sortable" data-sort="categoria">Categoria</th>')
-    html.append('<th class="sortable" data-sort="fonte">Fonte</th>')
-    html.append('<th>Link</th>')
-    html.append('<th class="sortable" data-sort="datahora">Data/Hora</th>')
-    html.append('</tr></thead>')
-    html.append('<tbody id="tableBody">')
+    total = len(todas)
+    fontes = sorted(set(n.get("fonte", "") for n in todas if n.get("fonte")))
+    fontes_str = ", ".join(fontes) if fontes else "Valor, Estadão, Folha, O Globo, CNN"
+
+    html = f"""<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="30">
+  <title>Newsflow Macro Brasil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    :root {{
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #5c5c5c;
+      --border: #e5e5e5;
+      --accent: #1a5276;
+      --accent-soft: #e3f2fd;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.06);
+    }}
+    * {{ box-sizing: border-box; }}
+    body {{
+      margin: 0; padding: 0;
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15px; line-height: 1.5;
+      color: var(--text); background: var(--bg);
+      min-height: 100vh;
+    }}
+    .wrap {{ max-width: 720px; margin: 0 auto; padding: 24px 20px 48px; }}
+    .header {{
+      background: var(--surface); border-radius: var(--radius);
+      padding: 24px 28px; margin-bottom: 24px;
+      box-shadow: var(--shadow); border: 1px solid var(--border);
+    }}
+    .header h1 {{
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 1.75rem; font-weight: 400;
+      margin: 0 0 12px 0; color: var(--text);
+      letter-spacing: -0.02em;
+    }}
+    .stats {{ display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }}
+    .stat {{
+      background: var(--accent-soft); color: var(--accent);
+      padding: 5px 12px; border-radius: 6px;
+      font-size: 0.8125rem; font-weight: 500;
+    }}
+    .meta-bar {{
+      display: flex; flex-wrap: wrap; gap: 16px 24px;
+      font-size: 0.8125rem; color: var(--text-muted);
+      padding-top: 16px; border-top: 1px solid var(--border);
+    }}
+    .meta-bar strong {{ color: var(--text); font-weight: 500; }}
+    .card {{
+      background: var(--surface); border-radius: var(--radius);
+      padding: 16px 20px; margin-bottom: 10px;
+      box-shadow: var(--shadow); border: 1px solid var(--border);
+      transition: border-color .15s, box-shadow .15s;
+    }}
+    .card:hover {{ border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,.08); }}
+    .card .fonte {{
+      font-size: 0.75rem; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.03em;
+      margin-bottom: 4px;
+    }}
+    .card h2 {{ font-size: 0.9375rem; font-weight: 500; margin: 0 0 6px 0; line-height: 1.35; }}
+    .card h2 a {{ color: var(--text); text-decoration: none; }}
+    .card h2 a:hover {{ color: var(--accent); text-decoration: underline; }}
+    .card .meta {{
+      font-size: 0.75rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
+    }}
+    .card .tag {{
+      display: inline-block; padding: 2px 8px;
+      border-radius: 4px; font-size: 0.6875rem;
+      font-weight: 500; color: #fff; white-space: nowrap;
+    }}
+    .footer {{
+      margin-top: 40px; padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem; color: var(--text-muted);
+      text-align: center;
+    }}
+    @media (max-width: 600px) {{
+      .wrap {{ padding: 16px 14px 32px; }}
+      .header {{ padding: 20px 18px; }}
+      .header h1 {{ font-size: 1.5rem; }}
+      .card {{ padding: 14px 16px; }}
+    }}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <h1>Newsflow Macro Brasil</h1>
+      <div class="stats">
+        <span class="stat">{total} notícias</span>
+        <span class="stat">Últimas {periodo_horas}h</span>
+      </div>
+      <div class="meta-bar">
+        <span><strong>Fontes:</strong> {escape(fontes_str)}</span>
+        <span><strong>Atualizado em</strong> {escape(data_formatada)}</span>
+      </div>
+    </header>
+"""
+
     for n in todas:
         titulo = escape((n.get("titulo") or "").strip())
-        resumo = escape((n.get("resumo") or "").strip())
         tema = (n.get("tema") or "").strip()
+        if tema == "Mundo":
+            continue
         cor = CORES_TEMAS.get(tema, "#95a5a6")
         fonte = (n.get("fonte") or "").strip()
         link = escape((n.get("link") or "#").strip())
         data = (n.get("data") or "").strip()
         hora = (n.get("hora") or "").strip()
-        dh = f"{data} {hora}".strip()
-        html.append(f'<tr data-titulo="{escape(titulo.lower())}" data-resumo="{escape(resumo.lower())}" data-categoria="{escape(tema)}" data-fonte="{escape(fonte.lower())}" data-datahora="{escape(dh)}">')
-        html.append(f'<td class="titulo-cell">{titulo}</td>')
-        html.append(f'<td class="resumo-cell">{resumo[:300] + ("..." if len(resumo) > 300 else "") if resumo else "—"}</td>')
-        html.append(f'<td><span class="badge" style="background:{cor};">{escape(tema) or "—"}</span></td>')
-        html.append(f'<td class="fonte-cell">{escape(fonte) or "—"}</td>')
-        html.append(f'<td class="link-cell"><a href="{link}" target="_blank">Abrir</a></td>')
-        html.append(f'<td class="dh-cell">{escape(dh)}</td>')
-        html.append("</tr>")
-    html.append("</tbody></table>")
-    html.append("</div>")
-    html.append("<script>")
-    html.append("""
-    let allRows = Array.from(document.querySelectorAll('#tableBody tr'));
-    let currentSort = { col: 'datahora', dir: 'desc' };
-    let currentPage = 1;
-    const rowsPerPage = 25;
-    function updateTable() {
-        const search = document.getElementById('searchInput').value.toLowerCase();
-        const categoria = document.getElementById('filterCategoria').value.toLowerCase();
-        const tbody = document.getElementById('tableBody');
-        const countSpan = document.getElementById('resultCount');
-        let filtered = allRows.filter(row => {
-            const titulo = row.dataset.titulo || '';
-            const resumo = row.dataset.resumo || '';
-            const cat = row.dataset.categoria || '';
-            const matchSearch = !search || titulo.includes(search) || resumo.includes(search);
-            const matchCat = !categoria || cat.toLowerCase() === categoria;
-            return matchSearch && matchCat;
-        });
-        filtered.sort((a, b) => {
-            const aVal = a.dataset[currentSort.col] || '';
-            const bVal = b.dataset[currentSort.col] || '';
-            if (currentSort.col === 'datahora') {
-                const aDate = parseDateTime(aVal);
-                const bDate = parseDateTime(bVal);
-                return currentSort.dir === 'asc' ? aDate - bDate : bDate - aDate;
-            }
-            const cmp = aVal.localeCompare(bVal);
-            return currentSort.dir === 'asc' ? cmp : -cmp;
-        });
-        const totalPages = Math.ceil(filtered.length / rowsPerPage);
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const pageRows = filtered.slice(start, end);
-        tbody.innerHTML = '';
-        pageRows.forEach(row => tbody.appendChild(row.cloneNode(true)));
-        countSpan.textContent = `Mostrando ${start + 1}-${Math.min(end, filtered.length)} de ${filtered.length} notícias`;
-        updatePagination(totalPages);
-        updateSortIndicators();
-    }
-    function parseDateTime(str) {
-        const parts = str.trim().split(' ');
-        if (parts.length !== 2) return 0;
-        const [data, hora] = parts;
-        const [d, m, y] = data.split('/');
-        const [h, min] = hora.split(':');
-        return new Date(y, m-1, d, h, min).getTime();
-    }
-    function updateSortIndicators() {
-        document.querySelectorAll('th.sortable').forEach(th => {
-            th.classList.remove('sort-asc', 'sort-desc');
-            if (th.dataset.sort === currentSort.col) {
-                th.classList.add(currentSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
-            }
-        });
-    }
-    function updatePagination(totalPages) {
-        const pagDiv = document.querySelector('.pagination');
-        if (!pagDiv) { const wrapper = document.querySelector('.table-wrapper'); const pag = document.createElement('div'); pag.className = 'pagination'; wrapper.appendChild(pag); }
-        const pag = document.querySelector('.pagination');
-        pag.innerHTML = '';
-        if (totalPages <= 1) return;
-        const prev = document.createElement('button'); prev.textContent = '« Anterior'; prev.disabled = currentPage === 1; prev.onclick = () => { currentPage--; updateTable(); }; pag.appendChild(prev);
-        for (let i = 1; i <= totalPages; i++) {
-            if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-                const btn = document.createElement('button'); btn.textContent = i; btn.className = i === currentPage ? 'active' : '';
-                btn.onclick = () => { currentPage = i; updateTable(); }; pag.appendChild(btn);
-            } else if (i === currentPage - 3 || i === currentPage + 3) {
-                const span = document.createElement('span'); span.textContent = '...'; span.style.padding = '8px'; pag.appendChild(span);
-            }
-        }
-        const next = document.createElement('button'); next.textContent = 'Próxima »'; next.disabled = currentPage === totalPages; next.onclick = () => { currentPage++; updateTable(); }; pag.appendChild(next);
-    }
-    document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; updateTable(); });
-    document.getElementById('filterCategoria').addEventListener('change', () => { currentPage = 1; updateTable(); });
-    document.querySelectorAll('th.sortable').forEach(th => {
-        th.addEventListener('click', () => {
-            const col = th.dataset.sort;
-            if (currentSort.col === col) { currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc'; } else { currentSort.col = col; currentSort.dir = 'asc'; }
-            currentPage = 1; updateTable();
-        });
-    });
-    updateTable();
-    """)
-    html.append("</script>")
-    html.append("</div></body></html>")
+        hora_rel = escape(_hora_relativa(data, hora))
+        tema_esc = escape(tema) if tema else ""
+
+        html += f"""    <article class="card">
+      <div class="fonte">{escape(fonte)}</div>
+      <h2><a href="{link}" target="_blank" rel="noopener">{titulo}</a></h2>
+      <div class="meta">
+        {f'<span class="tag" style="background:{cor}">{tema_esc}</span>' if tema_esc else ''}
+        <span>{hora_rel}</span>
+      </div>
+    </article>
+"""
+
+    html += """    <div class="footer">Newsflow Macro Brasil — atualização automática a cada 30s</div>
+  </div>
+</body>
+</html>"""
+
     arquivo_saida.parent.mkdir(parents=True, exist_ok=True)
     with open(arquivo_saida, "w", encoding="utf-8") as f:
-        f.write("\n".join(html))
+        f.write(html)
 
 
 def gerar_painel():
-    # Carregar e mesclar todos os JSONs disponíveis (Valor, Estadão)
+    # Carregar e mesclar todos os JSONs disponíveis
     por_tema_merged = {}
     data_coleta = ""
     periodo_horas = 24
@@ -295,19 +265,15 @@ def gerar_painel():
 
     if not data_coleta:
         data_coleta = datetime.now().isoformat()
-    if data_coleta:
-        try:
-            dt = datetime.fromisoformat(data_coleta.replace("Z", "+00:00"))
-            data_formatada = dt.strftime("%d/%m/%Y %H:%M")
-        except Exception:
-            data_formatada = data_coleta[:16]
-    else:
-        data_formatada = datetime.now().strftime("%d/%m/%Y %H:%M")
+    try:
+        dt = datetime.fromisoformat(data_coleta.replace("Z", "+00:00"))
+        data_formatada = dt.strftime("%d/%m/%Y %H:%M")
+    except Exception:
+        data_formatada = data_coleta[:16]
 
-    temas_unicos = sorted(set(n.get("tema", "") for n in todas if n.get("tema") and n.get("tema") != "Mundo"))
-    _escrever_html_painel(todas, data_formatada, periodo_horas, ARQUIVO_PAINEL, temas_unicos)
+    _escrever_html_painel(todas, data_formatada, periodo_horas, ARQUIVO_PAINEL)
     print(f"Painel gerado: {ARQUIVO_PAINEL}")
-    print(f"  Notícias: {len(todas)} | Categorias: {len(temas_unicos)}")
+    print(f"  Notícias: {len(todas)}")
 
 
 if __name__ == "__main__":
