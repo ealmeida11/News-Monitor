@@ -39,6 +39,7 @@ COLETORES = [
     ("Folha", "coletores/folha.py"),
     ("O Globo", "coletores/oglobo.py"),
     ("CNN Brasil", "coletores/cnn.py"),
+    ("Metrópoles", "coletores/metropoles.py"),
 ]
 OUTPUT_DIR = BASE_DIR / "output"
 ARQUIVOS_JSON = [
@@ -47,6 +48,7 @@ ARQUIVOS_JSON = [
     OUTPUT_DIR / "folha_classificado_24h.json",
     OUTPUT_DIR / "oglobo_classificado_24h.json",
     OUTPUT_DIR / "cnn_classificado_24h.json",
+    OUTPUT_DIR / "metropoles_classificado_24h.json",
 ]
 
 

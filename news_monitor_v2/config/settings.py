@@ -22,7 +22,7 @@ LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
 # Fontes atuais para validação e coleta
-FONTES_ATUAIS = ["Valor Econômico", "Estadão", "Folha de S.Paulo", "O Globo", "CNN Brasil"]
+FONTES_ATUAIS = ["Valor Econômico", "Estadão", "Folha de S.Paulo", "O Globo", "CNN Brasil", "Metrópoles"]
 
 # Temas para classificação (futuro)
 TEMAS = [

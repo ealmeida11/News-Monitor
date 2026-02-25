@@ -21,6 +21,7 @@ ARQUIVOS_JSON = [
     OUTPUT_DIR / "folha_classificado_24h.json",
     OUTPUT_DIR / "oglobo_classificado_24h.json",
     OUTPUT_DIR / "cnn_classificado_24h.json",
+    OUTPUT_DIR / "metropoles_classificado_24h.json",
 ]
 ARQUIVO_PAINEL = OUTPUT_DIR / "painel_dashboard.html"
 
