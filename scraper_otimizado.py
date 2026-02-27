@@ -344,6 +344,7 @@ class UnifiedNewsScraper:
             #     log_output=os.devnull  # Suprimir logs do ChromeDriver
             # )
             # driver = webdriver.Chrome(service=service, options=chrome_options)
+            print("Usando Chrome do sistema...")
             driver = webdriver.Chrome(command_executor="http://airflow.jgp.com.br:4445", options=chrome_options)
             
             # Configurar timeouts otimizados

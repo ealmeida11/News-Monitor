@@ -116,7 +116,7 @@ def main():
     print()
 
     chrome_options = ChromeOptions()
-    chrome_options.add_argument("--headless")
+    #chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
@@ -143,8 +143,9 @@ def main():
     parar_por_banco = False
 
     try:
-        service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        #service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)
+        #driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver = webdriver.Chrome(command_executor="http://airflow.jgp.com.br:4445", options=chrome_options)
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
 
