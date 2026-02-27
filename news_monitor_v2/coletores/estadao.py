@@ -200,6 +200,10 @@ def main():
             command_executor=SELENIUM_GRID_URL,
             options=chrome_options,
         )
+
+        sleep(120)
+
+
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
 
