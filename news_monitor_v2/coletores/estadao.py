@@ -41,6 +41,13 @@ def _extrair_categoria_estadao(link):
     return "Não especificada"
 
 
+def _ajustar_fuso(data, hora, delta_horas=-3):
+    """Ajusta data/hora pelo fuso do servidor (UTC -> BRT)."""
+    dt = datetime.strptime(f"{data} {hora}", "%d/%m/%Y %H:%M")
+    dt += timedelta(hours=delta_horas)
+    return dt.strftime("%d/%m/%Y"), dt.strftime("%H:%M")
+
+
 def noticia_dentro_24h(data, hora):
     """Verifica se está dentro das últimas 24 horas. data=DD/MM/YYYY, hora=HH:MM."""
     try:
@@ -200,8 +207,6 @@ def main():
             options=chrome_options,
         )
 
-        sleep(120)
-
 
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
@@ -258,6 +263,7 @@ def main():
                     data, hora = _parse_data_hora_estadao(data_hora_texto, referencia=agora)
                     if not data or not hora:
                         continue
+                    data, hora = _ajustar_fuso(data, hora)
 
                     if not noticia_dentro_24h(data, hora):
                         antigas_nesta_rodada += 1

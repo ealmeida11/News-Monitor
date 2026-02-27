@@ -28,6 +28,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from classificador.lexico_classifier import classificar, NAO_CLASSIFICADO
 
 
+def _ajustar_fuso(data, hora, delta_horas=-3):
+    """Ajusta data/hora pelo fuso do servidor (UTC -> BRT)."""
+    dt = datetime.strptime(f"{data} {hora}", "%d/%m/%Y %H:%M")
+    dt += timedelta(hours=delta_horas)
+    return dt.strftime("%d/%m/%Y"), dt.strftime("%H:%M")
+
+
 def noticia_dentro_24h(data, hora):
     """Verifica se está dentro das últimas 24 horas. data=DD/MM/YYYY, hora=HH:MM."""
     try:
@@ -147,6 +154,7 @@ def _extrair_noticias_pagina(soup, titulos_unicos, limite_24h, categorias_exclui
                         break
         if not data or not hora:
             continue
+        data, hora = _ajustar_fuso(data, hora)
         if not noticia_dentro_24h(data, hora):
             continue
         if categoria in categorias_excluidas:
@@ -227,6 +235,7 @@ def _extrair_editoriais_blogs(soup, titulos_unicos, limite_24h):
                         break
         if not autor or not data or not hora:
             continue
+        data, hora = _ajustar_fuso(data, hora)
         if not noticia_dentro_24h(data, hora):
             continue
         titulos_unicos.add(titulo)
@@ -276,7 +285,6 @@ def main():
 
     chrome_options = ChromeOptions()
     # chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--user-data-dir=/home/seluser/chrome-profile")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
@@ -369,6 +377,7 @@ def main():
                                 hora = f"{m.group(4)}:{m.group(5)}"
                     if not data or not hora:
                         continue
+                    data, hora = _ajustar_fuso(data, hora)
                     if not noticia_dentro_24h(data, hora):
                         continue
                     if links_existentes and link in links_existentes:

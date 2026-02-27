@@ -44,6 +44,13 @@ def _extrair_categoria_folha(link):
     return "Não especificada"
 
 
+def _ajustar_fuso(data, hora, delta_horas=-3):
+    """Ajusta data/hora pelo fuso do servidor (UTC -> BRT)."""
+    dt = datetime.strptime(f"{data} {hora}", "%d/%m/%Y %H:%M")
+    dt += timedelta(hours=delta_horas)
+    return dt.strftime("%d/%m/%Y"), dt.strftime("%H:%M")
+
+
 def noticia_dentro_24h(data, hora):
     """Verifica se está dentro das últimas 24 horas. data=DD/MM/YYYY, hora=HH:MM."""
     try:
@@ -123,6 +130,7 @@ def _extrair_editoriais_colunaseblogs(soup, titulos_unicos, links_unicos, limite
         data_hora = _processar_data_folha(time_el.get_text(strip=True)) if time_el else None
         if not data_hora:
             continue
+        data_hora = _ajustar_fuso(data_hora[0], data_hora[1])
         if not noticia_dentro_24h(data_hora[0], data_hora[1]):
             continue
         titulos_unicos.add(titulo)
@@ -310,6 +318,8 @@ def main():
                                     )
                                     if time_el:
                                         data_hora = _processar_data_folha(time_el.get_text(strip=True))
+                                        if data_hora:
+                                            data_hora = _ajustar_fuso(data_hora[0], data_hora[1])
                                         if data_hora and noticia_dentro_24h(data_hora[0], data_hora[1]):
                                             if links_existentes and link in links_existentes:
                                                 ja_no_banco += 1
@@ -356,6 +366,7 @@ def main():
                     data_hora = _processar_data_folha(time_el.get_text(strip=True))
                     if not data_hora:
                         continue
+                    data_hora = _ajustar_fuso(data_hora[0], data_hora[1])
                     if not noticia_dentro_24h(data_hora[0], data_hora[1]):
                         antigas_nesta_rodada += 1
                         continue

@@ -72,6 +72,13 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
         f.write("\n".join(linhas))
 
 
+def _ajustar_fuso(data, hora, delta_horas=-3):
+    """Ajusta data/hora pelo fuso do servidor (UTC -> BRT)."""
+    dt = datetime.strptime(f"{data} {hora}", "%d/%m/%Y %H:%M")
+    dt += timedelta(hours=delta_horas)
+    return dt.strftime("%d/%m/%Y"), dt.strftime("%H:%M")
+
+
 def noticia_dentro_24h(data, hora):
     """Verifica se uma notícia está dentro das últimas 24 horas."""
     try:
@@ -208,6 +215,7 @@ def main():
 
                     data = data_match.group(1)
                     hora = data_match.group(2)
+                    data, hora = _ajustar_fuso(data, hora)
 
                     # Filtrar por 24 horas
                     if not noticia_dentro_24h(data, hora):
@@ -292,6 +300,7 @@ def main():
                         continue
                     data = data_match.group(1)
                     hora = data_match.group(2)
+                    data, hora = _ajustar_fuso(data, hora)
                     if not noticia_dentro_24h(data, hora):
                         continue
                     if links_existentes and link in links_existentes:

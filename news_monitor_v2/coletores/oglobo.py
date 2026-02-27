@@ -37,6 +37,13 @@ def noticia_dentro_24h(data, hora):
         return False
 
 
+def _ajustar_fuso(data, hora, delta_horas=-3):
+    """Ajusta data/hora pelo fuso do servidor (UTC -> BRT)."""
+    dt = datetime.strptime(f"{data} {hora}", "%d/%m/%Y %H:%M")
+    dt += timedelta(hours=delta_horas)
+    return dt.strftime("%d/%m/%Y"), dt.strftime("%H:%M")
+
+
 def _calcular_tempo_absoluto(tempo_relativo, referencia=None):
     """
     Converte tempo relativo do O Globo para (data, hora).
@@ -225,6 +232,7 @@ def main():
                         dt = datetime.fromisoformat(dt_str)
                         data = dt.strftime("%d/%m/%Y")
                         hora = dt.strftime("%H:%M")
+                        data, hora = _ajustar_fuso(data, hora)
                         if not noticia_dentro_24h(data, hora):
                             continue
                         if links_existentes and href in links_existentes:
