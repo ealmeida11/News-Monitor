@@ -276,7 +276,7 @@ class UnifiedNewsScraper:
         
         # Configurações otimizadas para melhor performance e estabilidade
         chrome_args = [
-            "--headless",
+            # "--headless",
             "--disable-gpu",
             "--no-sandbox",
             "--disable-dev-shm-usage",
