@@ -13,6 +13,29 @@ import sys
 import time
 from collections import defaultdict
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+COOKIES_FILE = os.path.join(SCRIPT_DIR, "estadao_login.json")
+
+def carregar_cookies(driver):
+    """Carrega cookies salvos"""
+    if not os.path.exists(COOKIES_FILE):
+        return False
+    
+    with open(COOKIES_FILE, 'r') as f:
+        cookies = json.load(f)
+    
+    for cookie in cookies:
+        if 'expiry' in cookie:
+            cookie['expiry'] = int(cookie['expiry'])
+        try:
+            driver.add_cookie(cookie)
+        except:
+            pass  # Ignora cookies inválidos
+    
+    print(f"✓ {len(cookies)} cookies carregados")
+    return True
+
+
 # Evitar UnicodeEncodeError no console Windows (cp1252)
 if sys.stdout.encoding and sys.stdout.encoding.lower().replace("-", "") != "utf8":
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
@@ -216,7 +239,10 @@ def main():
             EC.presence_of_element_located((By.CSS_SELECTOR, "a[data-component-name='lista-ultimas']"))
         )
         time.sleep(2)
-
+        if carregar_cookies(driver):
+            print("Recarregando página com cookies...")
+            driver.refresh()
+            time.sleep(2)
         clique = 0
         tentativas_sem_novas = 0
         antigas_consecutivas = 0
