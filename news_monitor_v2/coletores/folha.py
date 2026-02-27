@@ -298,6 +298,8 @@ def main():
                                 link = main_headline.get("href") or "#"
                                 if "folha.uol.com.br" not in link:
                                     link = ("https://www.folha.uol.com.br" + link) if link.startswith("/") else link
+                                if "f5.folha.uol.com.br" in link:
+                                    continue
                                 categoria = _extrair_categoria_folha(link)
                                 if categoria not in categorias_excluidas_folha:
                                     time_el = (
@@ -342,6 +344,8 @@ def main():
                         repetidas_nesta_rodada += 1
                         continue
                     link = artigo.get("href") or "#"
+                    if "f5.folha.uol.com.br" in link:
+                        continue
                     categoria = _extrair_categoria_folha(link)
                     if categoria in categorias_excluidas_folha:
                         continue
