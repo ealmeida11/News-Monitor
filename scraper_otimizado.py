@@ -276,7 +276,7 @@ class UnifiedNewsScraper:
         
         # Configurações otimizadas para melhor performance e estabilidade
         chrome_args = [
-            "--headless",
+            #"--headless",
             "--disable-gpu",
             "--no-sandbox",
             "--disable-dev-shm-usage",
@@ -329,8 +329,8 @@ class UnifiedNewsScraper:
             chrome_options = ChromeOptions()
             for arg in chrome_args:
                 chrome_options.add_argument(arg)
-            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
-            chrome_options.add_experimental_option('useAutomationExtension', False)
+            # chrome_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
+            # chrome_options.add_experimental_option('useAutomationExtension', False)
             
             # Suprimir logs do ChromeDriver
             os.environ['WDM_LOG'] = '0'
@@ -338,12 +338,13 @@ class UnifiedNewsScraper:
             os.environ['WDM_LOG_LEVEL'] = '0'
             
             # Tentar baixar driver automaticamente
-            print("Baixando ChromeDriver automaticamente...")
-            service = ChromeService(
-                ChromeDriverManager().install(),
-                log_output=os.devnull  # Suprimir logs do ChromeDriver
-            )
-            driver = webdriver.Chrome(service=service, options=chrome_options)
+            # print("Baixando ChromeDriver automaticamente...")
+            # service = ChromeService(
+            #     ChromeDriverManager().install(),
+            #     log_output=os.devnull  # Suprimir logs do ChromeDriver
+            # )
+            # driver = webdriver.Chrome(service=service, options=chrome_options)
+            driver = webdriver.Chrome(command_executor="http://airflow.jgp.com.br:4445", options=chrome_options)
             
             # Configurar timeouts otimizados
             driver.set_page_load_timeout(180)  # 3 minutos para carregar página
