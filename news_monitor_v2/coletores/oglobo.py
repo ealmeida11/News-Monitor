@@ -9,6 +9,7 @@ Não incluído no painel até revisão e aprovação.
 
 import io
 import json
+import os
 import re
 import sys
 import time
@@ -24,6 +25,29 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from classificador.lexico_classifier import classificar, NAO_CLASSIFICADO
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+COOKIES_FILE = os.path.join(SCRIPT_DIR, "oglobo_login.json")
+
+
+def carregar_cookies(driver):
+    """Carrega cookies salvos"""
+    if not os.path.exists(COOKIES_FILE):
+        return False
+
+    with open(COOKIES_FILE, 'r') as f:
+        cookies = json.load(f)
+
+    for cookie in cookies:
+        if 'expiry' in cookie:
+            cookie['expiry'] = int(cookie['expiry'])
+        try:
+            driver.add_cookie(cookie)
+        except:
+            pass  # Ignora cookies inválidos
+
+    print(f"  {len(cookies)} cookies carregados")
+    return True
 
 
 def noticia_dentro_24h(data, hora):
@@ -150,7 +174,7 @@ def main():
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
+    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4444"
 
     URL_BASE = "https://oglobo.globo.com/ultimas-noticias/"
 
@@ -197,6 +221,13 @@ def main():
         )
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
+
+        # Carregar cookies
+        driver.get(URL_BASE)
+        if carregar_cookies(driver):
+            print("  Recarregando página com cookies...")
+            driver.refresh()
+            time.sleep(2)
 
         # ── Editoriais: blogs (entrar em cada artigo para pegar data) ──
         print("  Coletando editoriais (blogs O Globo)...")

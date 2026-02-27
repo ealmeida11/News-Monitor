@@ -8,6 +8,7 @@ Objetivo: analisar classificação e dar instruções para ajustes.
 
 import io
 import json
+import os
 import re
 import sys
 import time
@@ -23,6 +24,29 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from classificador.lexico_classifier import classificar, NAO_CLASSIFICADO
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+COOKIES_FILE = os.path.join(SCRIPT_DIR, "folha_login.json")
+
+
+def carregar_cookies(driver):
+    """Carrega cookies salvos"""
+    if not os.path.exists(COOKIES_FILE):
+        return False
+
+    with open(COOKIES_FILE, 'r') as f:
+        cookies = json.load(f)
+
+    for cookie in cookies:
+        if 'expiry' in cookie:
+            cookie['expiry'] = int(cookie['expiry'])
+        try:
+            driver.add_cookie(cookie)
+        except:
+            pass  # Ignora cookies inválidos
+
+    print(f"  {len(cookies)} cookies carregados")
+    return True
 
 
 def _extrair_categoria_folha(link):
@@ -207,7 +231,7 @@ def main():
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
+    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4444"
 
     URL_BASE = "https://www1.folha.uol.com.br/ultimas-noticias/"
 
@@ -256,6 +280,10 @@ def main():
         driver.implicitly_wait(10)
 
         driver.get(URL_BASE)
+        if carregar_cookies(driver):
+            print("  Recarregando página com cookies...")
+            driver.refresh()
+            time.sleep(2)
         WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.CLASS_NAME, "c-main-headline__title"))
         )

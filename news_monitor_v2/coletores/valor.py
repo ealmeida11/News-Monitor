@@ -6,11 +6,17 @@ classifica cada uma por tema e mostra agrupadas por tema.
 Também mostra as não classificadas para identificar gaps nas palavras-chave.
 """
 
+import io
 import json
+import os
 import re
 import sys
 import time
 from collections import defaultdict
+
+# Evitar UnicodeEncodeError no console Windows (cp1252)
+if sys.stdout.encoding and sys.stdout.encoding.lower().replace("-", "") != "utf8":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -21,6 +27,29 @@ sys.path.insert(0, str(PROJECT_ROOT))
 # Importar classificador
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from classificador.lexico_classifier import classificar, NAO_CLASSIFICADO
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+COOKIES_FILE = os.path.join(SCRIPT_DIR, "valor_login.json")
+
+
+def carregar_cookies(driver):
+    """Carrega cookies salvos"""
+    if not os.path.exists(COOKIES_FILE):
+        return False
+
+    with open(COOKIES_FILE, 'r') as f:
+        cookies = json.load(f)
+
+    for cookie in cookies:
+        if 'expiry' in cookie:
+            cookie['expiry'] = int(cookie['expiry'])
+        try:
+            driver.add_cookie(cookie)
+        except:
+            pass  # Ignora cookies inválidos
+
+    print(f"  {len(cookies)} cookies carregados")
+    return True
 
 
 def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
@@ -111,7 +140,7 @@ def main():
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
+    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4444"
 
     URL_BASE = "https://valor.globo.com/ultimas-noticias/"
 
@@ -155,6 +184,13 @@ def main():
         )
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
+
+        # Carregar cookies
+        driver.get(URL_BASE)
+        if carregar_cookies(driver):
+            print("  Recarregando página com cookies...")
+            driver.refresh()
+            time.sleep(2)
 
         pagina = 1
         limite_paginas = 50  # Aumentado para garantir coleta completa
