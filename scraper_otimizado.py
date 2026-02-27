@@ -14,13 +14,13 @@ import signal
 import sys
 from datetime import datetime, timedelta
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
+
+SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
 
 # Suprimir warnings desnecessários
 warnings.filterwarnings("ignore")
@@ -276,7 +276,7 @@ class UnifiedNewsScraper:
         
         # Configurações otimizadas para melhor performance e estabilidade
         chrome_args = [
-            #"--headless",
+            "--headless",
             "--disable-gpu",
             "--no-sandbox",
             "--disable-dev-shm-usage",
@@ -344,8 +344,11 @@ class UnifiedNewsScraper:
             #     log_output=os.devnull  # Suprimir logs do ChromeDriver
             # )
             # driver = webdriver.Chrome(service=service, options=chrome_options)
-            print("Usando Chrome do sistema...")
-            driver = webdriver.Chrome(command_executor="http://airflow.jgp.com.br:4445", options=chrome_options)
+            print("Conectando ao Selenium Grid...")
+            driver = webdriver.Remote(
+                command_executor=SELENIUM_GRID_URL,
+                options=chrome_options,
+            )
             
             # Configurar timeouts otimizados
             driver.set_page_load_timeout(180)  # 3 minutos para carregar página
@@ -356,31 +359,8 @@ class UnifiedNewsScraper:
             return driver
             
         except Exception as e:
-            print(f"Erro ao baixar ChromeDriver automaticamente: {e}")
-            print("Tentando usar Chrome do sistema...")
-            
-            try:
-                # Tentar usar Chrome do sistema
-                chrome_options = ChromeOptions()
-                for arg in chrome_args:
-                    chrome_options.add_argument(arg)
-                chrome_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
-                chrome_options.add_experimental_option('useAutomationExtension', False)
-                
-                service = ChromeService(log_output=os.devnull)  # Suprimir logs
-                driver = webdriver.Chrome(service=service, options=chrome_options)
-                
-                # Configurar timeouts otimizados
-                driver.set_page_load_timeout(180)
-                driver.implicitly_wait(15)
-                driver.set_script_timeout(60)
-                
-                print("Chrome do sistema configurado com sucesso!")
-                return driver
-                
-            except Exception as e2:
-                print(f"Erro ao usar Chrome do sistema: {e2}")
-                raise Exception("Não foi possível configurar o Chrome. Verifique se o Chrome está instalado e se há conectividade com a internet.")
+            print(f"Erro ao conectar ao Selenium Grid: {e}")
+            raise Exception(f"Não foi possível conectar ao Selenium Grid em {SELENIUM_GRID_URL}. Verifique se o Grid está ativo.")
     
     def fechar_driver(self):
         """Fecha o driver do navegador e mata processos Chrome residuais"""

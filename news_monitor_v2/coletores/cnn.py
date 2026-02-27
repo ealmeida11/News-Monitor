@@ -248,13 +248,13 @@ def main():
     os.environ["WDM_LOG_LEVEL"] = "0"
 
     from selenium import webdriver
-    from selenium.webdriver.chrome.service import Service as ChromeService
     from selenium.webdriver.chrome.options import Options as ChromeOptions
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
-    from webdriver_manager.chrome import ChromeDriverManager
     from bs4 import BeautifulSoup
+
+    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
 
     URL_BASE = "https://www.cnnbrasil.com.br/ultimas-noticias/"
 
@@ -281,7 +281,6 @@ def main():
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--log-level=3")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
     for arg in ["--disable-logging", "--silent"]:
         chrome_options.add_argument(arg)
 
@@ -300,8 +299,10 @@ def main():
             pass
 
     try:
-        service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver = webdriver.Remote(
+            command_executor=SELENIUM_GRID_URL,
+            options=chrome_options,
+        )
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
 
