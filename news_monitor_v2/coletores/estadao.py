@@ -186,7 +186,7 @@ def main():
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4444"
+    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
 
     URL_BASE = "https://www.estadao.com.br/ultimas/"
 
@@ -200,6 +200,8 @@ def main():
     print(f"  Inclusao: noticias entre {limite_24h:%d/%m/%Y %H:%M} e {agora:%d/%m/%Y %H:%M}")
     print()
 
+    UBLOCK_CRX = os.path.join(SCRIPT_DIR, "ublock.crx")
+
     chrome_options = ChromeOptions()
     #chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
@@ -209,6 +211,8 @@ def main():
     chrome_options.add_argument("--log-level=3")
     for arg in ["--disable-logging", "--silent"]:
         chrome_options.add_argument(arg)
+    if os.path.exists(UBLOCK_CRX):
+        chrome_options.add_extension(UBLOCK_CRX)
 
     driver = None
     noticias_coletadas = []
@@ -241,6 +245,7 @@ def main():
             print("Recarregando página com cookies...")
             driver.refresh()
             time.sleep(2)
+            
         WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "a[data-component-name='lista-ultimas']"))
         )

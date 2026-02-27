@@ -131,12 +131,41 @@ def main():
     except Exception:
         pass
 
-    # ---- Coleta ----
-    print("  Coleta")
+    # ---- Coleta (paralela) ----
+    import time as _time
+    print("  Coleta (6 fontes em paralelo)")
     print("  " + "-" * (W - 2))
+    env = {
+        **os.environ,
+        "PYTHONPATH": os.pathsep.join([str(PROJECT_ROOT), str(BASE_DIR)]),
+        "PYTHONIOENCODING": "utf-8",
+    }
+    processos = {}
+    for nome, script_rel in COLETORES:
+        script_path = BASE_DIR / script_rel
+        if script_path.exists():
+            p = subprocess.Popen(
+                [sys.executable, str(script_path)],
+                cwd=str(BASE_DIR),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                env=env,
+            )
+            processos[nome] = p
+            print(f"    {nome:<22} [iniciado]")
+            _time.sleep(3)  # stagger: evitar sobrecarga no Grid
+        else:
+            print(f"    {nome:<22} [arquivo nao encontrado]")
+
+    print()
+    print("  Aguardando conclusao...")
     ok = 0
-    for nome, script in COLETORES:
-        status = _rodar_coleta_fonte(nome, script)
+    for nome, p in processos.items():
+        p.wait()  # sem timeout — cada coletor para pelas próprias regras
+        status = p.returncode == 0
         ok += status
         sym = "ok" if status else ".."
         print(f"    {nome:<22} [{sym}]")

@@ -231,7 +231,7 @@ def main():
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4444"
+    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
 
     URL_BASE = "https://www1.folha.uol.com.br/ultimas-noticias/"
 

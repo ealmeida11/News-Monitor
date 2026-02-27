@@ -140,7 +140,7 @@ def main():
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4444"
+    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
 
     URL_BASE = "https://valor.globo.com/ultimas-noticias/"
 
@@ -151,6 +151,8 @@ def main():
     print(f"  Período: últimas 24 horas (desde {datetime.now() - timedelta(hours=24):%d/%m/%Y %H:%M})")
     print()
 
+    UBLOCK_CRX = os.path.join(SCRIPT_DIR, "ublock.crx")
+
     chrome_options = ChromeOptions()
     # chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
@@ -160,6 +162,8 @@ def main():
     chrome_options.add_argument("--log-level=3")
     for arg in ["--disable-logging", "--silent"]:
         chrome_options.add_argument(arg)
+    if os.path.exists(UBLOCK_CRX):
+        chrome_options.add_extension(UBLOCK_CRX)
 
     driver = None
     noticias_coletadas = []
