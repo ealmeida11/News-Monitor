@@ -170,6 +170,17 @@ EDITORIAL_AUTORES_CNN = {
     "Gustavo Uribe", "Isabel Mega", "Thaís Herédia", "Débora Bergamasco",
 }
 URL_CNN_BLOGS = "https://www.cnnbrasil.com.br/blogs/"
+# Blogs individuais (coleta direta na página de cada autor)
+EDITORIAL_BLOGS_CNN = [
+    ("https://www.cnnbrasil.com.br/blogs/caio-junqueira/", "Caio Junqueira"),
+    ("https://www.cnnbrasil.com.br/blogs/matheus-teixeira/", "Matheus Teixeira"),
+    ("https://www.cnnbrasil.com.br/blogs/teo-cury/", "Teo Cury"),
+    ("https://www.cnnbrasil.com.br/blogs/larissa-rodrigues/", "Larissa Rodrigues"),
+    ("https://www.cnnbrasil.com.br/blogs/gustavo-uribe/", "Gustavo Uribe"),
+    ("https://www.cnnbrasil.com.br/blogs/isabel-mega/", "Isabel Mega"),
+    ("https://www.cnnbrasil.com.br/blogs/thais-heredia/", "Thaís Herédia"),
+    ("https://www.cnnbrasil.com.br/blogs/debora-bergamasco/", "Débora Bergamasco"),
+]
 
 
 def _extrair_editoriais_blogs(soup, titulos_unicos, limite_24h):
@@ -323,9 +334,57 @@ def main():
                 next_url = f"{URL_BASE}pagina/{num_pag + 1}/"
                 time.sleep(1)
 
-        # Coleta editorial: blogs CNN (colunistas em EDITORIAL_AUTORES_CNN)
+        # Coleta editorial: blogs individuais CNN (cada página de autor)
         print()
-        print("  Coletando editoriais (blogs CNN)...")
+        print("  Coletando editoriais (blogs individuais CNN)...")
+        for url_blog, autor_blog in EDITORIAL_BLOGS_CNN:
+            try:
+                driver.get(url_blog)
+                time.sleep(2)
+                soup = BeautifulSoup(driver.page_source, "html.parser")
+                n_blog = 0
+                for a_el in soup.find_all("a", href=True):
+                    if "cnnbrasil.com.br" not in (a_el.get("href") or ""):
+                        continue
+                    h2 = a_el.find("h2", class_=re.compile(r"text-xl\s+font-bold|font-bold\s+text-xl"))
+                    if not h2:
+                        continue
+                    titulo = h2.get_text(strip=True)
+                    if not titulo or titulo in titulos_unicos:
+                        continue
+                    link = (a_el.get("href") or "").strip()
+                    if not link.startswith("http"):
+                        link = "https://www.cnnbrasil.com.br" + link
+                    container = a_el.find_parent("li") or a_el.find_parent("article") or a_el.find_parent("div")
+                    data, hora = None, None
+                    if container:
+                        time_el = container.find("time", attrs={"datetime": True})
+                        if time_el:
+                            dt_str = time_el.get("datetime", "")
+                            m = re.search(r"(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})", dt_str)
+                            if m:
+                                data = f"{m.group(3)}/{m.group(2)}/{m.group(1)}"
+                                hora = f"{m.group(4)}:{m.group(5)}"
+                    if not data or not hora:
+                        continue
+                    if not noticia_dentro_24h(data, hora):
+                        continue
+                    if links_existentes and link in links_existentes:
+                        continue
+                    titulos_unicos.add(titulo)
+                    noticias_coletadas.append({
+                        "titulo": titulo, "resumo": "", "categoria": "Editorial",
+                        "fonte": "CNN Brasil", "data": data, "hora": hora,
+                        "link": link, "autor_editorial": autor_blog,
+                    })
+                    n_blog += 1
+                print(f"    {autor_blog}: {n_blog} artigos")
+            except Exception as e:
+                print(f"    {autor_blog}: ERRO - {e}")
+
+        # Coleta editorial: listagem geral de blogs CNN
+        print()
+        print("  Coletando editoriais (listagem blogs CNN)...")
         for num_pag in range(1, 4):
             url_blogs = URL_CNN_BLOGS if num_pag == 1 else f"{URL_CNN_BLOGS}pagina/{num_pag}/"
             try:

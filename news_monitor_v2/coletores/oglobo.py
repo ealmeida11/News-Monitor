@@ -119,6 +119,18 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html, 
 # Colunistas do O Globo (feed-post-metadata-section) que entram na categoria Editorial
 EDITORIAL_AUTORES_GLOBO = {"Bela Megale", "Fábio Graner", "Fabio Graner", "Lauro Jardim", "Miriam Leitão"}
 
+# Blogs editoriais — páginas individuais (sem data na listagem, precisa entrar no artigo)
+EDITORIAL_BLOGS_GLOBO = [
+    ("https://oglobo.globo.com/blogs/malu-gaspar/", "Malu Gaspar"),
+    ("https://oglobo.globo.com/blogs/miriam-leitao/", "Miriam Leitão"),
+    ("https://oglobo.globo.com/blogs/lauro-jardim/", "Lauro Jardim"),
+    ("https://oglobo.globo.com/blogs/bela-megale/", "Bela Megale"),
+]
+# Feeds editoriais — com tempo relativo na listagem
+EDITORIAL_FEEDS_GLOBO = [
+    ("https://oglobo.globo.com/economia/fabio-graner/", "Fábio Graner"),
+]
+
 
 def main():
     import os
@@ -178,6 +190,98 @@ def main():
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
 
+        # ── Editoriais: blogs (entrar em cada artigo para pegar data) ──
+        print("  Coletando editoriais (blogs O Globo)...")
+        for url_blog, autor_blog in EDITORIAL_BLOGS_GLOBO:
+            try:
+                driver.get(url_blog)
+                time.sleep(3)
+                soup = BeautifulSoup(driver.page_source, "html.parser")
+                links_blog = []
+                for a_el in soup.select("a.bstn-hl-link"):
+                    titulo_el = a_el.select_one("h2.bstn-hl-title")
+                    titulo = titulo_el.get_text(strip=True) if titulo_el else a_el.get_text(strip=True)
+                    href = a_el.get("href", "")
+                    if titulo and href and titulo not in titulos_unicos:
+                        links_blog.append((titulo, href))
+                for a_el in soup.select("a.feed-post-link"):
+                    titulo = a_el.get_text(strip=True)
+                    href = a_el.get("href", "")
+                    if titulo and href and titulo not in titulos_unicos:
+                        links_blog.append((titulo, href))
+                n_blog = 0
+                for titulo, href in links_blog:
+                    try:
+                        driver.get(href)
+                        time.sleep(1.5)
+                        art_soup = BeautifulSoup(driver.page_source, "html.parser")
+                        time_el = art_soup.find("time", attrs={"itemprop": "datePublished"})
+                        if not time_el:
+                            time_el = art_soup.find("time", attrs={"datetime": True})
+                        if not time_el:
+                            continue
+                        dt_str = time_el.get("datetime", "")
+                        dt = datetime.fromisoformat(dt_str)
+                        data = dt.strftime("%d/%m/%Y")
+                        hora = dt.strftime("%H:%M")
+                        if not noticia_dentro_24h(data, hora):
+                            continue
+                        if links_existentes and href in links_existentes:
+                            continue
+                        titulos_unicos.add(titulo)
+                        noticias_coletadas.append({
+                            "titulo": titulo, "resumo": "", "categoria": "Editorial",
+                            "fonte": "O Globo", "data": data, "hora": hora,
+                            "link": href, "autor_editorial": autor_blog,
+                        })
+                        n_blog += 1
+                    except Exception:
+                        continue
+                print(f"    {autor_blog}: {n_blog} artigos")
+            except Exception as e:
+                print(f"    {autor_blog}: ERRO - {e}")
+
+        # ── Editoriais: feeds (tempo relativo na listagem) ──
+        for url_feed, autor_feed in EDITORIAL_FEEDS_GLOBO:
+            try:
+                driver.get(url_feed)
+                time.sleep(2)
+                soup = BeautifulSoup(driver.page_source, "html.parser")
+                n_feed = 0
+                for art in soup.find_all("div", class_="feed-post-body"):
+                    try:
+                        link_el = art.find("a", class_="feed-post-link")
+                        if not link_el:
+                            continue
+                        titulo = link_el.get_text(strip=True)
+                        if not titulo or titulo in titulos_unicos:
+                            continue
+                        link = link_el.get("href", "")
+                        tempo_el = art.find("span", class_="feed-post-datetime")
+                        if not tempo_el:
+                            continue
+                        data, hora = _calcular_tempo_absoluto(tempo_el.get_text(strip=True), referencia=agora)
+                        if not data or not hora:
+                            break
+                        if links_existentes and link in links_existentes:
+                            continue
+                        titulos_unicos.add(titulo)
+                        noticias_coletadas.append({
+                            "titulo": titulo, "resumo": "", "categoria": "Editorial",
+                            "fonte": "O Globo", "data": data, "hora": hora,
+                            "link": link, "autor_editorial": autor_feed,
+                        })
+                        n_feed += 1
+                    except Exception:
+                        continue
+                print(f"    {autor_feed}: {n_feed} artigos")
+            except Exception as e:
+                print(f"    {autor_feed}: ERRO - {e}")
+
+        print(f"  Editoriais O Globo: {sum(1 for n in noticias_coletadas if n.get('autor_editorial'))} artigos")
+        print()
+
+        # ── Últimas notícias ──
         pagina = 1
         max_paginas = 20
         duplicatas_consecutivas = 0

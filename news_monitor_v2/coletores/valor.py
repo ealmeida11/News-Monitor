@@ -87,6 +87,9 @@ def noticia_dentro_24h(data, hora):
 EDITORIAL_AUTORES_VALOR = [
     ("https://valor.globo.com/autores/alex-ribeiro/", "Alex Ribeiro"),
     ("https://valor.globo.com/autores/andrea-jube/", "Andrea Jubé"),
+    ("https://valor.globo.com/autores/arthur-cagliari/", "Arthur Cagliari"),
+    ("https://valor.globo.com/autores/sergio-lamucci/", "Sergio Lamucci"),
+    ("https://valor.globo.com/autores/giordanna-neves/", "Giordanna Neves"),
 ]
 
 

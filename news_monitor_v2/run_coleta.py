@@ -31,6 +31,7 @@ os.environ.setdefault("WDM_LOG_LEVEL", "0")
 
 from database import db
 from config import settings
+from filtros import is_excluded
 
 # Scripts de coleta (cada um gera um JSON em output/)
 COLETORES = [
@@ -146,16 +147,23 @@ def main():
     print("  Banco")
     print("  " + "-" * (W - 2))
     inseridas = 0
+    filtradas = 0
     for arq in ARQUIVOS_JSON:
         noticias = _extrair_noticias_do_json(arq)
         for n in noticias:
             link = (n.get("link") or "").strip()
             if not link or link in links_existentes:
                 continue
+            titulo = n.get("titulo", "")
+            autor = n.get("autor", "")
+            if is_excluded(link, titulo, autor):
+                filtradas += 1
+                continue
             if db.insert_noticia(n, db_path):
                 inseridas += 1
                 links_existentes.add(link)
     print(f"    links (7 dias)  {len(links_existentes):>6}")
+    print(f"    filtradas       {filtradas:>6}")
     print(f"    inseridas       {inseridas:>6}")
     print()
 
