@@ -12,6 +12,7 @@ import re
 import sys
 import time
 from collections import defaultdict
+import os
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 COOKIES_FILE = os.path.join(SCRIPT_DIR, "estadao_login.json")
@@ -64,7 +65,7 @@ def _extrair_categoria_estadao(link):
     return "Não especificada"
 
 
-def _ajustar_fuso(data, hora, delta_horas=-3):
+def _ajustar_fuso(data, hora, delta_horas=0):
     """Ajusta data/hora pelo fuso do servidor (UTC -> BRT)."""
     dt = datetime.strptime(f"{data} {hora}", "%d/%m/%Y %H:%M")
     dt += timedelta(hours=delta_horas)
@@ -185,7 +186,7 @@ def main():
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
+    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4444"
 
     URL_BASE = "https://www.estadao.com.br/ultimas/"
 
@@ -235,14 +236,16 @@ def main():
         driver.implicitly_wait(10)
 
         driver.get(URL_BASE)
-        WebDriverWait(driver, 15).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "a[data-component-name='lista-ultimas']"))
-        )
-        time.sleep(2)
+
         if carregar_cookies(driver):
             print("Recarregando página com cookies...")
             driver.refresh()
             time.sleep(2)
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "a[data-component-name='lista-ultimas']"))
+        )
+        time.sleep(2)
+
         clique = 0
         tentativas_sem_novas = 0
         antigas_consecutivas = 0
