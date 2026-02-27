@@ -277,6 +277,7 @@ class UnifiedNewsScraper:
         # Configurações otimizadas para melhor performance e estabilidade
         chrome_args = [
             # "--headless",
+            "--user-data-dir=/home/seluser/chrome-profile",
             "--disable-gpu",
             "--no-sandbox",
             "--disable-dev-shm-usage",
