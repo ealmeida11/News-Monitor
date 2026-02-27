@@ -149,13 +149,13 @@ def main():
     os.environ["WDM_LOG_LEVEL"] = "0"
 
     from selenium import webdriver
-    from selenium.webdriver.chrome.service import Service as ChromeService
     from selenium.webdriver.chrome.options import Options as ChromeOptions
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
-    from webdriver_manager.chrome import ChromeDriverManager
     from bs4 import BeautifulSoup
+
+    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
 
     URL_BASE = "https://www.estadao.com.br/ultimas/"
 
@@ -170,13 +170,12 @@ def main():
     print()
 
     chrome_options = ChromeOptions()
-    #chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--log-level=3")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
     for arg in ["--disable-logging", "--silent"]:
         chrome_options.add_argument(arg)
 
@@ -196,9 +195,10 @@ def main():
     parar_por_banco = False
 
     try:
-        # service = ChromeService(ChromeDriverManager().install(), log_output=os.devnull)
-        # driver = webdriver.Chrome(service=service, options=chrome_options)
-        driver = webdriver.Chrome(command_executor="http://airflow.jgp.com.br:4445", options=chrome_options)
+        driver = webdriver.Remote(
+            command_executor=SELENIUM_GRID_URL,
+            options=chrome_options,
+        )
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
 
