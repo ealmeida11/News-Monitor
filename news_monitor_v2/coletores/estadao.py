@@ -233,7 +233,7 @@ def main():
 
 
         driver.set_page_load_timeout(60)
-        driver.implicitly_wait(10)
+        # driver.implicitly_wait(10)
 
         driver.get(URL_BASE)
 
