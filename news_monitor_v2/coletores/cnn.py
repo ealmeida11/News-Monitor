@@ -312,9 +312,30 @@ def main():
     agora = datetime.now()
     limite_24h = agora - timedelta(hours=24)
     categorias_excluidas_cnn = {
+        # Entretenimento / cultura
         "Esportes", "BBB", "Entretenimento", "Carnaval", "Celebridades", "Música", "Cinema", "Televisão",
         "Streaming", "Shows", "Horóscopo", "Viagem & Gastronomia", "Viagem", "Gastronomia",
-        "Olimpíadas", "Minas Gerais", "Internacional", "Ceará",
+        "Olimpíadas", "Lifestyle", "Pop",
+        # Ciência / saúde / tech
+        "Saúde", "Saude", "Ciência", "Ciencia", "Tecnologia", "Auto",
+        # Regional / estados
+        "Nacional", "Internacional",
+        "São Paulo", "Sao Paulo", "Rio de Janeiro", "Minas Gerais", "Rio Grande do Sul",
+        "Bahia", "Paraná", "Parana", "Ceará", "Pernambuco", "Pará", "Para",
+        "Santa Catarina", "Goiás", "Goias", "Maranhão", "Maranhao",
+        "Amazonas", "Espírito Santo", "Espirito Santo", "Paraíba", "Paraiba",
+        "Mato Grosso", "Mato Grosso do Sul", "Rio Grande do Norte",
+        "Alagoas", "Piauí", "Piaui", "Distrito Federal", "Sergipe",
+        "Tocantins", "Acre", "Amapá", "Amapa", "Roraima", "Rondônia", "Rondonia",
+        # Futebol / times
+        "Palmeiras", "Flamengo", "Corinthians", "São Paulo Clube", "Botafogo",
+        "Atlético Mineiro", "Atletico Mineiro", "Grêmio", "Gremio", "Internacional FC",
+        "Fluminense", "Santos", "Vasco", "Cruzeiro", "Seleção Brasileira", "Selecao Brasileira",
+        "Futebol Italiano", "Futebol Espanhol", "Futebol Internacional",
+        "Campeonato Carioca", "Campeonato Paulista", "Campeonato Brasileiro",
+        # Outros esportes
+        "Automobilismo", "Basquete", "Tênis", "Tenis", "Lutas", "Fórmula 1", "Formula 1",
+        "UFC", "MMA", "Vôlei", "Volei", "Natação", "Natacao", "Atletismo",
     }
 
     log.info("=" * 60)

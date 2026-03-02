@@ -331,12 +331,13 @@ def main():
                         continue
 
                     if links_existentes and link in links_existentes:
-                        ja_no_banco += 1
+                        ja_no_banco_consecutivos += 1
                         links_processados.add(link)
-                        if ja_no_banco >= 3:
+                        if ja_no_banco_consecutivos >= 5:
                             parar_por_banco = True
                             break
                         continue
+                    ja_no_banco_consecutivos = 0
 
                     # Estadão não tem resumo na lista; usamos apenas título na classificação
                     noticia = {
@@ -365,9 +366,9 @@ def main():
                      len(noticias_coletadas), time.time() - t_rodada)
 
             if parar_por_banco:
-                log.info("  Parada: 3 noticias ja estavam no banco")
+                log.info("  Parada: 5 noticias consecutivas ja estavam no banco")
                 break
-            if antigas_nesta_rodada >= 3:
+            if antigas_nesta_rodada >= 5:
                 log.info("  Parada: muitas noticias antigas (fora de 24h)")
                 break
             if novas_nesta_rodada == 0:

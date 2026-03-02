@@ -277,7 +277,7 @@ def main():
                 links_existentes = {ln.strip() for ln in f if ln.strip()}
         except Exception:
             pass
-    ja_no_banco = 0
+    ja_no_banco_consecutivos = 0
     parar_por_banco = False
 
     try:
@@ -366,10 +366,11 @@ def main():
                                             data_hora = _ajustar_fuso(data_hora[0], data_hora[1])
                                         if data_hora and noticia_dentro_24h(data_hora[0], data_hora[1]):
                                             if links_existentes and link in links_existentes:
-                                                ja_no_banco += 1
-                                                if ja_no_banco >= 3:
+                                                ja_no_banco_consecutivos += 1
+                                                if ja_no_banco_consecutivos >= 5:
                                                     parar_por_banco = True
                                             else:
+                                                ja_no_banco_consecutivos = 0
                                                 resumo_el = (
                                                     main_headline.find("p", class_="c-headline__standfirst")
                                                     or main_headline.find("p", class_=re.compile(r"standfirst|resumo|summary", re.I))
@@ -415,11 +416,12 @@ def main():
                         antigas_nesta_rodada += 1
                         continue
                     if links_existentes and link in links_existentes:
-                        ja_no_banco += 1
-                        if ja_no_banco >= 3:
+                        ja_no_banco_consecutivos += 1
+                        if ja_no_banco_consecutivos >= 5:
                             parar_por_banco = True
                             break
                         continue
+                    ja_no_banco_consecutivos = 0
                     # Resumo: verificar se existe elemento na lista (ex.: c-headline__kicker ou similar)
                     resumo_el = artigo.find("p", class_="c-headline__standfirst")
                     resumo = (resumo_el.get_text(strip=True) if resumo_el else "")[:500] or ""
