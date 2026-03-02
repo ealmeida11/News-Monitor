@@ -13,6 +13,12 @@ PROJECT_ROOT = BASE_DIR.parent
 # Banco de dados (evita duplicatas por link; usado por run_coleta.py)
 DB_PATH = os.environ.get("DB_PATH", str(BASE_DIR / "noticias_v2.db"))
 
+# Banco do NewsAI Real Time (fonte de notícias — leitura only)
+REALTIME_DB = os.environ.get(
+    "REALTIME_DB",
+    str(Path(r"R:\Economics\Ealmeida\Brasil\NewsAI - Real Time\database\seen.db")),
+)
+
 # Scraper original (para testes)
 SCRAPER_ORIGINAL_PATH = PROJECT_ROOT / "scraper_otimizado.py"
 DB_ORIGINAL_PATH = PROJECT_ROOT / "noticias.db"

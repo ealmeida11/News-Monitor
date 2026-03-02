@@ -209,12 +209,6 @@ def main():
             driver.refresh()
             time.sleep(5)
 
-        # Debug: salvar HTML para diagnóstico
-        _debug_html = Path(__file__).resolve().parent.parent / "output" / "_debug_valor.html"
-        with open(_debug_html, "w", encoding="utf-8") as f:
-            f.write(driver.page_source)
-        log.info("  Debug HTML salvo em %s (%d bytes)", _debug_html, len(driver.page_source))
-
         pagina = 1
         limite_paginas = 50  # Aumentado para garantir coleta completa
 
