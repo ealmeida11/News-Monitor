@@ -207,7 +207,13 @@ def main():
         if carregar_cookies(driver):
             log.info("  Recarregando página com cookies...")
             driver.refresh()
-            time.sleep(2)
+            time.sleep(5)
+
+        # Debug: salvar HTML para diagnóstico
+        _debug_html = Path(__file__).resolve().parent.parent / "output" / "_debug_valor.html"
+        with open(_debug_html, "w", encoding="utf-8") as f:
+            f.write(driver.page_source)
+        log.info("  Debug HTML salvo em %s (%d bytes)", _debug_html, len(driver.page_source))
 
         pagina = 1
         limite_paginas = 50  # Aumentado para garantir coleta completa
@@ -328,12 +334,16 @@ def main():
         for url_autor, autor_nome in EDITORIAL_AUTORES_VALOR:
             try:
                 driver.get(url_autor)
-                WebDriverWait(driver, 10).until(
+                WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "feed-post-body"))
                 )
                 time.sleep(2)
             except Exception as e:
-                log.warning("    Aviso: erro ao carregar %s: %s", url_autor, e)
+                err = str(e).lower()
+                if "connection" in err or "refused" in err or "10061" in err or "target machine" in err:
+                    log.warning("    Browser caiu; pulando editoriais restantes.")
+                    break
+                log.warning("    Aviso: erro ao carregar %s: %s", url_autor, type(e).__name__)
                 continue
             soup = BeautifulSoup(driver.page_source, "html.parser")
             artigos = soup.find_all("div", class_="feed-post-body")
