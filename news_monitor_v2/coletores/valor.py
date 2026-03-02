@@ -8,6 +8,7 @@ Também mostra as não classificadas para identificar gaps nas palavras-chave.
 
 import io
 import json
+import logging
 import os
 import re
 import sys
@@ -15,8 +16,9 @@ import time
 from collections import defaultdict
 
 # Evitar UnicodeEncodeError no console Windows (cp1252)
-if sys.stdout.encoding and sys.stdout.encoding.lower().replace("-", "") != "utf8":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -27,6 +29,9 @@ sys.path.insert(0, str(PROJECT_ROOT))
 # Importar classificador
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from classificador.lexico_classifier import classificar, NAO_CLASSIFICADO
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-5s %(message)s", datefmt="%d/%m/%Y %H:%M:%S")
+log = logging.getLogger(__name__)
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 COOKIES_FILE = os.path.join(SCRIPT_DIR, "valor_login.json")
@@ -48,7 +53,7 @@ def carregar_cookies(driver):
         except:
             pass  # Ignora cookies inválidos
 
-    print(f"  {len(cookies)} cookies carregados")
+    log.info("  %d cookies carregados", len(cookies))
     return True
 
 
@@ -73,11 +78,11 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html):
     linhas.append('</style>')
     linhas.append('</head><body><div class="container">')
     linhas.append('<h1>Valor Econômico – Classificação por tema</h1>')
-    
+
     # Filtrar Mundo e contar apenas temas visíveis
     temas_visiveis = {t: lista for t, lista in noticias_por_tema.items() if t != "Mundo"}
     total_classificadas = sum(len(lista) for lista in temas_visiveis.values())
-    
+
     linhas.append(f'<p class="meta">Últimas 24 horas | Total coletado: {total_coletado} | '
                   f'Classificadas: {total_classificadas}</p>')
 
@@ -132,38 +137,39 @@ EDITORIAL_AUTORES_VALOR = [
 def main():
     import os
     os.environ['WDM_LOG_LEVEL'] = '0'
+    logging.getLogger("WDM").setLevel(logging.WARNING)
 
     from selenium import webdriver
     from selenium.webdriver.chrome.options import Options as ChromeOptions
+    from selenium.webdriver.chrome.service import Service as ChromeService
+    from webdriver_manager.chrome import ChromeDriverManager
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
+    # SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
 
     URL_BASE = "https://valor.globo.com/ultimas-noticias/"
 
-    print("=" * 70)
-    print("  COLETA E CLASSIFICAÇÃO - VALOR (últimas 24 horas)")
-    print("=" * 70)
-    print(f"  URL: {URL_BASE}")
-    print(f"  Período: últimas 24 horas (desde {datetime.now() - timedelta(hours=24):%d/%m/%Y %H:%M})")
-    print()
+    t0 = time.time()
 
-    UBLOCK_CRX = os.path.join(SCRIPT_DIR, "ublock.crx")
+    log.info("=" * 60)
+    log.info("COLETA - VALOR ECONÔMICO (últimas 24h)")
+    log.info("URL: %s", URL_BASE)
+    log.info("Período: últimas 24h (desde %s)", (datetime.now() - timedelta(hours=24)).strftime("%d/%m/%Y %H:%M"))
+    log.info("=" * 60)
 
-    chrome_options = ChromeOptions()
-    # chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--log-level=3")
-    for arg in ["--disable-logging", "--silent"]:
-        chrome_options.add_argument(arg)
-    if os.path.exists(UBLOCK_CRX):
-        chrome_options.add_extension(UBLOCK_CRX)
+    opts = ChromeOptions()
+    opts.add_argument("--headless=new")
+    opts.add_argument("--no-sandbox")
+    opts.add_argument("--disable-dev-shm-usage")
+    opts.add_argument("--disable-gpu")
+    opts.add_argument("--window-size=1920,1080")
+    opts.add_argument("--log-level=3")
+    opts.add_argument("--disable-logging")
+    opts.add_argument("--silent")
+    opts.add_experimental_option("excludeSwitches", ["enable-logging"])
 
     driver = None
     noticias_coletadas = []
@@ -182,17 +188,24 @@ def main():
     parar_por_banco = False
 
     try:
-        driver = webdriver.Remote(
-            command_executor=SELENIUM_GRID_URL,
-            options=chrome_options,
-        )
+        # # --- Selenium Grid (comentado) ---
+        # driver = webdriver.Remote(
+        #     command_executor=SELENIUM_GRID_URL,
+        #     options=chrome_options,
+        # )
+
+        # --- Chrome local (mesmo padrão do NewsAI Real Time) ---
+        driver_path = ChromeDriverManager().install()
+        service = ChromeService(driver_path, log_output=os.devnull)
+        driver = webdriver.Chrome(service=service, options=opts)
+
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
 
         # Carregar cookies
         driver.get(URL_BASE)
         if carregar_cookies(driver):
-            print("  Recarregando página com cookies...")
+            log.info("  Recarregando página com cookies...")
             driver.refresh()
             time.sleep(2)
 
@@ -207,7 +220,7 @@ def main():
             else:
                 url = f"https://valor.globo.com/ultimas-noticias/index/feed/pagina-{pagina}"
 
-            print(f"  Acessando página {pagina}...")
+            log.info("  Acessando página %d...", pagina)
             try:
                 driver.get(url)
                 WebDriverWait(driver, 10).until(
@@ -215,8 +228,8 @@ def main():
                 )
                 time.sleep(2)
             except Exception as e:
-                print(f"    ERRO ao acessar página {pagina}: {type(e).__name__}")
-                print(f"    Continuando com o que já foi coletado...")
+                log.error("    Erro ao acessar página %d: %s", pagina, type(e).__name__)
+                log.info("    Continuando com o que já foi coletado...")
                 break
 
             soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -292,24 +305,24 @@ def main():
                     continue
 
             if parar_por_banco:
-                print("    PARADA: 3 notícias já estavam no banco")
+                log.info("  Parada: 3 notícias já estavam no banco")
                 break
-            print(f"    Página {pagina}: {novas_nesta_pagina} novas, {antigas_nesta_pagina} antigas")
+            log.info("    Página %d: %d novas, %d antigas", pagina, novas_nesta_pagina, antigas_nesta_pagina)
 
             # Parar apenas se encontrar muitas notícias antigas (fora de 24h) consecutivas
             # Isso indica que chegamos em notícias antigas e não há mais novas nas próximas páginas
             if antigas_nesta_pagina >= 5:
-                print("    PARADA: muitas notícias antigas detectadas (fora de 24h)")
+                log.info("  Parada: muitas notícias antigas detectadas (fora de 24h)")
                 break
-            
+
             # Se não encontrou nenhum artigo na página (erro de parsing ou página vazia), continuar
             # Só parar se chegou no limite de páginas
 
             pagina += 1
 
         # Coleta editorial: páginas de autores (Alex Ribeiro, Andrea Jubé)
-        print()
-        print("  Coletando editoriais (páginas de autores)...")
+        log.info("")
+        log.info("  Coletando editoriais (páginas de autores)...")
         for url_autor, autor_nome in EDITORIAL_AUTORES_VALOR:
             try:
                 driver.get(url_autor)
@@ -318,7 +331,7 @@ def main():
                 )
                 time.sleep(2)
             except Exception as e:
-                print(f"    AVISO: erro ao carregar {url_autor}: {e}")
+                log.warning("    Aviso: erro ao carregar %s: %s", url_autor, e)
                 continue
             soup = BeautifulSoup(driver.page_source, "html.parser")
             artigos = soup.find_all("div", class_="feed-post-body")
@@ -360,15 +373,13 @@ def main():
                     titulos_unicos.add(titulo)
                 except Exception:
                     continue
-            print(f"    {autor_nome}: +{len(artigos)} itens na página")
-        print()
+            log.info("    %s: +%d itens na página", autor_nome, len(artigos))
 
-        print()
-        print(f"  Total coletado: {len(noticias_coletadas)} notícias")
-        print()
+        log.info("")
+        log.info("  Total coletado: %d notícias", len(noticias_coletadas))
 
         # Classificar cada notícia
-        print("  Classificando notícias...")
+        log.info("  Classificando notícias...")
         noticias_por_tema = defaultdict(list)
         nao_classificadas = []
 
@@ -383,11 +394,11 @@ def main():
             # Classificar com léxico
             resultado = classificar(noticia['titulo'], resumo=noticia.get('resumo', ''))
             tema = resultado['tema']
-            
+
             # Excluir completamente notícias classificadas como Mundo (não coletar)
             if tema == "Mundo":
                 continue  # Pula esta notícia, não salva em lugar nenhum
-            
+
             noticia['tema_classificado'] = tema
             noticia['score'] = resultado['score']
             noticia['scores_todos'] = resultado['scores']
@@ -398,43 +409,20 @@ def main():
             else:
                 noticias_por_tema[tema].append(noticia)
 
-        # Mostrar resultados
-        print()
-        print("=" * 70)
-        print("  RESULTADO DA CLASSIFICAÇÃO")
-        print("=" * 70)
-        print()
-
-        # Por tema (sem Mundo)
+        # Mostrar classificação
         temas_visiveis = {t: lista for t, lista in noticias_por_tema.items() if t != "Mundo"}
-        for tema in sorted(temas_visiveis.keys()):
-            lista = temas_visiveis[tema]
-            print(f"  [{len(lista)}] {tema}")
-            print("-" * 70)
-            for n in lista:
-                print(f"    - {n['titulo'][:75]}...")
-                if n.get('resumo'):
-                    print(f"      Resumo: {n['resumo'][:70]}...")
-                print(f"      Score: {n['score']} | Categoria site: {n['categoria']} | {n['hora']}")
-            print()
 
-        # Resumo estatístico
-        print("=" * 70)
-        print("  RESUMO ESTATÍSTICO")
-        print("=" * 70)
-        print(f"  Total coletado: {len(noticias_coletadas)}")
-        print(f"  Classificadas: {len(noticias_coletadas) - len(nao_classificadas)}")
-        print(f"  Não classificadas: {len(nao_classificadas)}")
-        print()
-        print("  Por tema:")
-        temas_visiveis = {t: lista for t, lista in noticias_por_tema.items() if t != "Mundo"}
+        log.info("")
+        log.info("Classificação")
+        log.info("-" * 60)
         for tema in sorted(temas_visiveis.keys()):
-            print(f"    {tema}: {len(temas_visiveis[tema])}")
+            log.info("  %-20s %4d", tema, len(temas_visiveis[tema]))
+        log.info("  %-20s %4d", "Não classificadas", len(nao_classificadas))
 
         # Salvar JSON completo (sempre com o mesmo nome)
         out_dir = Path(__file__).resolve().parent.parent / "output"
         out_dir.mkdir(exist_ok=True)
-        
+
         # Limpar arquivos antigos com timestamp
         for arq_antigo in out_dir.glob("valor_classificado_*_*.json"):
             try:
@@ -446,11 +434,11 @@ def main():
                 arq_antigo.unlink()
             except:
                 pass
-        
+
         # Nomes fixos (sem timestamp)
         arq_json = out_dir / "valor_classificado_24h.json"
         arq_html = out_dir / "valor_classificado_24h.html"
-        
+
         resultado_completo = {
             "data_coleta": datetime.now().isoformat(),
             "periodo_horas": 24,
@@ -460,13 +448,17 @@ def main():
         }
         with open(arq_json, "w", encoding="utf-8") as f:
             json.dump(resultado_completo, f, ensure_ascii=False, indent=2)
-        print()
-        print(f"  JSON completo salvo em: {arq_json}")
 
         # Gerar HTML simples para abrir no navegador
         _gerar_html(noticias_por_tema, nao_classificadas, len(noticias_coletadas), arq_html)
-        print(f"  Relatório HTML salvo em: {arq_html}")
-        print("=" * 70)
+
+        log.info("")
+        log.info("Arquivos salvos:")
+        log.info("  JSON: %s", arq_json)
+        log.info("  HTML: %s", arq_html)
+        log.info("=" * 60)
+        log.info("Concluído (%.1fs)", time.time() - t0)
+        log.info("=" * 60)
 
     finally:
         if driver:

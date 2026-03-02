@@ -12,14 +12,17 @@ Paginação: próxima página por URL pagina/2/, pagina/3/ ou botão com seta.
 
 import io
 import json
+import logging
 import os
 import re
 import sys
 import time
 from collections import defaultdict
 
-if sys.stdout.encoding and sys.stdout.encoding.lower().replace("-", "") != "utf8":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+# Evitar UnicodeEncodeError no console Windows (cp1252)
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -30,6 +33,9 @@ from classificador.lexico_classifier import classificar, NAO_CLASSIFICADO
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 COOKIES_FILE = os.path.join(SCRIPT_DIR, "cnn_login.json")
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-5s %(message)s", datefmt="%d/%m/%Y %H:%M:%S")
+log = logging.getLogger(__name__)
 
 
 def carregar_cookies(driver):
@@ -48,7 +54,7 @@ def carregar_cookies(driver):
         except:
             pass  # Ignora cookies inválidos
 
-    print(f"  {len(cookies)} cookies carregados")
+    log.info("  %d cookies carregados", len(cookies))
     return True
 
 
@@ -183,6 +189,13 @@ def _extrair_noticias_pagina(soup, titulos_unicos, limite_24h, categorias_exclui
             continue
         if categoria in categorias_excluidas:
             continue
+        # Filtrar seção CNN Pop
+        if container:
+            pop_link = container.find("a", href=lambda h: h and "/pop/" in h)
+            if pop_link:
+                continue
+        if "/pop/" in link:
+            continue
         titulos_unicos.add(titulo)
         noticias.append({
             "titulo": titulo,
@@ -277,17 +290,22 @@ def _extrair_editoriais_blogs(soup, titulos_unicos, limite_24h):
 
 
 def main():
+    t0 = time.time()
+
     import os
     os.environ["WDM_LOG_LEVEL"] = "0"
+    logging.getLogger("WDM").setLevel(logging.WARNING)
 
     from selenium import webdriver
     from selenium.webdriver.chrome.options import Options as ChromeOptions
+    from selenium.webdriver.chrome.service import Service as ChromeService
+    from webdriver_manager.chrome import ChromeDriverManager
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
+    # SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
 
     URL_BASE = "https://www.cnnbrasil.com.br/ultimas-noticias/"
 
@@ -299,27 +317,22 @@ def main():
         "Olimpíadas", "Minas Gerais", "Internacional", "Ceará",
     }
 
-    print("=" * 70)
-    print("  COLETA E CLASSIFICACAO - CNN BRASIL (ultimas 24 horas)")
-    print("=" * 70)
-    print(f"  URL: {URL_BASE}")
-    print(f"  Agora (referencia):  {agora:%d/%m/%Y %H:%M}")
-    print(f"  Inclusao: noticias entre {limite_24h:%d/%m/%Y %H:%M} e {agora:%d/%m/%Y %H:%M}")
-    print()
+    log.info("=" * 60)
+    log.info("COLETA - CNN BRASIL (últimas 24h)")
+    log.info("URL: %s", URL_BASE)
+    log.info("Período: %s -> %s", limite_24h.strftime("%d/%m/%Y %H:%M"), agora.strftime("%d/%m/%Y %H:%M"))
+    log.info("=" * 60)
 
-    UBLOCK_CRX = os.path.join(SCRIPT_DIR, "ublock.crx")
-
-    chrome_options = ChromeOptions()
-    # chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--log-level=3")
-    for arg in ["--disable-logging", "--silent"]:
-        chrome_options.add_argument(arg)
-    if os.path.exists(UBLOCK_CRX):
-        chrome_options.add_extension(UBLOCK_CRX)
+    opts = ChromeOptions()
+    opts.add_argument("--headless=new")
+    opts.add_argument("--no-sandbox")
+    opts.add_argument("--disable-dev-shm-usage")
+    opts.add_argument("--disable-gpu")
+    opts.add_argument("--window-size=1920,1080")
+    opts.add_argument("--log-level=3")
+    opts.add_argument("--disable-logging")
+    opts.add_argument("--silent")
+    opts.add_experimental_option("excludeSwitches", ["enable-logging"])
 
     driver = None
     noticias_coletadas = []
@@ -336,23 +349,30 @@ def main():
             pass
 
     try:
-        driver = webdriver.Remote(
-            command_executor=SELENIUM_GRID_URL,
-            options=chrome_options,
-        )
+        # # --- Selenium Grid (comentado) ---
+        # driver = webdriver.Remote(
+        #     command_executor=SELENIUM_GRID_URL,
+        #     options=chrome_options,
+        # )
+
+        # --- Chrome local (mesmo padrão do NewsAI Real Time) ---
+        driver_path = ChromeDriverManager().install()
+        service = ChromeService(driver_path, log_output=os.devnull)
+        driver = webdriver.Chrome(service=service, options=opts)
+
         driver.set_page_load_timeout(60)
         driver.implicitly_wait(10)
 
         # Carregar cookies
         driver.get(URL_BASE)
         if carregar_cookies(driver):
-            print("  Recarregando página com cookies...")
+            log.info("  Recarregando página com cookies...")
             driver.refresh()
             time.sleep(2)
 
         for num_pag in range(1, max_paginas + 1):
             url = URL_BASE if num_pag == 1 else f"{URL_BASE}pagina/{num_pag}/"
-            print(f"  Página {num_pag}: {url}")
+            log.info("  Página %d: %s", num_pag, url)
             try:
                 driver.get(url)
                 WebDriverWait(driver, 15).until(
@@ -360,18 +380,18 @@ def main():
                 )
                 time.sleep(2)
             except Exception as e:
-                print(f"  AVISO: erro ao carregar página {num_pag}: {e}")
+                log.warning("  AVISO: erro ao carregar página %d: %s", num_pag, e)
                 break
 
             soup = BeautifulSoup(driver.page_source, "html.parser")
             novas = _extrair_noticias_pagina(soup, titulos_unicos, limite_24h, categorias_excluidas_cnn)
             noticias_coletadas.extend(novas)
-            print(f"    -> {len(novas)} novas nesta página (total acumulado: {len(noticias_coletadas)})")
+            log.info("    -> %d novas nesta página (total acumulado: %d)", len(novas), len(noticias_coletadas))
             if len(novas) == 0 and num_pag > 1:
-                print("  PARADA: página sem notícias novas")
+                log.info("  Parada: página sem notícias novas")
                 break
             if num_pag >= max_paginas:
-                print("  PARADA: limite de páginas")
+                log.info("  Parada: limite de páginas")
                 break
 
             # Próxima página: tentar clicar no botão "próxima" (seta) ou seguir por URL
@@ -380,8 +400,8 @@ def main():
                 time.sleep(1)
 
         # Coleta editorial: blogs individuais CNN (cada página de autor)
-        print()
-        print("  Coletando editoriais (blogs individuais CNN)...")
+        log.info("")
+        log.info("  Coletando editoriais (blogs individuais CNN)...")
         for url_blog, autor_blog in EDITORIAL_BLOGS_CNN:
             try:
                 driver.get(url_blog)
@@ -424,13 +444,13 @@ def main():
                         "link": link, "autor_editorial": autor_blog,
                     })
                     n_blog += 1
-                print(f"    {autor_blog}: {n_blog} artigos")
+                log.info("    %s: %d artigos", autor_blog, n_blog)
             except Exception as e:
-                print(f"    {autor_blog}: ERRO - {e}")
+                log.error("    %s: ERRO - %s", autor_blog, e)
 
         # Coleta editorial: listagem geral de blogs CNN
-        print()
-        print("  Coletando editoriais (listagem blogs CNN)...")
+        log.info("")
+        log.info("  Coletando editoriais (listagem blogs CNN)...")
         for num_pag in range(1, 4):
             url_blogs = URL_CNN_BLOGS if num_pag == 1 else f"{URL_CNN_BLOGS}pagina/{num_pag}/"
             try:
@@ -440,7 +460,7 @@ def main():
                 )
                 time.sleep(2)
             except Exception as e:
-                print(f"  AVISO: erro ao carregar blogs página {num_pag}: {e}")
+                log.warning("  AVISO: erro ao carregar blogs página %d: %s", num_pag, e)
                 break
             soup = BeautifulSoup(driver.page_source, "html.parser")
             editoriais = _extrair_editoriais_blogs(soup, titulos_unicos, limite_24h)
@@ -448,13 +468,13 @@ def main():
                 if links_existentes and n.get("link") in links_existentes:
                     continue
                 noticias_coletadas.append(n)
-            print(f"    Blogs p.{num_pag}: {len(editoriais)} editoriais (total acumulado: {len(noticias_coletadas)})")
+            log.info("    Blogs p.%d: %d editoriais (total acumulado: %d)", num_pag, len(editoriais), len(noticias_coletadas))
             if len(editoriais) == 0 and num_pag > 1:
                 break
             time.sleep(1)
 
-        print()
-        print(f"  Total coletado: {len(noticias_coletadas)} notícias")
+        log.info("")
+        log.info("  Total coletado: %d notícias", len(noticias_coletadas))
         if noticias_coletadas:
             datas_ord = sorted(
                 (datetime.strptime(f"{n['data']} {n['hora']}", "%d/%m/%Y %H:%M") for n in noticias_coletadas),
@@ -462,9 +482,9 @@ def main():
             )
             mais_recente = datas_ord[0]
             mais_antiga = datas_ord[-1]
-            print(f"  Intervalo: de {mais_antiga:%d/%m/%Y %H:%M} até {mais_recente:%d/%m/%Y %H:%M}")
-        print()
-        print("  Classificando notícias...")
+            log.info("  Intervalo: de %s até %s", mais_antiga.strftime("%d/%m/%Y %H:%M"), mais_recente.strftime("%d/%m/%Y %H:%M"))
+        log.info("")
+        log.info("  Classificando notícias...")
 
         noticias_por_tema = defaultdict(list)
         nao_classificadas = []
@@ -490,16 +510,14 @@ def main():
             else:
                 noticias_por_tema[tema].append(noticia)
 
-        print()
-        print("=" * 70)
-        print("  RESULTADO DA CLASSIFICACAO")
-        print("=" * 70)
         temas_visiveis = {t: lst for t, lst in noticias_por_tema.items() if t != "Mundo"}
+
+        log.info("")
+        log.info("Classificação")
+        log.info("-" * 60)
         for tema in sorted(temas_visiveis.keys()):
-            lista = temas_visiveis[tema]
-            print(f"  [{len(lista)}] {tema}")
-        print(f"  [{len(nao_classificadas)}] NAO CLASSIFICADAS")
-        print()
+            log.info("  %-20s %4d", tema, len(temas_visiveis[tema]))
+        log.info("  %-20s %4d", "Não classificadas", len(nao_classificadas))
 
         out_dir = Path(__file__).resolve().parent.parent / "output"
         out_dir.mkdir(exist_ok=True)
@@ -524,9 +542,13 @@ def main():
             intervalo_noticias = (datas_ord[-1], datas_ord[0])
         _gerar_html(noticias_por_tema, nao_classificadas, len(noticias_coletadas), arq_html, limite_24h=limite_24h, intervalo_noticias=intervalo_noticias)
 
-        print(f"  JSON: {arq_json}")
-        print(f"  HTML: {arq_html}")
-        print("=" * 70)
+        log.info("")
+        log.info("Arquivos salvos:")
+        log.info("  JSON: %s", arq_json)
+        log.info("  HTML: %s", arq_html)
+        log.info("=" * 60)
+        log.info("Concluído (%.1fs)", time.time() - t0)
+        log.info("=" * 60)
 
     finally:
         if driver:

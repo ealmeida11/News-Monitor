@@ -8,11 +8,24 @@ Objetivo: analisar classificação e dar instruções para ajustes.
 
 import io
 import json
+import logging
+import os
 import re
 import sys
 import time
 from collections import defaultdict
-import os
+
+# Evitar UnicodeEncodeError no console Windows (cp1252)
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)-5s %(message)s",
+    datefmt="%d/%m/%Y %H:%M:%S",
+)
+log = logging.getLogger(__name__)
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 COOKIES_FILE = os.path.join(SCRIPT_DIR, "estadao_login.json")
@@ -21,10 +34,10 @@ def carregar_cookies(driver):
     """Carrega cookies salvos"""
     if not os.path.exists(COOKIES_FILE):
         return False
-    
+
     with open(COOKIES_FILE, 'r') as f:
         cookies = json.load(f)
-    
+
     for cookie in cookies:
         if 'expiry' in cookie:
             cookie['expiry'] = int(cookie['expiry'])
@@ -32,8 +45,8 @@ def carregar_cookies(driver):
             driver.add_cookie(cookie)
         except:
             pass  # Ignora cookies inválidos
-    
-    print(f"✓ {len(cookies)} cookies carregados")
+
+    log.info("%d cookies carregados", len(cookies))
     return True
 
 
@@ -178,45 +191,45 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html, 
 def main():
     import os
     os.environ["WDM_LOG_LEVEL"] = "0"
+    logging.getLogger("WDM").setLevel(logging.WARNING)
 
     from selenium import webdriver
     from selenium.webdriver.chrome.options import Options as ChromeOptions
+    from selenium.webdriver.chrome.service import Service as ChromeService
+    from webdriver_manager.chrome import ChromeDriverManager
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
 
-    SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4445"
+    # SELENIUM_GRID_URL = "http://airflow.jgp.com.br:4444"
 
     URL_BASE = "https://www.estadao.com.br/ultimas/"
 
+    t0 = time.time()
     agora = datetime.now()
     limite_24h = agora - timedelta(hours=24)
-    print("=" * 70)
-    print("  COLETA E CLASSIFICACAO - ESTADAO (ultimas 24 horas)")
-    print("=" * 70)
-    print(f"  URL: {URL_BASE}")
-    print(f"  Agora (referencia):  {agora:%d/%m/%Y %H:%M}")
-    print(f"  Inclusao: noticias entre {limite_24h:%d/%m/%Y %H:%M} e {agora:%d/%m/%Y %H:%M}")
-    print()
+    log.info("=" * 60)
+    log.info("COLETA - ESTADÃO (últimas 24h)")
+    log.info("URL: %s", URL_BASE)
+    log.info("Periodo: %s -> %s", limite_24h.strftime("%d/%m/%Y %H:%M"), agora.strftime("%d/%m/%Y %H:%M"))
+    log.info("=" * 60)
 
-    UBLOCK_CRX = os.path.join(SCRIPT_DIR, "ublock.crx")
-
-    chrome_options = ChromeOptions()
-    #chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--log-level=3")
-    for arg in ["--disable-logging", "--silent"]:
-        chrome_options.add_argument(arg)
-    if os.path.exists(UBLOCK_CRX):
-        chrome_options.add_extension(UBLOCK_CRX)
+    opts = ChromeOptions()
+    opts.add_argument("--headless=new")
+    opts.add_argument("--no-sandbox")
+    opts.add_argument("--disable-dev-shm-usage")
+    opts.add_argument("--disable-gpu")
+    opts.add_argument("--window-size=1920,1080")
+    opts.add_argument("--log-level=3")
+    opts.add_argument("--disable-logging")
+    opts.add_argument("--silent")
+    opts.add_experimental_option("excludeSwitches", ["enable-logging"])
 
     driver = None
     noticias_coletadas = []
     titulos_unicos = set()
+    links_processados = set()  # rastreia todos os links já vistos (DOM acumula)
     _out = Path(__file__).resolve().parent.parent / "output"
     _links_file = _out / "links_existentes.txt"
     links_existentes = set()
@@ -230,11 +243,16 @@ def main():
     parar_por_banco = False
 
     try:
-        driver = webdriver.Remote(
-            command_executor=SELENIUM_GRID_URL,
-            options=chrome_options,
-        )
+        # # --- Selenium Grid (comentado) ---
+        # driver = webdriver.Remote(
+        #     command_executor=SELENIUM_GRID_URL,
+        #     options=chrome_options,
+        # )
 
+        # --- Chrome local (mesmo padrão do NewsAI Real Time) ---
+        driver_path = ChromeDriverManager().install()
+        service = ChromeService(driver_path, log_output=os.devnull)
+        driver = webdriver.Chrome(service=service, options=opts)
 
         driver.set_page_load_timeout(60)
         # driver.implicitly_wait(10)
@@ -242,10 +260,10 @@ def main():
         driver.get(URL_BASE)
 
         if carregar_cookies(driver):
-            print("Recarregando página com cookies...")
+            log.info("Recarregando página com cookies...")
             driver.refresh()
             time.sleep(2)
-            
+
         WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "a[data-component-name='lista-ultimas']"))
         )
@@ -258,53 +276,63 @@ def main():
         max_cliques = 30  # Aumentado para pegar mais notícias das 24h
 
         while True:
+            t_rodada = time.time()
             try:
                 soup = BeautifulSoup(driver.page_source, "html.parser")
             except Exception as e:
                 err = str(e).lower()
                 if "connection" in err or "refused" in err or "10061" in err or "target machine" in err:
-                    print("  AVISO: conexao com o browser caiu; usando noticias ja coletadas.")
+                    log.warning("conexao com o browser caiu; usando noticias ja coletadas.")
                 break
             artigos = soup.find_all("a", attrs={"data-component-name": "lista-ultimas"})
 
             novas_nesta_rodada = 0
             antigas_nesta_rodada = 0
-            repetidas_nesta_rodada = 0  # já estavam em titulos_unicos (como no stop por "banco" do scraper)
+            repetidas_nesta_rodada = 0
 
             for artigo in artigos:
                 try:
-                    titulo = (artigo.get("title") or "").strip()
-                    if not titulo:
-                        continue
-                    if titulo in titulos_unicos:
+                    link = artigo.get("href") or "#"
+
+                    # Deduplica por link (DOM acumula tudo a cada clique)
+                    if link in links_processados:
                         repetidas_nesta_rodada += 1
                         continue
 
-                    link = artigo.get("href") or "#"
+                    titulo = (artigo.get("title") or "").strip()
+                    if not titulo:
+                        links_processados.add(link)
+                        continue
+
                     categoria = _extrair_categoria_estadao(link)
 
-                    # Excluir categorias que geram classificação indevida (ex.: Esportes -> Governo/Congresso por "MP-SP")
+                    # Excluir categorias que geram classificação indevida
                     categorias_excluidas_estadao = {"Esportes", "Automóveis", "Cultura", "Internacional", "Educação", "São Paulo", "Colunas", "Colunistas"}
                     if categoria in categorias_excluidas_estadao:
+                        links_processados.add(link)
                         continue
 
                     parent_div = artigo.find_parent("div")
                     data_element = parent_div.find("span", class_="date") if parent_div else None
                     if not data_element:
+                        links_processados.add(link)
                         continue
 
                     data_hora_texto = data_element.get_text(strip=True)
                     data, hora = _parse_data_hora_estadao(data_hora_texto, referencia=agora)
                     if not data or not hora:
+                        links_processados.add(link)
                         continue
                     data, hora = _ajustar_fuso(data, hora)
 
                     if not noticia_dentro_24h(data, hora):
                         antigas_nesta_rodada += 1
+                        links_processados.add(link)
                         continue
 
                     if links_existentes and link in links_existentes:
                         ja_no_banco += 1
+                        links_processados.add(link)
                         if ja_no_banco >= 3:
                             parar_por_banco = True
                             break
@@ -320,6 +348,7 @@ def main():
                         "hora": hora,
                         "link": link,
                     }
+                    links_processados.add(link)
                     titulos_unicos.add(titulo)
                     noticias_coletadas.append(noticia)
                     novas_nesta_rodada += 1
@@ -331,32 +360,25 @@ def main():
             else:
                 antigas_consecutivas = 0
 
-            # Stop por duplicatas: 2 rodadas seguidas com muitas notícias já vistas (como no scraper com banco)
-            if repetidas_nesta_rodada >= 5:
-                duplicatas_consecutivas += 1
-            else:
-                duplicatas_consecutivas = 0
-
-            print(f"  Rodada (clique {clique}): {novas_nesta_rodada} novas, {antigas_nesta_rodada} antigas, {repetidas_nesta_rodada} repetidas")
+            log.info("  Rodada %d: +%d novas, %d antigas, %d repetidas (%d total) (%.1fs)",
+                     clique, novas_nesta_rodada, antigas_nesta_rodada, repetidas_nesta_rodada,
+                     len(noticias_coletadas), time.time() - t_rodada)
 
             if parar_por_banco:
-                print("  PARADA: 3 noticias ja estavam no banco")
+                log.info("  Parada: 3 noticias ja estavam no banco")
                 break
             if antigas_nesta_rodada >= 3:
-                print("  PARADA: muitas noticias antigas (fora de 24h)")
-                break
-            if duplicatas_consecutivas >= 2:
-                print("  PARADA: muitas noticias repetidas (ja coletadas)")
+                log.info("  Parada: muitas noticias antigas (fora de 24h)")
                 break
             if novas_nesta_rodada == 0:
                 tentativas_sem_novas += 1
                 if tentativas_sem_novas >= 3:
-                    print("  PARADA: 3 rodadas sem noticias novas")
+                    log.info("  Parada: 3 rodadas sem noticias novas")
                     break
             else:
                 tentativas_sem_novas = 0
             if clique >= max_cliques:
-                print("  PARADA: limite de cliques em Carregar mais")
+                log.info("  Parada: limite de cliques em Carregar mais")
                 break
 
             # Clicar no botão "Carregar mais notícias": <button data-component-name="lista-ultimas" type="button" class="see-more">Carregar mais notícias</button>
@@ -387,7 +409,7 @@ def main():
                     except Exception:
                         pass
                 if not botao:
-                    print("  PARADA: botao Carregar mais nao encontrado")
+                    log.info("  Parada: botao Carregar mais nao encontrado")
                     break
                 driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao)
                 time.sleep(0.5)
@@ -397,13 +419,13 @@ def main():
             except Exception as e:
                 err = str(e).lower()
                 if "connection" in err or "refused" in err or "10061" in err or "target machine" in err:
-                    print("  AVISO: conexao com o browser caiu; usando noticias ja coletadas.")
+                    log.warning("conexao com o browser caiu; usando noticias ja coletadas.")
                 else:
-                    print("  PARADA: botao Carregar mais nao clicavel:", str(e)[:50])
+                    log.info("  Parada: botao Carregar mais nao clicavel: %s", str(e)[:50])
                 break
 
-        print()
-        print(f"  Total coletado: {len(noticias_coletadas)} noticias")
+        log.info("")
+        log.info("Total coletado: %d noticias", len(noticias_coletadas))
         # Mostrar intervalo real das notícias coletadas (para confirmar que são das últimas 24h)
         if noticias_coletadas:
             datas_ord = sorted(
@@ -412,11 +434,12 @@ def main():
             )
             mais_recente = datas_ord[0]
             mais_antiga = datas_ord[-1]
-            print(f"  Intervalo das noticias: de {mais_antiga:%d/%m/%Y %H:%M} ate {mais_recente:%d/%m/%Y %H:%M}")
+            log.info("Intervalo das noticias: de %s ate %s",
+                     mais_antiga.strftime("%d/%m/%Y %H:%M"), mais_recente.strftime("%d/%m/%Y %H:%M"))
             if mais_antiga < limite_24h:
-                print("  AVISO: alguma noticia coletada esta fora da janela de 24h (verifique parsing da data).")
-        print()
-        print("  Classificando noticias...")
+                log.warning("alguma noticia coletada esta fora da janela de 24h (verifique parsing da data).")
+        log.info("")
+        log.info("Classificando noticias...")
 
         noticias_por_tema = defaultdict(list)
         nao_classificadas = []
@@ -436,45 +459,14 @@ def main():
                 noticias_por_tema[tema].append(noticia)
 
         # Resultado no console
-        print()
-        print("=" * 70)
-        print("  RESULTADO DA CLASSIFICACAO")
-        print("=" * 70)
-        print()
-
         temas_visiveis = {t: lst for t, lst in noticias_por_tema.items() if t != "Mundo"}
-        for tema in sorted(temas_visiveis.keys()):
-            lista = temas_visiveis[tema]
-            print(f"  [{len(lista)}] {tema}")
-            print("-" * 70)
-            for n in lista:
-                tit = (n.get("titulo") or "")[:75]
-                print(f"    - {tit}{'...' if len(n.get('titulo') or '') > 75 else ''}")
-                print(f"      Categoria site: {n.get('categoria', '')} | {n.get('hora', '')} | score {n.get('score', 0)}")
-            print()
 
-        print(f"  [{len(nao_classificadas)}] NAO CLASSIFICADAS")
-        print("-" * 70)
-        if nao_classificadas:
-            for n in nao_classificadas:
-                tit = (n.get("titulo") or "")[:75]
-                print(f"    - {tit}{'...' if len(n.get('titulo') or '') > 75 else ''}")
-                print(f"      Categoria site: {n.get('categoria', '')} | {n.get('hora', '')}")
-        else:
-            print("    (nenhuma)")
-        print()
-
-        print("=" * 70)
-        print("  RESUMO ESTATISTICO")
-        print("=" * 70)
-        print(f"  Total coletado: {len(noticias_coletadas)}")
-        print(f"  Classificadas: {len(noticias_coletadas) - len(nao_classificadas)}")
-        print(f"  Nao classificadas: {len(nao_classificadas)}")
-        print()
-        print("  Por tema:")
+        log.info("")
+        log.info("Classificação")
+        log.info("-" * 60)
         for tema in sorted(temas_visiveis.keys()):
-            print(f"    {tema}: {len(temas_visiveis[tema])}")
-        print()
+            log.info("  %-20s %4d", tema, len(temas_visiveis[tema]))
+        log.info("  %-20s %4d", "Não classificadas", len(nao_classificadas))
 
         out_dir = Path(__file__).resolve().parent.parent / "output"
         out_dir.mkdir(exist_ok=True)
@@ -498,9 +490,13 @@ def main():
             intervalo_noticias = (datas_ord[0], datas_ord[-1])  # (mais_antiga, mais_recente)
         _gerar_html(noticias_por_tema, nao_classificadas, len(noticias_coletadas), arq_html, limite_24h=limite_24h, intervalo_noticias=intervalo_noticias)
 
-        print(f"  JSON: {arq_json}")
-        print(f"  HTML: {arq_html}")
-        print("=" * 70)
+        log.info("")
+        log.info("Arquivos salvos:")
+        log.info("  JSON: %s", arq_json)
+        log.info("  HTML: %s", arq_html)
+        log.info("=" * 60)
+        log.info("Concluído (%.1fs)", time.time() - t0)
+        log.info("=" * 60)
 
     finally:
         if driver:

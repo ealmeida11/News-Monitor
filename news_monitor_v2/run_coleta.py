@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 r"""
-Script principal: coleta das 5 fontes, grava no banco (sem duplicatas por link),
+Script principal: coleta das 6 fontes, grava no banco (sem duplicatas por link),
 gera painel HTML e index para GitHub Pages.
 
 Uso (a partir da raiz do projeto News):
@@ -11,12 +11,21 @@ Ou na pasta news_monitor_v2:
   python run_coleta.py
 """
 
+import io
 import json
+import logging
 import os
 import subprocess
 import sys
+import threading
+import time
 from datetime import datetime
 from pathlib import Path
+
+# Evitar UnicodeEncodeError no console Windows (cp1252)
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 
 # Garantir que o projeto está no path
 BASE_DIR = Path(__file__).resolve().parent
@@ -28,6 +37,14 @@ if str(BASE_DIR) not in sys.path:
 
 # Reduzir ruído do Chrome/WebDriver
 os.environ.setdefault("WDM_LOG_LEVEL", "0")
+
+# ── Logging ──────────────────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)-5s %(message)s",
+    datefmt="%d/%m/%Y %H:%M:%S",
+)
+log = logging.getLogger(__name__)
 
 from database import db
 from config import settings
@@ -51,34 +68,6 @@ ARQUIVOS_JSON = [
     OUTPUT_DIR / "cnn_classificado_24h.json",
     OUTPUT_DIR / "metropoles_classificado_24h.json",
 ]
-
-
-def _rodar_coleta_fonte(nome, script_rel):
-    """Executa o script de coleta de uma fonte. Retorna True se OK."""
-    script_path = BASE_DIR / script_rel
-    if not script_path.exists():
-        return False
-    try:
-        env = {
-            **os.environ,
-            "PYTHONPATH": os.pathsep.join([str(PROJECT_ROOT), str(BASE_DIR)]),
-            "PYTHONIOENCODING": "utf-8",
-        }
-        r = subprocess.run(
-            [sys.executable, str(script_path)],
-            cwd=str(BASE_DIR),
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            timeout=600,
-            env=env,
-        )
-        return r.returncode == 0
-    except subprocess.TimeoutExpired:
-        return False
-    except Exception:
-        return False
 
 
 def _extrair_noticias_do_json(arq):
@@ -109,16 +98,15 @@ def _extrair_noticias_do_json(arq):
 
 
 def main():
-    t0 = datetime.now()
-    W = 56  # largura do bloco
+    t0 = time.time()
+    agora = datetime.now()
 
-    # ---- Cabeçalho ----
-    print()
-    print("  " + "=" * (W - 2))
-    print("  MONITOR MACRO BRASIL  v2")
-    print("  " + "=" * (W - 2))
-    print(f"  {t0:%d/%m/%Y  %H:%M:%S}")
-    print()
+    # ── Cabeçalho ─────────────────────────────────────────────────────────
+    log.info("=" * 60)
+    log.info("MONITOR MACRO BRASIL v2")
+    log.info("%s", agora.strftime("%d/%m/%Y %H:%M:%S"))
+    log.info("Fontes: %s", ", ".join(nome for nome, _ in COLETORES))
+    log.info("=" * 60)
 
     db_path = db.get_db_path()
     db.init_db(db_path)
@@ -131,21 +119,46 @@ def main():
     except Exception:
         pass
 
-    # ---- Coleta (paralela) ----
-    import time as _time
-    print("  Coleta (6 fontes em paralelo)")
-    print("  " + "-" * (W - 2))
+    # ── Coleta (paralela) ─────────────────────────────────────────────────
+    log.info("")
+    log.info("Coleta (6 fontes em paralelo)")
+    log.info("-" * 60)
     env = {
         **os.environ,
         "PYTHONPATH": os.pathsep.join([str(PROJECT_ROOT), str(BASE_DIR)]),
         "PYTHONIOENCODING": "utf-8",
     }
+
+    # Linhas de ruído do Chrome/Selenium que queremos esconder
+    _NOISE = ("DevTools listening", "ERROR:device_event_log", "ERROR:ssl_client_socket",
+              "[WARNING:", "USB:", "Bluetooth", "HidManager")
+
+    import re as _re
+    _TS_PREFIX = _re.compile(r"^\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2} \w+\s+")
+
+    def _stream_output(stream, prefix):
+        """Lê stream linha a linha e loga com prefixo (roda em thread)."""
+        try:
+            for line in stream:
+                line = line.rstrip()
+                if not line or any(n in line for n in _NOISE):
+                    continue
+                # Remover timestamp/level duplicado dos coletores
+                line = _TS_PREFIX.sub("", line)
+                log.info("[%s] %s", prefix, line)
+        except Exception:
+            pass
+
+    t_coleta = time.time()
     processos = {}
+    tempos_inicio = {}
+    threads = []
+
     for nome, script_rel in COLETORES:
         script_path = BASE_DIR / script_rel
         if script_path.exists():
             p = subprocess.Popen(
-                [sys.executable, str(script_path)],
+                [sys.executable, "-u", str(script_path)],
                 cwd=str(BASE_DIR),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -155,26 +168,40 @@ def main():
                 env=env,
             )
             processos[nome] = p
-            print(f"    {nome:<22} [iniciado]")
-            _time.sleep(3)  # stagger: evitar sobrecarga no Grid
+            tempos_inicio[nome] = time.time()
+            # Abreviar nome para prefixo compacto no log
+            tag = nome.split()[0][:8].upper()
+            t_out = threading.Thread(target=_stream_output, args=(p.stdout, tag), daemon=True)
+            t_err = threading.Thread(target=_stream_output, args=(p.stderr, tag), daemon=True)
+            t_out.start()
+            t_err.start()
+            threads.extend([t_out, t_err])
+            log.info("  %-22s [iniciado]", nome)
+            time.sleep(3)  # stagger: evitar sobrecarga
         else:
-            print(f"    {nome:<22} [arquivo nao encontrado]")
+            log.warning("  %-22s [arquivo não encontrado]", nome)
 
-    print()
-    print("  Aguardando conclusao...")
+    log.info("")
+    log.info("Aguardando conclusão...")
     ok = 0
     for nome, p in processos.items():
-        p.wait()  # sem timeout — cada coletor para pelas próprias regras
+        p.wait()
+        elapsed_fonte = time.time() - tempos_inicio[nome]
         status = p.returncode == 0
         ok += status
-        sym = "ok" if status else ".."
-        print(f"    {nome:<22} [{sym}]")
-    print(f"  fontes: {ok}/{len(COLETORES)}")
-    print()
+        sym = "ok" if status else "ERRO"
+        log.info("  %-22s [%s]  (%.0fs)", nome, sym, elapsed_fonte)
+    # Esperar threads de leitura terminarem
+    for t in threads:
+        t.join(timeout=5)
+    elapsed_coleta = time.time() - t_coleta
+    log.info("Fontes: %d/%d (%.0fs)", ok, len(COLETORES), elapsed_coleta)
 
-    # ---- Banco ----
-    print("  Banco")
-    print("  " + "-" * (W - 2))
+    # ── Banco ─────────────────────────────────────────────────────────────
+    log.info("")
+    log.info("Banco")
+    log.info("-" * 60)
+    t_banco = time.time()
     inseridas = 0
     filtradas = 0
     for arq in ARQUIVOS_JSON:
@@ -191,18 +218,20 @@ def main():
             if db.insert_noticia(n, db_path):
                 inseridas += 1
                 links_existentes.add(link)
-    print(f"    links (7 dias)  {len(links_existentes):>6}")
-    print(f"    filtradas       {filtradas:>6}")
-    print(f"    inseridas       {inseridas:>6}")
-    print()
+    elapsed_banco = time.time() - t_banco
+    log.info("  links (7 dias)  %6d", len(links_existentes))
+    log.info("  filtradas       %6d", filtradas)
+    log.info("  inseridas       %6d", inseridas)
+    log.info("  (%.1fs)", elapsed_banco)
 
-    # ---- Painel ----
-    print("  Painel (24h)")
-    print("  " + "-" * (W - 2))
+    # ── Painel ────────────────────────────────────────────────────────────
+    log.info("")
+    log.info("Painel (24h)")
+    log.info("-" * 60)
+    t_painel = time.time()
     noticias_24h_bruto = db.get_noticias_ultimas_24h(db_path)
-    # Categorias da fonte usadas como tema quando o classificador não atribuiu (ex.: CNN "Política", "Macroeconomia")
     CATEGORIAS_COMO_TEMA = {"Política", "Economia", "Mercado", "Macroeconomia"}
-    MAPEAMENTO_CATEGORIA_TEMA = {"Macroeconomia": "Mercado"}  # categoria do site -> tema no painel
+    MAPEAMENTO_CATEGORIA_TEMA = {"Macroeconomia": "Mercado"}
     TEMAS_EXCLUIDOS_PAINEL = {"Saúde", "Mundo", "Ambiente", "Ciência", "Cotidiano", "Tecnologia"}
     noticias_24h = []
     for n in noticias_24h_bruto:
@@ -229,20 +258,21 @@ def main():
             arquivo_saida=painel_path,
         )
         shutil.copy2(painel_path, index_path)
-        print(f"    noticias        {len(noticias_24h):>6}")
+        log.info("  notícias        %6d", len(noticias_24h))
         if sem_tema:
-            print(f"    sem tema        {sem_tema:>6} (nao exibidas)")
-        print(f"    index.html      atualizado")
+            log.info("  sem tema        %6d (não exibidas)", sem_tema)
+        log.info("  index.html      atualizado")
     else:
-        print("    (nenhuma noticia com tema nas 24h)")
-    print()
+        log.info("  (nenhuma notícia com tema nas 24h)")
+    elapsed_painel = time.time() - t_painel
+    log.info("  (%.1fs)", elapsed_painel)
 
-    # ---- Rodapé ----
-    elapsed = (datetime.now() - t0).total_seconds()
-    print("  " + "=" * (W - 2))
-    print(f"  concluido  {elapsed:.0f}s")
-    print("  " + "=" * (W - 2))
-    print()
+    # ── Rodapé ────────────────────────────────────────────────────────────
+    elapsed = time.time() - t0
+    log.info("")
+    log.info("=" * 60)
+    log.info("Concluído em %.0fs", elapsed)
+    log.info("=" * 60)
     return 0
 
 
