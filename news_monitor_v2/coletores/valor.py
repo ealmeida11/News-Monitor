@@ -184,7 +184,7 @@ def main():
                 links_existentes = {ln.strip() for ln in f if ln.strip()}
         except Exception:
             pass
-    ja_no_banco = 0
+    ja_no_banco_consecutivos = 0
     parar_por_banco = False
 
     try:
@@ -275,13 +275,14 @@ def main():
                         antigas_nesta_pagina += 1
                         continue
 
-                    # Parar cedo se 3 notícias já estiverem no banco (agiliza loop)
+                    # Parar se 5 notícias consecutivas já estiverem no banco
                     if links_existentes and link in links_existentes:
-                        ja_no_banco += 1
-                        if ja_no_banco >= 3:
+                        ja_no_banco_consecutivos += 1
+                        if ja_no_banco_consecutivos >= 5:
                             parar_por_banco = True
                             break
                         continue
+                    ja_no_banco_consecutivos = 0
 
                     # Resumo
                     resumo_element = artigo.find("p", class_="feed-post-body-resumo")

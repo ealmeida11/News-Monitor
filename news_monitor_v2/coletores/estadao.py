@@ -239,7 +239,7 @@ def main():
                 links_existentes = {ln.strip() for ln in f if ln.strip()}
         except Exception:
             pass
-    ja_no_banco = 0
+    ja_no_banco_consecutivos = 0
     parar_por_banco = False
 
     try:
