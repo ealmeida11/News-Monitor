@@ -222,8 +222,9 @@ def main():
 
             log.info("  Acessando página %d...", pagina)
             try:
-                driver.get(url)
-                WebDriverWait(driver, 10).until(
+                if pagina > 1:
+                    driver.get(url)
+                WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "feed-post-body"))
                 )
                 time.sleep(2)
