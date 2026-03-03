@@ -153,7 +153,7 @@ def _gerar_html(noticias_por_tema, nao_classificadas, total_coletado, arq_html, 
 
 
 # Colunistas do O Globo (feed-post-metadata-section) que entram na categoria Editorial
-EDITORIAL_AUTORES_GLOBO = {"Bela Megale", "Fábio Graner", "Fabio Graner", "Lauro Jardim", "Miriam Leitão"}
+EDITORIAL_AUTORES_GLOBO = {"Bela Megale", "Fábio Graner", "Fabio Graner", "Lauro Jardim", "Miriam Leitão", "Andréia Sadi"}
 
 # Blogs editoriais — páginas individuais (sem data na listagem, precisa entrar no artigo)
 EDITORIAL_BLOGS_GLOBO = [
@@ -161,6 +161,7 @@ EDITORIAL_BLOGS_GLOBO = [
     ("https://oglobo.globo.com/blogs/miriam-leitao/", "Miriam Leitão"),
     ("https://oglobo.globo.com/blogs/lauro-jardim/", "Lauro Jardim"),
     ("https://oglobo.globo.com/blogs/bela-megale/", "Bela Megale"),
+    ("https://g1.globo.com/politica/blog/andreia-sadi/", "Andréia Sadi"),
 ]
 # Feeds editoriais — com tempo relativo na listagem
 EDITORIAL_FEEDS_GLOBO = [
