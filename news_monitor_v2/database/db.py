@@ -139,6 +139,11 @@ def get_noticias_ultimas_24h(db_path=None):
             "tema": (tema or "").strip(),
             "score": score or 0,
         })
-    # Ordenar do mais recente para o mais antigo
-    out.sort(key=lambda n: (n.get("data", ""), n.get("hora", "")), reverse=True)
+    # Ordenar do mais recente para o mais antigo (por datetime, não string)
+    def _sort_key(n):
+        try:
+            return datetime.strptime(f"{n['data']} {n['hora']}", "%d/%m/%Y %H:%M")
+        except Exception:
+            return datetime.min
+    out.sort(key=_sort_key, reverse=True)
     return out
