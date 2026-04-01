@@ -196,8 +196,6 @@ def _escrever_html_painel(todas, data_formatada, periodo_horas, arquivo_saida):
     for n in todas:
         titulo = escape((n.get("titulo") or "").strip())
         tema = (n.get("tema") or "").strip()
-        if tema == "Mundo":
-            continue
         cor = CORES_TEMAS.get(tema, "#95a5a6")
         fonte = (n.get("fonte") or "").strip()
         link = escape((n.get("link") or "#").strip())
