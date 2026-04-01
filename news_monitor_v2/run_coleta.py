@@ -127,21 +127,15 @@ def main():
     log.info("Painel (24h)")
     log.info("-" * 60)
     t_painel = time.time()
-    noticias_24h_bruto = db.get_noticias_ultimas_24h(db_path)
-    CATEGORIAS_COMO_TEMA = {"Política", "Economia", "Mercado", "Macroeconomia"}
+    noticias_24h = db.get_noticias_ultimas_24h(db_path)
+    # Usar categoria como tema quando tema está vazio
     MAPEAMENTO_CATEGORIA_TEMA = {"Macroeconomia": "Mercado"}
-    TEMAS_EXCLUIDOS_PAINEL = {"Saúde", "Mundo", "Ambiente", "Ciência", "Cotidiano", "Tecnologia"}
-    noticias_24h = []
-    for n in noticias_24h_bruto:
+    for n in noticias_24h:
         tema = (n.get("tema") or "").strip()
-        cat = (n.get("categoria") or "").strip()
-        if tema and tema not in TEMAS_EXCLUIDOS_PAINEL:
-            noticias_24h.append(n)
-        elif not tema and cat in CATEGORIAS_COMO_TEMA:
-            n_copy = dict(n)
-            n_copy["tema"] = MAPEAMENTO_CATEGORIA_TEMA.get(cat, cat)
-            noticias_24h.append(n_copy)
-    sem_tema = len(noticias_24h_bruto) - len(noticias_24h)
+        if not tema:
+            cat = (n.get("categoria") or "").strip()
+            if cat:
+                n["tema"] = MAPEAMENTO_CATEGORIA_TEMA.get(cat, cat)
     data_formatada = datetime.now().strftime("%d/%m/%Y %H:%M")
 
     if noticias_24h:
@@ -157,11 +151,9 @@ def main():
         )
         shutil.copy2(painel_path, index_path)
         log.info("  notícias        %6d", len(noticias_24h))
-        if sem_tema:
-            log.info("  sem tema        %6d (não exibidas)", sem_tema)
         log.info("  index.html      atualizado")
     else:
-        log.info("  (nenhuma notícia com tema nas 24h)")
+        log.info("  (nenhuma notícia nas 24h)")
     elapsed_painel = time.time() - t_painel
     log.info("  (%.1fs)", elapsed_painel)
 
