@@ -33,7 +33,7 @@ from pathlib import Path
 from peak.config import (
     DATA_DIR, DB_PATH, SELECTION_JSON, SOURCE_LABELS,
     WHATSAPP_HEADER_TEMPLATE, TINYURL_API, COLUNISTAS_TAB_ID,
-    PEAK_WHATSAPP_RECIPIENTS,
+    PEAK_WHATSAPP_RECIPIENTS, OBSIDIAN_INBOX_DIR, OBSIDIAN_COUNTRY_TAG,
 )
 
 log = logging.getLogger(__name__)
@@ -336,6 +336,108 @@ def _build_digest(articles: list[dict], data_str: str) -> str:
     return "\n".join(lines)
 
 
+# ---------------------------------------------------------------------------
+# Obsidian Inbox — salva starred como .md depois de enviar no WhatsApp
+# ---------------------------------------------------------------------------
+
+# Caracteres bloqueados em filenames Windows + alguns mais agressivos
+_FILENAME_BAD_RE = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
+# Em-dash usado como separador no filename (padrão CLAUDE.md do vault Macro)
+_FN_SEP = " — "
+
+
+def _sanitize_filename_part(s: str) -> str:
+    """Remove caracteres inválidos pra filename, colapsa whitespace, trim."""
+    if not s:
+        return ""
+    # Substitui o em-dash dentro do título por hifen pra não confundir com separador
+    s = s.replace("—", "-")
+    s = _FILENAME_BAD_RE.sub("", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def _format_body_paragraphs(body: str) -> str:
+    """Separa parágrafos por linha em branco (mesma lógica do realtime/formatter)."""
+    paragraphs = [p.strip() for p in body.split("\n") if p.strip()]
+    return "\n\n".join(paragraphs)
+
+
+def _save_to_obsidian_inbox(art: dict) -> Path | None:
+    """
+    Salva o starred article como .md no Inbox/brasil/news/.
+    Filename: YYYY-MM-DD — Fonte — Título.md (em-dash).
+    Frontmatter: date, fonte, autor (se columnist), tags=[news, brasil], url.
+    Body: # Título\\n\\n*DD/MM/YYYY HH:MM*\\n\\n<parágrafos espaçados>
+    """
+    fonte_label = (art.get("fonte_label") or "").strip() or "Desconhecido"
+    title = (art.get("title") or "").strip()
+    raw_url = (art.get("raw_url") or art.get("url") or "").strip()
+    body = (art.get("cleaned_body") or art.get("full_text") or "").strip()
+    columnist = (art.get("columnist") or "").strip()
+    pub_iso = (art.get("published_at") or "").strip()
+
+    if not title:
+        log.warning("[obsidian] item sem título — pulando")
+        return None
+
+    # Parse timestamp do published_at (formato ISO local naive do seen.db).
+    # Fallback: agora.
+    dt = None
+    if pub_iso:
+        try:
+            dt = datetime.fromisoformat(pub_iso.split(".")[0])
+        except ValueError:
+            dt = None
+    if dt is None:
+        dt = datetime.now()
+    date_iso = dt.strftime("%Y-%m-%d")
+    date_br = dt.strftime("%d/%m/%Y %H:%M")
+
+    # Filename — limite total ~200 chars
+    fonte_safe = _sanitize_filename_part(fonte_label)
+    title_safe = _sanitize_filename_part(title)
+    max_title_len = 200 - len(date_iso) - len(fonte_safe) - 2 * len(_FN_SEP) - len(".md")
+    if len(title_safe) > max_title_len > 20:
+        title_safe = title_safe[:max_title_len].rstrip()
+    filename = f"{date_iso}{_FN_SEP}{fonte_safe}{_FN_SEP}{title_safe}.md"
+    path = OBSIDIAN_INBOX_DIR / filename
+
+    # Frontmatter
+    fm_lines = [
+        "---",
+        f"date: {date_iso}",
+        f"fonte: {fonte_label}",
+    ]
+    if columnist:
+        fm_lines.append(f"autor: {columnist}")
+    fm_lines.append(f"tags: [news, {OBSIDIAN_COUNTRY_TAG}]")
+    if raw_url:
+        fm_lines.append(f"url: {raw_url}")
+    fm_lines.append("---")
+
+    # Body markdown
+    if body:
+        body_md = _format_body_paragraphs(body)
+    else:
+        body_md = "(corpo do artigo não disponível)"
+
+    content = (
+        "\n".join(fm_lines)
+        + "\n\n"
+        + f"# {title}\n\n*{date_br}*\n\n{body_md}\n"
+    )
+
+    try:
+        OBSIDIAN_INBOX_DIR.mkdir(parents=True, exist_ok=True)
+        # Se já existe (re-run), sobrescreve
+        path.write_text(content, encoding="utf-8")
+        return path
+    except Exception as e:
+        log.error("[obsidian] falha ao salvar %s: %s", path.name, e)
+        return None
+
+
 def _build_starred_body_message(art: dict) -> str:
     label = _label_for_item(art)
     titulo = art.get("title", "").strip()
@@ -496,6 +598,17 @@ def run() -> int:
             print(f"[starred] {i}/{len(starred)}: {title} ({len(msg)} chars)", flush=True)
             if not _send_whatsapp_message(msg):
                 log.warning("Body starred falhou — continuando")
+
+        # Salvar starred no Inbox do Obsidian Macro (staging — /sync-news-brasil
+        # depois processa pra raw + wiki).
+        print(f"\n[obsidian] Salvando {len(starred)} starred no Inbox/brasil/news/...", flush=True)
+        saved = 0
+        for it in starred:
+            path = _save_to_obsidian_inbox(it)
+            if path:
+                saved += 1
+                print(f"[obsidian] ✓ {path.name}", flush=True)
+        print(f"[obsidian] {saved}/{len(starred)} salvos em {OBSIDIAN_INBOX_DIR}\n", flush=True)
     else:
         print("[extract] Nenhum starred — pulando bodies.\n", flush=True)
 

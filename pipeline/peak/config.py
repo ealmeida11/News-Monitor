@@ -76,3 +76,9 @@ TINYURL_API = "http://tinyurl.com/api-create.php?url={url}"
 # Destinatário do peak Brasil — isolado do .env global (que tem os grupos do
 # pipeline diário). Peak envia só pra este número pessoal.
 PEAK_WHATSAPP_RECIPIENTS = ["5521989020903@c.us"]
+
+# Obsidian (Second Brain Macro) — onde salvamos os starred após envio.
+# Inbox é staging efêmero; o processo /sync-news-brasil depois move pra raw/wiki.
+OBSIDIAN_VAULT_DIR = Path(r"R:/Economics/Ealmeida/Macro")
+OBSIDIAN_INBOX_DIR = OBSIDIAN_VAULT_DIR / "Inbox" / "brasil" / "news"
+OBSIDIAN_COUNTRY_TAG = "brasil"
