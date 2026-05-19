@@ -48,6 +48,11 @@ def smart_merge(prev_selection: dict, new_headlines: dict) -> dict:
                 "published_at": h.get("published_at"),
                 "category": h.get("category", ""),
                 "rank": h.get("rank", 0),
+                # Brasil-specific pass-through (no-op pra outras versões do peak)
+                "headline_id": h.get("headline_id"),
+                "columnist": h.get("columnist"),
+                "fonte_label": h.get("fonte_label", ""),
+                "source_id": h.get("source_id", ""),
             })
 
     # Repack positions: items added=True ganham positions contíguas 1..N,

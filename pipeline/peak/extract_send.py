@@ -352,30 +352,54 @@ def _build_starred_body_message(art: dict) -> str:
 
 def _load_bodies_from_db(items: list[dict]) -> tuple[list[dict], int]:
     """
-    Popula it['full_text'] consultando seen_articles.id no DB realtime.
+    Popula it['full_text'] consultando seen_articles no DB realtime.
+    Tenta primeiro por headline_id; pra items sem id (legacy da selection.json
+    de versões antigas), faz fallback por raw_url.
     Retorna (items_atualizados, n_sem_body).
     """
-    ids = [it.get("headline_id") for it in items if it.get("headline_id")]
-    if not ids:
-        for it in items:
-            it["full_text"] = ""
-        return items, len(items)
-
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
     try:
-        placeholders = ",".join("?" * len(ids))
-        rows = conn.execute(
-            f"SELECT id, body FROM seen_articles WHERE id IN ({placeholders})",
-            ids,
-        ).fetchall()
-        by_id = {r["id"]: (r["body"] or "") for r in rows}
+        # 1) lookup por id
+        ids = [it.get("headline_id") for it in items if it.get("headline_id")]
+        by_id: dict[int, str] = {}
+        if ids:
+            placeholders = ",".join("?" * len(ids))
+            rows = conn.execute(
+                f"SELECT id, body FROM seen_articles WHERE id IN ({placeholders})",
+                ids,
+            ).fetchall()
+            by_id = {r["id"]: (r["body"] or "") for r in rows}
+
+        # 2) Fallback por URL pros items sem id
+        urls_to_lookup = [
+            it.get("raw_url") or it.get("url")
+            for it in items
+            if not it.get("headline_id") and (it.get("raw_url") or it.get("url"))
+        ]
+        by_url: dict[str, tuple[int, str]] = {}
+        if urls_to_lookup:
+            placeholders = ",".join("?" * len(urls_to_lookup))
+            rows = conn.execute(
+                f"SELECT id, url, body FROM seen_articles WHERE url IN ({placeholders})",
+                urls_to_lookup,
+            ).fetchall()
+            for r in rows:
+                by_url[r["url"]] = (r["id"], r["body"] or "")
     finally:
         conn.close()
 
     missing = 0
     for it in items:
-        body = by_id.get(it.get("headline_id"), "")
+        body = ""
+        hid = it.get("headline_id")
+        if hid and hid in by_id:
+            body = by_id[hid]
+        else:
+            url = it.get("raw_url") or it.get("url")
+            if url and url in by_url:
+                hid_found, body = by_url[url]
+                it["headline_id"] = hid_found  # patch in-memory pra próximos passos
         it["full_text"] = body
         if not body:
             missing += 1
