@@ -343,6 +343,11 @@ def _build_starred_body_message(art: dict) -> str:
     body = (art.get("cleaned_body") or art.get("full_text") or "").strip()
     if not body:
         body = "(corpo do artigo não disponível)"
+    else:
+        # Separar parágrafos por linha em branco (mesma lógica do
+        # realtime/notify/formatter.py).
+        paragraphs = [p.strip() for p in body.split("\n") if p.strip()]
+        body = "\n\n".join(paragraphs)
     return f"*{label}: {titulo}*\n\n{body}\n\n{url}"
 
 
