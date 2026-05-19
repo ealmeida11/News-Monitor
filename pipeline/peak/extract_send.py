@@ -352,7 +352,7 @@ def _build_starred_body_message(art: dict) -> str:
 
 def _load_bodies_from_db(items: list[dict]) -> tuple[list[dict], int]:
     """
-    Popula it['full_text'] consultando articles.headline_id no DB.
+    Popula it['full_text'] consultando seen_articles.id no DB realtime.
     Retorna (items_atualizados, n_sem_body).
     """
     ids = [it.get("headline_id") for it in items if it.get("headline_id")]
@@ -366,10 +366,10 @@ def _load_bodies_from_db(items: list[dict]) -> tuple[list[dict], int]:
     try:
         placeholders = ",".join("?" * len(ids))
         rows = conn.execute(
-            f"SELECT headline_id, full_text FROM articles WHERE headline_id IN ({placeholders})",
+            f"SELECT id, body FROM seen_articles WHERE id IN ({placeholders})",
             ids,
         ).fetchall()
-        by_id = {r["headline_id"]: (r["full_text"] or "") for r in rows}
+        by_id = {r["id"]: (r["body"] or "") for r in rows}
     finally:
         conn.close()
 

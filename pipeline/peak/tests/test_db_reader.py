@@ -12,33 +12,30 @@ from peak.db_reader import (
     _classify_columnist,
     _load_headlines_from_db,
     _within_window,
-    _cutoff_iso_utc,
+    _cutoff_iso_local,
+    _pick_timestamp,
 )
 
 
 @pytest.fixture
 def fake_db(tmp_path):
-    """Cria DB temporário com schema simplificado."""
+    """Cria DB temporário com schema do seen_articles (realtime)."""
     db = tmp_path / "test.db"
     conn = sqlite3.connect(str(db))
     conn.row_factory = sqlite3.Row
     conn.executescript("""
-        CREATE TABLE runs (id INTEGER PRIMARY KEY, run_date TEXT, status TEXT);
-        CREATE TABLE headlines (
-            id INTEGER PRIMARY KEY, run_id INTEGER, titulo TEXT, link TEXT,
-            fonte TEXT, data TEXT, hora TEXT, resumo_site TEXT DEFAULT '',
-            ai_category TEXT DEFAULT '',
-            UNIQUE(run_id, link)
-        );
-        CREATE TABLE articles (
-            id INTEGER PRIMARY KEY, headline_id INTEGER UNIQUE,
-            full_text TEXT DEFAULT '', fetch_status TEXT DEFAULT 'pending',
-            summary_line1 TEXT DEFAULT '', summary_line2 TEXT DEFAULT '',
-            partial INTEGER DEFAULT 0
+        CREATE TABLE seen_articles (
+            id INTEGER PRIMARY KEY,
+            url TEXT NOT NULL,
+            url_normalized TEXT NOT NULL,
+            title TEXT NOT NULL,
+            source TEXT NOT NULL,
+            seen_at TEXT NOT NULL,
+            sent INTEGER NOT NULL DEFAULT 0,
+            body TEXT NOT NULL DEFAULT '',
+            published_at TEXT NOT NULL DEFAULT ''
         );
     """)
-    today = datetime.now().strftime("%Y-%m-%d")
-    conn.execute("INSERT INTO runs(id, run_date, status) VALUES (1, ?, 'done')", (today,))
     yield conn, str(db)
     conn.close()
 
@@ -83,34 +80,46 @@ def test_classify_columnist_case_insensitive_at_start():
 
 
 def test_within_window_drops_items_outside_24h():
-    cutoff = "2026-05-17T22:36:00Z"
-    # Notícia de 16/05 BRT 12:19 → UTC 15:19 — FORA da janela
-    assert _within_window({"published_at": "2026-05-16T15:19:00Z"}, cutoff) is False
-    # Notícia de 17/05 BRT 19:00 → UTC 22:00 — DENTRO (margem)
-    assert _within_window({"published_at": "2026-05-17T22:00:00Z"}, cutoff) is False  # 22:00 < 22:36
-    assert _within_window({"published_at": "2026-05-17T23:00:00Z"}, cutoff) is True
+    # Cutoff: 17/05 22:36 BRT (naive local)
+    cutoff = "2026-05-17T22:36:00"
+    # Notícia de 16/05 12:19 — FORA da janela
+    assert _within_window({"published_at": "2026-05-16T12:19:00"}, cutoff) is False
+    # Notícia 22:00 BRT do dia 17 — antes do cutoff (22:36)
+    assert _within_window({"published_at": "2026-05-17T22:00:00"}, cutoff) is False
+    # Notícia 23:00 BRT do dia 17 — depois do cutoff
+    assert _within_window({"published_at": "2026-05-17T23:00:00"}, cutoff) is True
     # Sem timestamp — descartar
     assert _within_window({"published_at": None}, cutoff) is False
     assert _within_window({}, cutoff) is False
 
 
 def test_cutoff_iso_format():
-    iso = _cutoff_iso_utc(24)
-    # Bate o formato esperado: YYYY-MM-DDTHH:MM:SSZ
-    assert iso.endswith("Z")
+    iso = _cutoff_iso_local(24)
+    # Bate o formato esperado: YYYY-MM-DDTHH:MM:SS (ISO local naive, sem Z)
     assert "T" in iso
-    assert len(iso) == 20
+    assert len(iso) == 19  # YYYY-MM-DDTHH:MM:SS
+    assert not iso.endswith("Z")
+
+
+def test_pick_timestamp_prefers_published_when_available():
+    assert _pick_timestamp("2026-05-18T22:00:00", "2026-05-18T22:30:00") == "2026-05-18T22:00:00"
+    # Sem published, usa seen
+    assert _pick_timestamp("", "2026-05-18T22:30:00.123") == "2026-05-18T22:30:00.123"
+    # Ambos vazios
+    assert _pick_timestamp("", "") is None
+    assert _pick_timestamp(None, None) is None
 
 
 def test_load_headlines_filters_24h(fake_db):
     conn, _ = fake_db
-    today = datetime.now().strftime("%d/%m/%Y")
+    now = datetime.now()
     conn.execute(
-        "INSERT INTO headlines(run_id, titulo, link, fonte, data, hora) "
-        "VALUES (1, 'Hoje', 'https://x/today', 'CNN Brasil', ?, '08:00')",
-        (today,),
+        "INSERT INTO seen_articles(url, url_normalized, title, source, seen_at, published_at, body) "
+        "VALUES (?, ?, 'Hoje', 'CNN Brasil', ?, ?, 'corpo do artigo')",
+        ("https://x/today", "https://x/today", now.strftime("%Y-%m-%dT%H:%M:%S"),
+         now.strftime("%Y-%m-%dT%H:%M:%S")),
     )
     conn.commit()
     rows = _load_headlines_from_db(conn, hours=24)
-    titles = [r["titulo"] for r in rows]
+    titles = [r["title"] for r in rows]
     assert "Hoje" in titles

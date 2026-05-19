@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Lê últimas N horas de headlines+articles do newsai.db, dedupa por título
+Lê últimas N horas de seen_articles do seen.db (realtime), dedupa por título
 normalizado com prioridade editorial, classifica colunistas pela whitelist,
 aplica keyword score, e serializa headlines.json no formato consumido pela UI.
+
+Schema do seen_articles (origem):
+  id, url, url_normalized, title, source, seen_at, sent, body, published_at
+
+published_at e seen_at vêm em ISO local naive (BRT), ex: '2026-05-18T22:51:00'.
+Quando published_at está vazio, usamos seen_at como fallback.
 
 Schema dos rows que produzimos pra UI:
   {
@@ -10,16 +16,17 @@ Schema dos rows que produzimos pra UI:
     "title": str,
     "url": str,             # canonicalizado
     "raw_url": str,         # original do DB
-    "fonte_label": str,     # como veio do DB (ex: "CNN Brasil")
+    "fonte_label": str,     # ex: "CNN Brasil"
+    "source_id": str,
     "home_tab": str,        # source_id ou "colunistas"
-    "columnist": str|None,  # nome se identificado
-    "published_at": str|None,  # ISO 'YYYY-MM-DDTHH:MM:SSZ'
-    "category_db": str,     # headlines.ai_category (informativo)
-    "summary_line1": str,
-    "summary_line2": str,
+    "columnist": str|None,
+    "published_at": str|None,  # ISO local BRT
+    "category_db": str,     # vazio (não temos no realtime)
+    "summary_line1": str,   # vazio (não temos no realtime)
+    "summary_line2": str,   # vazio (não temos no realtime)
     "body_len": int,
     "keyword_score": int,
-    "headline_id": int,     # FK pra articles
+    "headline_id": int,     # seen_articles.id
   }
 """
 
@@ -90,65 +97,41 @@ def _classify_columnist(title: str, whitelist: list[str]) -> str | None:
 # DB read
 # ---------------------------------------------------------------------------
 
-_DATA_FORMATS = ["%d/%m/%Y", "%Y-%m-%d"]
-
-
-def _parse_data_hora_iso(data: str, hora: str) -> str | None:
-    if not data:
-        return None
-    dt = None
-    for fmt in _DATA_FORMATS:
-        try:
-            dt = datetime.strptime(data.strip(), fmt)
-            break
-        except ValueError:
-            dt = None
-    if dt is None:
-        return None
-    if hora:
-        try:
-            h, m = hora.strip().split(":")[:2]
-            dt = dt.replace(hour=int(h), minute=int(m))
-        except (ValueError, IndexError):
-            pass
-    # Trata como horário local do Brasil (BRT, UTC-3) e converte pra UTC
-    dt_utc = dt + timedelta(hours=3)
-    return dt_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+def _pick_timestamp(published_at: str, seen_at: str) -> str | None:
+    """Retorna o melhor ISO disponível: published_at se não vazio, senão seen_at.
+    Ambos vêm em ISO local naive (BRT). Retorna None se ambos vazios."""
+    if published_at and published_at.strip():
+        return published_at.strip()
+    if seen_at and seen_at.strip():
+        return seen_at.strip()
+    return None
 
 
 def _load_headlines_from_db(conn: sqlite3.Connection, hours: int) -> list[sqlite3.Row]:
-    """SELECT amplo: runs com run_date >= (hoje - N horas - 1 dia de buffer).
-    Filtro fino por timestamp real (data+hora) é feito em Python via
-    _filter_within_window."""
-    buffer_days = (hours // 24) + 2
-    cutoff_date = (datetime.now() - timedelta(days=buffer_days)).strftime("%Y-%m-%d")
+    """SELECT amplo do seen_articles: rows com seen_at >= (now - N horas - buffer).
+    Filtro fino é feito em Python via _within_window contra o cutoff exato.
+    Usamos seen_at no SQL (sempre populado e indexável), published_at pode estar vazio."""
+    buffer_hours = hours + 24
+    cutoff_seen = (datetime.now() - timedelta(hours=buffer_hours)).strftime("%Y-%m-%dT%H:%M:%S")
     rows = conn.execute("""
-        SELECT h.id, h.titulo, h.link, h.fonte, h.data, h.hora, h.resumo_site,
-               h.ai_category,
-               COALESCE(a.full_text, '')       AS full_text,
-               COALESCE(a.summary_line1, '')   AS summary_line1,
-               COALESCE(a.summary_line2, '')   AS summary_line2,
-               COALESCE(a.fetch_status, '')    AS fetch_status
-        FROM headlines h
-        LEFT JOIN articles a ON a.headline_id = h.id
-        WHERE h.run_id IN (
-            SELECT id FROM runs WHERE run_date >= ?
-        )
-        ORDER BY h.id DESC
-    """, (cutoff_date,)).fetchall()
+        SELECT id, url, url_normalized, title, source, seen_at, published_at, body
+        FROM seen_articles
+        WHERE seen_at >= ?
+        ORDER BY id DESC
+    """, (cutoff_seen,)).fetchall()
     return rows
 
 
-def _cutoff_iso_utc(hours: int) -> str:
-    """ISO UTC do cutoff (agora - N horas). _parse_data_hora_iso produz strings
-    do mesmo formato, então comparação lexicográfica funciona."""
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
-    return cutoff.strftime("%Y-%m-%dT%H:%M:%SZ")
+def _cutoff_iso_local(hours: int) -> str:
+    """ISO local BRT (naive) do cutoff (agora - N horas). published_at/seen_at
+    do realtime são local naive, então comparação string funciona."""
+    cutoff = datetime.now() - timedelta(hours=hours)
+    return cutoff.strftime("%Y-%m-%dT%H:%M:%S")
 
 
 def _within_window(item: dict, cutoff_iso: str) -> bool:
     """True se o item tem published_at e cai dentro da janela [cutoff, agora].
-    Items sem timestamp parseado são descartados (não dá pra saber a janela)."""
+    Items sem timestamp parseado são descartados."""
     pub = item.get("published_at")
     if not pub:
         return False
@@ -168,15 +151,15 @@ def _now_iso() -> str:
 
 
 def _row_to_item(row: sqlite3.Row, rank: int, regexes, columnist_whitelist: list[str]) -> dict:
-    title = (row["titulo"] or "").strip()
-    raw_url = (row["link"] or "").strip()
-    fonte_label = (row["fonte"] or "").strip()
+    title = (row["title"] or "").strip()
+    raw_url = (row["url"] or "").strip()
+    fonte_label = (row["source"] or "").strip()
     source_id = config.DB_SOURCE_TO_ID.get(fonte_label, fonte_label.lower())
 
     columnist = _classify_columnist(title, columnist_whitelist)
     home_tab = config.COLUNISTAS_TAB_ID if columnist else source_id
 
-    pub_iso = _parse_data_hora_iso(row["data"] or "", row["hora"] or "")
+    pub_iso = _pick_timestamp(row["published_at"] or "", row["seen_at"] or "")
     return {
         "rank": rank,
         "title": title,
@@ -187,10 +170,10 @@ def _row_to_item(row: sqlite3.Row, rank: int, regexes, columnist_whitelist: list
         "home_tab": home_tab,
         "columnist": columnist,
         "published_at": pub_iso,
-        "category_db": row["ai_category"] or "",
-        "summary_line1": row["summary_line1"] or "",
-        "summary_line2": row["summary_line2"] or "",
-        "body_len": len(row["full_text"] or ""),
+        "category_db": "",
+        "summary_line1": "",
+        "summary_line2": "",
+        "body_len": len(row["body"] or ""),
         "keyword_score": score(title, regexes),
         "headline_id": row["id"],
     }
@@ -215,8 +198,8 @@ def build_headlines_json(hours: int | None = None) -> dict:
     # 1. Transforma em items
     items = [_row_to_item(r, i, regexes, columnist_whitelist) for i, r in enumerate(rows)]
 
-    # 2. Filtro fino por janela temporal real (data+hora parseados, não só run_date)
-    cutoff_iso = _cutoff_iso_utc(hours)
+    # 2. Filtro fino por janela temporal real (published_at do realtime)
+    cutoff_iso = _cutoff_iso_local(hours)
     items = [it for it in items if _within_window(it, cutoff_iso)]
 
     # 3. Dedup global (todas as fontes) por título normalizado, com prioridade

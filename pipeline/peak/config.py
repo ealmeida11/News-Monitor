@@ -15,8 +15,10 @@ KEYWORDS_JSON = PEAK_DIR / "keywords.json"
 
 SERVER_HOST = "127.0.0.1"
 
-# DB path — newsai.db do pipeline diário Brasil
-DB_PATH = PEAK_DIR.parent / "database" / "newsai.db"
+# DB path — seen.db do newsflow realtime (realtime/monitor.py).
+# Esse é o DB com body completo dos artigos (94%+), atualizado continuamente.
+# O newsai.db (pipeline diário 06:00) tem só dados até a manhã.
+DB_PATH = PEAK_DIR.parent.parent / "realtime" / "database" / "seen.db"
 
 # SOURCES da UI (ordem dos tabs).
 # A tab "colunistas" é virtual (agregada via whitelist no db_reader).
