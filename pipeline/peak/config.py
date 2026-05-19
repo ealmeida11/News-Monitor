@@ -70,3 +70,7 @@ DB_SOURCE_TO_ID = {
 
 WHATSAPP_HEADER_TEMPLATE = "📰 *JGP - Newsflow Macro BR - {date_br}*"
 TINYURL_API = "http://tinyurl.com/api-create.php?url={url}"
+
+# Destinatário do peak Brasil — isolado do .env global (que tem os grupos do
+# pipeline diário). Peak envia só pra este número pessoal.
+PEAK_WHATSAPP_RECIPIENTS = ["5521989020903@c.us"]

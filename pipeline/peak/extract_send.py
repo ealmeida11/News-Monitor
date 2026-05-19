@@ -33,8 +33,8 @@ from pathlib import Path
 from peak.config import (
     DATA_DIR, DB_PATH, SELECTION_JSON, SOURCE_LABELS,
     WHATSAPP_HEADER_TEMPLATE, TINYURL_API, COLUNISTAS_TAB_ID,
+    PEAK_WHATSAPP_RECIPIENTS,
 )
-from config.settings import WHATSAPP_RECIPIENTS
 
 log = logging.getLogger(__name__)
 
@@ -275,11 +275,11 @@ def _shorten_url(url: str) -> str:
 
 
 def _send_whatsapp_message(text: str) -> bool:
-    if not WHATSAPP_RECIPIENTS:
-        log.warning("WHATSAPP_RECIPIENTS vazio")
+    if not PEAK_WHATSAPP_RECIPIENTS:
+        log.warning("PEAK_WHATSAPP_RECIPIENTS vazio")
         return False
     all_ok = True
-    for dest in WHATSAPP_RECIPIENTS:
+    for dest in PEAK_WHATSAPP_RECIPIENTS:
         body = json.dumps({"phone": dest, "message": text}).encode("utf-8")
         deadline = time.time() + _SEND_TIMEOUT_SECONDS
         sent = False
