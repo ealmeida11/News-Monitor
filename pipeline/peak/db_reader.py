@@ -117,9 +117,11 @@ def _parse_data_hora_iso(data: str, hora: str) -> str | None:
 
 
 def _load_headlines_from_db(conn: sqlite3.Connection, hours: int) -> list[sqlite3.Row]:
-    """SELECT últimas N horas. Considera headlines de runs com run_date >= ontem
-    (aproximação grosseira) — refina por data/hora em Python."""
-    cutoff = (datetime.now() - timedelta(hours=hours)).strftime("%Y-%m-%d")
+    """SELECT amplo: runs com run_date >= (hoje - N horas - 1 dia de buffer).
+    Filtro fino por timestamp real (data+hora) é feito em Python via
+    _filter_within_window."""
+    buffer_days = (hours // 24) + 2
+    cutoff_date = (datetime.now() - timedelta(days=buffer_days)).strftime("%Y-%m-%d")
     rows = conn.execute("""
         SELECT h.id, h.titulo, h.link, h.fonte, h.data, h.hora, h.resumo_site,
                h.ai_category,
@@ -133,8 +135,24 @@ def _load_headlines_from_db(conn: sqlite3.Connection, hours: int) -> list[sqlite
             SELECT id FROM runs WHERE run_date >= ?
         )
         ORDER BY h.id DESC
-    """, (cutoff,)).fetchall()
+    """, (cutoff_date,)).fetchall()
     return rows
+
+
+def _cutoff_iso_utc(hours: int) -> str:
+    """ISO UTC do cutoff (agora - N horas). _parse_data_hora_iso produz strings
+    do mesmo formato, então comparação lexicográfica funciona."""
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+    return cutoff.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _within_window(item: dict, cutoff_iso: str) -> bool:
+    """True se o item tem published_at e cai dentro da janela [cutoff, agora].
+    Items sem timestamp parseado são descartados (não dá pra saber a janela)."""
+    pub = item.get("published_at")
+    if not pub:
+        return False
+    return pub >= cutoff_iso
 
 
 def _load_keywords() -> dict:
@@ -197,7 +215,11 @@ def build_headlines_json(hours: int | None = None) -> dict:
     # 1. Transforma em items
     items = [_row_to_item(r, i, regexes, columnist_whitelist) for i, r in enumerate(rows)]
 
-    # 2. Dedup global (todas as fontes) por título normalizado, com prioridade
+    # 2. Filtro fino por janela temporal real (data+hora parseados, não só run_date)
+    cutoff_iso = _cutoff_iso_utc(hours)
+    items = [it for it in items if _within_window(it, cutoff_iso)]
+
+    # 3. Dedup global (todas as fontes) por título normalizado, com prioridade
     items = _dedup_with_priority(items)
 
     # 3. Agrupa em tabs

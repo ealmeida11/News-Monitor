@@ -11,6 +11,8 @@ from peak.db_reader import (
     _dedup_with_priority,
     _classify_columnist,
     _load_headlines_from_db,
+    _within_window,
+    _cutoff_iso_utc,
 )
 
 
@@ -78,6 +80,26 @@ def test_classify_columnist_case_insensitive_at_start():
     # Whitelist match deve exigir prefix "Nome: " (Lauro Jardim: ...)
     assert _classify_columnist("LAURO JARDIM: notícia", whitelist) is None  # all caps não é o pattern
     assert _classify_columnist("Lauro Jardim: notícia normal", whitelist) == "Lauro Jardim"
+
+
+def test_within_window_drops_items_outside_24h():
+    cutoff = "2026-05-17T22:36:00Z"
+    # Notícia de 16/05 BRT 12:19 → UTC 15:19 — FORA da janela
+    assert _within_window({"published_at": "2026-05-16T15:19:00Z"}, cutoff) is False
+    # Notícia de 17/05 BRT 19:00 → UTC 22:00 — DENTRO (margem)
+    assert _within_window({"published_at": "2026-05-17T22:00:00Z"}, cutoff) is False  # 22:00 < 22:36
+    assert _within_window({"published_at": "2026-05-17T23:00:00Z"}, cutoff) is True
+    # Sem timestamp — descartar
+    assert _within_window({"published_at": None}, cutoff) is False
+    assert _within_window({}, cutoff) is False
+
+
+def test_cutoff_iso_format():
+    iso = _cutoff_iso_utc(24)
+    # Bate o formato esperado: YYYY-MM-DDTHH:MM:SSZ
+    assert iso.endswith("Z")
+    assert "T" in iso
+    assert len(iso) == 20
 
 
 def test_load_headlines_filters_24h(fake_db):
