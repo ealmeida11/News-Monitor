@@ -339,7 +339,9 @@ def _build_digest(articles: list[dict], data_str: str) -> str:
 def _build_starred_body_message(art: dict) -> str:
     label = _label_for_item(art)
     titulo = art.get("title", "").strip()
-    url = art.get("short_url") or art.get("raw_url") or art.get("url", "")
+    # Starred = mensagem com corpo inteiro → manda link verdadeiro (não encurta).
+    # O digest curto continua usando short_url pra economizar chars.
+    url = art.get("raw_url") or art.get("url") or art.get("short_url", "")
     body = (art.get("cleaned_body") or art.get("full_text") or "").strip()
     if not body:
         body = "(corpo do artigo não disponível)"
