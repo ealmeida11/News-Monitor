@@ -297,3 +297,12 @@ main {
   transition: opacity 240ms;
 }
 .toast.hidden { opacity: 0; pointer-events: none; }
+
+.row-summary {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+  max-width: 700px;
+}
+.row-summary:empty { display: none; }
